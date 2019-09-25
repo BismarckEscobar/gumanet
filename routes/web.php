@@ -1,5 +1,6 @@
 <?php
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,5 +13,14 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+
+    $sql_server = new \sql_server();
+
+    $data = [
+        'name' =>  'GUMA@NET',
+        'rArticulos' => $sql_server->fetchArray("SELECT TOP 10 * FROM iweb_articulos ",SQLSRV_FETCH_ASSOC)
+    ];
+    return view('welcome',$data);
+
 });
+
