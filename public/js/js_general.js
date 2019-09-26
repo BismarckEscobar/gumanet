@@ -52,5 +52,32 @@ function inicializaControlFecha() {
 }
 
 $(document).ready(function(){
-    $('#tablaEjemplo').DataTable();
+    $('#dtInventarioArticulos').DataTable({
+            //"paging":         false,
+            "info":    false,            
+            "lengthMenu": [[20,30,50,100,-1], [20,30,50,100,"Todo"]],
+            "language": {
+                "zeroRecords": "NO HAY RESULTADOS",
+                "paginate": {
+                    "first":      "Primera",
+                    "last":       "Última ",
+                    "next":       "Siguiente",
+                    "previous":   "Anterior"                    
+                },
+                "lengthMenu": "MOSTRAR _MENU_",
+                "emptyTable": "NO HAY DATOS DISPONIBLES",
+                "search":     "BUSCAR"
+            }
+    });
+    $("#dtInventarioArticulos_length").hide();// esconde el input de mostrar numero de registros por carga
+    $("#dtInventarioArticulos_filter").hide();//esconde input de usqueda o filtrado
+    
+    $('#InputDtShowSearchFilterArt').on( 'keyup', function () {// muestra un input personalizado para hacer busqueda o filtrar datos por cadena de texto ingresada
+        var table = $('#dtInventarioArticulos').DataTable();
+        table.search(this.value).draw();
+    });
+    $( "#InputDtShowColumnsArtic").change(function() {
+        var table = $('#dtInventarioArticulos').DataTable();
+        table.page.len(this.value).draw();
+    });
 });
