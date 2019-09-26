@@ -12,6 +12,8 @@
 |
 */
 
+Route::get('/','login_controller@index');
+
 Route::get('/Dashboard','dashboard_controller@index');
 
 Route::get('/Inventario','inventario_controller@getArticulos');
