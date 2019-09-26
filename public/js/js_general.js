@@ -31,7 +31,7 @@ function inicializaControlFecha() {
                 "L",
                 "M",
                 "M",
-                "M",
+                "J",
                 "V",
                 "S"
             ],
@@ -55,3 +55,7 @@ function inicializaControlFecha() {
         showDropdowns: true
     });
 }
+
+$(document).ready(function(){
+    $('#tablaEjemplo').DataTable();
+});

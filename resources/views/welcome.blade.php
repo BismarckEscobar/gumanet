@@ -23,6 +23,8 @@
     }
 </style>
 <!-- Custom styles for this template -->
+
+<link rel="stylesheet" href="{{ url('css/jquery.dataTables.css') }}">
 <link rel="stylesheet" href="{{ url('css/dashboard.css') }}">
 <link rel="stylesheet" href="{{ url('css/fuente.css') }}">
 <link rel="stylesheet"  type="text/css" href="{{ url('css/daterangepicker.css') }}">
@@ -123,7 +125,7 @@
 
             <h2>Articulos</h2>
             <div class="table-responsive">
-                <table class="table table-striped table-sm">
+                <table class="table table-striped table-sm" id="tablaEjemplo">
                     <thead>
                     <tr>
                         <th>ARTICULO</th>
@@ -152,8 +154,11 @@
         </main>
     </div>
 </div>
-<script src="{{ url('js/ext/jquery-3.3.1.slim.min.js') }} " integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script>window.jQuery || document.write('<script src="{{ url('js/ext/vendor/jquery-slim.min.js') }}"><\/script>')</script><script src="{{ url ('js/ext/bootstrap.bundle.min.js') }}" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
+
+
+<script src="{{ url('js/ext/jquery-3.3.1.slim.min.js') }} "integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">//este esta dando proble4mas</script>
+<script>window.jQuery || document.write('<script src="{{ url('js/ext/jquery-slim.min.js') }}"><\/script>')//tuvo probelma porque la ruta apuntaba a un nivel mas /vendor, el cual no existe</script><script src="{{ url ('js/ext/bootstrap.bundle.min.js') }}" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous">//este esta dando problemas</script>
+<script src="{{ url('js/jquery.dataTables.js') }}"></script>
 <script src="{{ url('js/ext/feather.min.js') }}"></script>
 <script src="{{ url('js/ext/Chart.min.js') }}"></script>
 <script src="{{ url('js/ext/dashboard.js') }}"></script>
@@ -161,7 +166,7 @@
 <script src="{{ url('js/ext/daterangepicker.js') }}"></script>
 <script src="{{ url('js/js_general.js') }}"></script>
 <script>
-    inicializaControlFecha();
+inicializaControlFecha();
 </script>
 </body>
 </html>
