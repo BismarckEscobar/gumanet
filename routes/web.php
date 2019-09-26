@@ -12,15 +12,14 @@
 |
 */
 
-Route::get('/', function () {
+Route::get('/Dashboard','dashboard_controller@index');
 
-    $sql_server = new \sql_server();
+Route::get('/Inventario','inventario_controller@getArticulos');
 
-    $data = [
-        'name' =>  'GUMA@NET',
-        'rArticulos' => $sql_server->fetchArray("SELECT TOP 10 * FROM iweb_articulos ",SQLSRV_FETCH_ASSOC)
-    ];
-    return view('welcome',$data);
+Route::get('/Metas','metas_controller@index');
 
-});
+Route::get('/Usuario','usuario_controller@index');
+
+Route::get('/Reportes','reportes_controller@index');
+
 

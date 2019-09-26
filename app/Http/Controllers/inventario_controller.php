@@ -10,6 +10,11 @@ use App\Models;
 class inventario_controller extends Controller
 {
    public function getArticulos(){
-       return inventario_model::getArticulos();
+
+       $data = [
+           'name' =>  'GUMA@NET',
+           'rArticulos' => inventario_model::getArticulos()
+       ];
+       return view('pages.inventario',$data);
    }
 }
