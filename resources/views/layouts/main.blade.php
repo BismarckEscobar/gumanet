@@ -26,6 +26,7 @@
 <link rel="stylesheet" href="{{ url('css/dashboard.css') }}">
 <link rel="stylesheet" href="{{ url('css/fuente.css') }}">
 <link rel="stylesheet"  type="text/css" href="{{ url('css/daterangepicker.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url('css/jquery.dataTables.min.css') }}">
 <!--Import Google Icon Font-->
 <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
@@ -59,6 +60,7 @@
 <script src="{{ url('js/jquery-2.1.1.min.js') }}"></script>
 <script src="{{ url('js/ext/daterangepicker.js') }}"></script>
 <script src="{{ url('js/js_general.js') }}"></script>
+<script src="{{ url('js/jquery.dataTables.min.js') }}"></script>
 <script>
     inicializaControlFecha();
 </script>
