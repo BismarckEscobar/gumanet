@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
 
-    <title>@yield('title')</title>
+    <title>{{-- @yield('title') --}}</title>
 
     <link rel="stylesheet" href="{{ url('css/bootstrap.min.css') }}">
 
@@ -27,6 +27,8 @@
     <link rel="stylesheet" href="{{ url('css/signin.css') }}">
 </head>
 <body class="text-center">
-@yield('content')
+    <div id="contentL">
+        @yield('content')
+    </div>
 </body>
 </html>
