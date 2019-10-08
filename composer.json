@@ -39,7 +39,8 @@
             "database/seeds",
             "database/factories",
             "app/Libraries"
-        ]
+        ],
+        "files": ["app/Libraries/Sqlsrv.php"]
     },
     "autoload-dev": {
         "psr-4": {
