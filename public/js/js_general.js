@@ -1,8 +1,3 @@
-
-/**
- * Created by maryan.espinoza on 25/09/2019.
- */
-
 var pgurl = window.location.href.substr(window.location.href.lastIndexOf("/")+1);
 $("ul li a").each(function(){
     if($(this).attr("href") == pgurl || $(this).attr("href") == '' ){
@@ -10,6 +5,36 @@ $("ul li a").each(function(){
     }
 });
 
+//METODO QUE PERMITE ENVIAR POR POST AJAX
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+
+function mensaje(mensaje, tipo) {
+    /*
+    Tipos:
+    success, error, warning, info, question
+    +*/
+    const toast = swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3000
+    });
+
+    toast({
+      type: tipo,
+      title: mensaje
+    })
+}
+
+$(".active-menu").click( function() {
+    $("#sidebar").toggleClass('active');
+});
+
+feather.replace();
 
 function inicializaControlFecha() {
     $('input[class="input-fecha"]').daterangepicker({
@@ -50,34 +75,3 @@ function inicializaControlFecha() {
         showDropdowns: true
     });
 }
-
-$(document).ready(function(){
-    $('#dtInventarioArticulos').DataTable({
-            //"paging":         false,
-            "info":    false,            
-            "lengthMenu": [[20,30,50,100,-1], [20,30,50,100,"Todo"]],
-            "language": {
-                "zeroRecords": "NO HAY RESULTADOS",
-                "paginate": {
-                    "first":      "Primera",
-                    "last":       "Última ",
-                    "next":       "Siguiente",
-                    "previous":   "Anterior"                    
-                },
-                "lengthMenu": "MOSTRAR _MENU_",
-                "emptyTable": "NO HAY DATOS DISPONIBLES",
-                "search":     "BUSCAR"
-            }
-    });
-    $("#dtInventarioArticulos_length").hide();// esconde el input de mostrar numero de registros por carga
-    $("#dtInventarioArticulos_filter").hide();//esconde input de usqueda o filtrado
-    
-    $('#InputDtShowSearchFilterArt').on( 'keyup', function () {// muestra un input personalizado para hacer busqueda o filtrar datos por cadena de texto ingresada
-        var table = $('#dtInventarioArticulos').DataTable();
-        table.search(this.value).draw();
-    });
-    $( "#InputDtShowColumnsArtic").change(function() {
-        var table = $('#dtInventarioArticulos').DataTable();
-        table.page.len(this.value).draw();
-    });
-});
