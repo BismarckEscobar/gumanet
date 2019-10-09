@@ -22,7 +22,7 @@ Route::get('/Metas','metas_controller@index');
 
 Route::get('/Usuario','usuario_controller@index');
 
-Route::get('/Reportes','reportes_controller@index');
+Route::get('/Reportes','reportes_controller@index'); 
 
 
 Route::get('/','Auth\loginController@showLoginForm')->name('login');//mostrar pagina delogin (login/index)
