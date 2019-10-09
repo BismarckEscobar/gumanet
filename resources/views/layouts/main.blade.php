@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <meta charset="utf-8">
+ <!-- CSRF Token -->
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <title>@yield('title')</title>
 <!-- Bootstrap core CSS -->
