@@ -27,6 +27,7 @@ class inventario_model extends Model {
 	    	$i++;
         }
         $sql_server->close();        
+
         return $query;
     }
 
