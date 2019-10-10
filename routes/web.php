@@ -11,37 +11,22 @@
 |
 */
 
-//Route::get('/','login_controller@index');
-
-
-Route::get('/','login_controller@index');
-
+//RUTAS MENU
+Route::get('/','Auth\LoginController@showLoginForm');
 Route::get('/Inventario','inventario_controller@index');
-
 Route::get('/Metas','metas_controller@index');
-
 Route::get('/Usuario','usuario_controller@index');
 
 Route::get('/Reportes','reportes_controller@index'); 
 
 
-Route::get('/','Auth\loginController@showLoginForm')->name('login');//mostrar pagina delogin (login/index)
-Route::post('/login','Auth\loginController@login')->name('login');//request
-Route::get('/logout', 'Auth\LoginController@logout')->name('logout' );
-
-
-
-Auth::routes();
-
+//RUTAS LOGIN
+Auth::routes();//dentro de la funcion routes() se encunetran todas las rutas para login del Auth "Vendor/laravel/src/illuminate/routing/router.php"
+Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('/Dashboard','dashboard_controller@index')->name('Dashboard');
-Route::get('register','Auth\RegisterController@showRegistrationForm')->name('register');
-Route::post('register','Auth\RegisterController@register')->name('register');
 
-Route::get('password/reset','Auth\ForgotPasswordController@showLinkRequestForm');
-
-Route::post('password/email','Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
-
-
+//RUTAS USUARIO
+Route::get('/usuarios','usuario_controller@getUsuario');
 
 //RUTAS INVENTARIO
 Route::get('/articulos','inventario_controller@getArticulos');

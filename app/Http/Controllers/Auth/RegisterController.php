@@ -37,7 +37,9 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+        //$this->middleware('guest'); //Pagina se carga solo si usuario No esta Logeado
+
+        $this->middleware('auth');//pagina se carga unicamente cuando se este logeado
     }
 
     /**
@@ -52,10 +54,11 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'surname' => ['required', 'string', 'min:2'],
             'role' => ['required', 'string','not_in:0'],
+            'company' => ['required', 'string','not_in:0'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'description' => ['required', 'string', 'min:5'],
-            'password' => ['required', 'string', 'min:5', 'confirmed'],
-            'image' => ['image'],
+            'password' => ['required', 'string', 'min:5', 'confirmed']/*,
+            'image' => ['image'],*/
         ]);
     }
 
@@ -71,10 +74,11 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'surname' => $data['surname'],
             'role' => $data['role'],
+            'company' => $data['company'],
             'email' => $data['email'],
             'description' => $data['description'],
-            'password' => Hash::make($data['password']),
-            'image' => $data['image'],
+            'password' => Hash::make($data['password'])/*,
+            'image' => $data['image'],*/
         ]);
     }
 }
