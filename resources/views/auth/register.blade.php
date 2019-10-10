@@ -11,7 +11,7 @@
                     <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
                         @csrf
 
-                        <div class="form-group row">
+                        <!--<div class="form-group row">
                             <label for="image" class="col-md-4 col-form-label text-md-right">{{ __('Foto') }}</label>
 
                             <div class="col-md-6">
@@ -23,7 +23,7 @@
                                     </span>
                                 @endif
                             </div>
-                        </div>
+                        </div>-->
 
                         <div class="form-group row">
                             <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Nombre') }}</label>
@@ -58,7 +58,7 @@
 
                             <div class="col-md-6">
                                 <select id="role"  class="form-control{{ $errors->has('role') ? ' is-invalid' : '' }}" name="role" value="{{ old('role') }}" autofocus>
-                                    <option value="0">Seleccione un Rol de usuario</option>
+                                    <option value="0">Seleccione un rol de usuario</option>
                                     <option value="1">Administrador</option>
                                     <option value="2">Supervisor</option>
                                     <option value="3">Vendedor</option>
@@ -72,16 +72,20 @@
                             </div>
                         </div>
 
-
                         <div class="form-group row">
-                            <label for="text" placeholder="Email" class="col-md-4 col-form-label text-md-right">{{ __('Email') }}</label>
+                            <label for="role" class="col-md-4 col-form-label text-md-right">{{ __('Compañia') }}</label>
 
                             <div class="col-md-6">
-                                <input id="email" placeholder="Email" type="text" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}">
+                                <select id="company"  class="form-control{{ $errors->has('company') ? ' is-invalid' : '' }}" name="company" value="{{ old('company') }}" autofocus>
+                                    <option value="0">Seleccione compañia</option>
+                                    <option value="1">UMK</option>
+                                    <option value="2">GUMAPHARMA</option>
+                                    <option value="3">PRODUN</option>
+                                </select>
 
-                                @if ($errors->has('email'))
+                                @if ($errors->has('company'))
                                     <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('email') }}</strong>
+                                        <strong>{{ $errors->first('company') }}</strong>
                                     </span>
                                 @endif
                             </div>
@@ -96,6 +100,20 @@
                                 @if ($errors->has('surname'))
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $errors->first('surname') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="text" placeholder="Email" class="col-md-4 col-form-label text-md-right">{{ __('Email') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="email" placeholder="Email" type="text" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}">
+
+                                @if ($errors->has('email'))
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('email') }}</strong>
                                     </span>
                                 @endif
                             </div>

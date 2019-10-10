@@ -8,8 +8,13 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class dashboard_controller extends Controller {
+
+  public function __construct()
+  {
+    $this->middleware('auth');
+  }
    
-   function index() {
+   public function index() {
        $data = [
            'name' =>  'GUMA@NET'
        ];

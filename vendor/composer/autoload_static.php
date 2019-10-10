@@ -33,6 +33,7 @@ class ComposerStaticInit5e5ff9a4c065341154e0fa043f4f6bd3
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         '801c31d8ed748cfa537fa45402288c95' => __DIR__ . '/..' . '/psy/psysh/src/functions.php',
         '0d8253363903f0ac7b0978dcde4e28a0' => __DIR__ . '/..' . '/beyondcode/laravel-dump-server/helpers.php',
+        '7db69c74f32c4b4c3b65d79a4b64259b' => __DIR__ . '/../..' . '/app/Libraries/Sqlsrv.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -468,10 +469,8 @@ class ComposerStaticInit5e5ff9a4c065341154e0fa043f4f6bd3
         'App\\Http\\Controllers\\Auth\\ResetPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ResetPasswordController.php',
         'App\\Http\\Controllers\\Auth\\VerificationController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/VerificationController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
-        'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
         'App\\Http\\Controllers\\dashboard_controller' => __DIR__ . '/../..' . '/app/Http/Controllers/dashboard_controller.php',
         'App\\Http\\Controllers\\inventario_controller' => __DIR__ . '/../..' . '/app/Http/Controllers/inventario_controller.php',
-        'App\\Http\\Controllers\\login_controller' => __DIR__ . '/../..' . '/app/Http/Controllers/login_controller.php',
         'App\\Http\\Controllers\\metas_controller' => __DIR__ . '/../..' . '/app/Http/Controllers/metas_controller.php',
         'App\\Http\\Controllers\\reportes_controller' => __DIR__ . '/../..' . '/app/Http/Controllers/reportes_controller.php',
         'App\\Http\\Controllers\\usuario_controller' => __DIR__ . '/../..' . '/app/Http/Controllers/usuario_controller.php',

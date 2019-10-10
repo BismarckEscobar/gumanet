@@ -30,12 +30,13 @@ trait RegistersUsers
     {
         $this->validator($request->all())->validate();
 
-        event(new Registered($user = $this->create($request->all())));
+        event(new Registered($user = $this->create($request->all())));// guarda los registros en la tabla dela BD al mismo tiempo en la variable User
 
-        $this->guard()->login($user);
+        /*$this->guard()->login($user);//se logea con el nuevo usuario creado
 
         return $this->registered($request, $user)
-                        ?: redirect($this->redirectPath());
+                        ?: redirect($this->redirectPath());// si datos de usuarios existen carga pagina con nuevo usuario si no carga la pagina que esta en la funcion redirect($this->redirectPath())*/
+                        return redirect($this->redirectPath());// ***nueva linea de codigo por Ennio*** cuando se guardaden datos  de usuario se redirige a la pagina del home en este caso el dashboard, siempre con el mismo usuario que creo el nuevo registro
     }
 
     /**
