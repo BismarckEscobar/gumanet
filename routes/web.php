@@ -16,7 +16,9 @@ Route::get('/','Auth\LoginController@showLoginForm');
 Route::get('/Inventario','inventario_controller@index');
 Route::get('/Metas','metas_controller@index');
 Route::get('/Usuario','usuario_controller@index');
-Route::get('/Reportes','reportes_controller@index');
+
+Route::get('/Reportes','reportes_controller@index'); 
+
 
 //RUTAS LOGIN
 Auth::routes();//dentro de la funcion routes() se encunetran todas las rutas para login del Auth "Vendor/laravel/src/illuminate/routing/router.php"
