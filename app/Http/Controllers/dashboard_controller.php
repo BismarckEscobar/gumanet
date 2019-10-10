@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\dashboard_model;
 use App\Models;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class dashboard_controller extends Controller {
 
@@ -15,7 +13,9 @@ class dashboard_controller extends Controller {
   }
    
    public function index() {
+       $ApplicationVersion = new \git_version();
        $data = [
+           'appVersion' => $ApplicationVersion::get(),
            'name' =>  'GUMA@NET'
        ];
        return view('pages.dashboard',$data);
