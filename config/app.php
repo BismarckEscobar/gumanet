@@ -174,7 +174,8 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        App\Providers\SqlSrvProvider::class
+        App\Providers\SqlSrvProvider::class,
+        App\Providers\gitVersionServiceProvider::class
 
     ],
 
@@ -224,7 +225,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'sql_server' => App\Libraries\sql_server::class
+        'sql_server' => App\Libraries\sql_server::class,
+        'git_version' => App\Libraries\git_version::class
 
     ],
 
