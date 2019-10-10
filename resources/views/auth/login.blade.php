@@ -31,9 +31,7 @@
                     </span>
                 @endif
             </div>
-        </div>
-
-       
+        </div>       
         <div class="row ">
             <div class="col-8">
                 <select id="campoEmpresaLogin" name="campoEmpresa" class="form-control">
