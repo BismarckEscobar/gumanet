@@ -4,7 +4,7 @@
 @section('metodosjs')
   @include('jsViews.js_dashboard');
 @endsection
-@section('content')
+@section('content') 
 <div class="container-fluid">
     <h1 class="h4 mb-4">Resumen</h1>
     <div class="content-graf">
