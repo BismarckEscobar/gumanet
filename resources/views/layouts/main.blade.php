@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
  <!-- CSRF Token -->
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <title>@yield('title')</title>
@@ -50,7 +51,7 @@
                     <p class="font-weight-bold ml-2">Configuración<button type="button" class="active-menu close" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>
                     <ul class="list-group list-group-flush mt-3">
                       <li><a href="#!"><i class="align-middle mb-1 material-icons">https</i> Cambiar contraseña</a></li>
-                      <li><a href="#!"><i class="align-middle mb-1 material-icons">exit_to_app</i> Cerrar sesion</a></li>
+                      <li><a href="{{ route('logout') }}"><i class="align-middle mb-1 material-icons">exit_to_app</i> Cerrar sesion</a></li>
                     </ul><hr>
 
                     <!--OPCIONES PARA DASHBOARDS-->
