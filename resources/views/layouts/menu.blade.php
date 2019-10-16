@@ -37,5 +37,10 @@
                 </a>
             </li>
         </ul>
+        <footer class="page-footer font-small blue">
+            <div class="footer-copyright text-center py-3">
+                {{$appVersion }}
+            </div>
+        </footer>
     </div>
 </nav>
