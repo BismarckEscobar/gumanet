@@ -461,6 +461,7 @@ class ComposerStaticInit5e5ff9a4c065341154e0fa043f4f6bd3
     );
 
     public static $classMap = array (
+        'App\\Company_model' => __DIR__ . '/../..' . '/app/Company_model.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Http\\Controllers\\Auth\\ForgotPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ForgotPasswordController.php',
@@ -473,6 +474,7 @@ class ComposerStaticInit5e5ff9a4c065341154e0fa043f4f6bd3
         'App\\Http\\Controllers\\inventario_controller' => __DIR__ . '/../..' . '/app/Http/Controllers/inventario_controller.php',
         'App\\Http\\Controllers\\metas_controller' => __DIR__ . '/../..' . '/app/Http/Controllers/metas_controller.php',
         'App\\Http\\Controllers\\reportes_controller' => __DIR__ . '/../..' . '/app/Http/Controllers/reportes_controller.php',
+        'App\\Http\\Controllers\\resetPass_controller' => __DIR__ . '/../..' . '/app/Http/Controllers/resetPass_controller.php',
         'App\\Http\\Controllers\\usuario_controller' => __DIR__ . '/../..' . '/app/Http/Controllers/usuario_controller.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\Authenticate' => __DIR__ . '/../..' . '/app/Http/Middleware/Authenticate.php',
@@ -482,6 +484,7 @@ class ComposerStaticInit5e5ff9a4c065341154e0fa043f4f6bd3
         'App\\Http\\Middleware\\TrimStrings' => __DIR__ . '/../..' . '/app/Http/Middleware/TrimStrings.php',
         'App\\Http\\Middleware\\TrustProxies' => __DIR__ . '/../..' . '/app/Http/Middleware/TrustProxies.php',
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
+        'App\\Http\\Requests\\ResetPassword_Request' => __DIR__ . '/../..' . '/app/Http/Requests/ResetPassword_Request.php',
         'App\\Libraries\\sql_server' => __DIR__ . '/../..' . '/app/Libraries/Sqlsrv.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'App\\Providers\\AuthServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AuthServiceProvider.php',
@@ -492,6 +495,7 @@ class ComposerStaticInit5e5ff9a4c065341154e0fa043f4f6bd3
         'App\\User' => __DIR__ . '/../..' . '/app/User.php',
         'App\\dashboard_model' => __DIR__ . '/../..' . '/app/dashboard_model.php',
         'App\\inventario_model' => __DIR__ . '/../..' . '/app/inventario_model.php',
+        'App\\login_model' => __DIR__ . '/../..' . '/app/login_model.php',
         'App\\metas_model' => __DIR__ . '/../..' . '/app/metas_model.php',
         'App\\reportes_model' => __DIR__ . '/../..' . '/app/reportes_model.php',
         'App\\usuario_model' => __DIR__ . '/../..' . '/app/usuario_model.php',

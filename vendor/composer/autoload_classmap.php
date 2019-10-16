@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\Company_model' => $baseDir . '/app/Company_model.php',
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
     'App\\Http\\Controllers\\Auth\\ForgotPasswordController' => $baseDir . '/app/Http/Controllers/Auth/ForgotPasswordController.php',
@@ -18,6 +19,7 @@ return array(
     'App\\Http\\Controllers\\inventario_controller' => $baseDir . '/app/Http/Controllers/inventario_controller.php',
     'App\\Http\\Controllers\\metas_controller' => $baseDir . '/app/Http/Controllers/metas_controller.php',
     'App\\Http\\Controllers\\reportes_controller' => $baseDir . '/app/Http/Controllers/reportes_controller.php',
+    'App\\Http\\Controllers\\resetPass_controller' => $baseDir . '/app/Http/Controllers/resetPass_controller.php',
     'App\\Http\\Controllers\\usuario_controller' => $baseDir . '/app/Http/Controllers/usuario_controller.php',
     'App\\Http\\Kernel' => $baseDir . '/app/Http/Kernel.php',
     'App\\Http\\Middleware\\Authenticate' => $baseDir . '/app/Http/Middleware/Authenticate.php',
@@ -27,6 +29,7 @@ return array(
     'App\\Http\\Middleware\\TrimStrings' => $baseDir . '/app/Http/Middleware/TrimStrings.php',
     'App\\Http\\Middleware\\TrustProxies' => $baseDir . '/app/Http/Middleware/TrustProxies.php',
     'App\\Http\\Middleware\\VerifyCsrfToken' => $baseDir . '/app/Http/Middleware/VerifyCsrfToken.php',
+    'App\\Http\\Requests\\ResetPassword_Request' => $baseDir . '/app/Http/Requests/ResetPassword_Request.php',
     'App\\Libraries\\sql_server' => $baseDir . '/app/Libraries/Sqlsrv.php',
     'App\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',
     'App\\Providers\\AuthServiceProvider' => $baseDir . '/app/Providers/AuthServiceProvider.php',
@@ -37,6 +40,7 @@ return array(
     'App\\User' => $baseDir . '/app/User.php',
     'App\\dashboard_model' => $baseDir . '/app/dashboard_model.php',
     'App\\inventario_model' => $baseDir . '/app/inventario_model.php',
+    'App\\login_model' => $baseDir . '/app/login_model.php',
     'App\\metas_model' => $baseDir . '/app/metas_model.php',
     'App\\reportes_model' => $baseDir . '/app/reportes_model.php',
     'App\\usuario_model' => $baseDir . '/app/usuario_model.php',

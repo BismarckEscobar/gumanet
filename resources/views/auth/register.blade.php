@@ -1,5 +1,7 @@
 @extends('layouts.main')
-
+@section('metodosjs')
+  @include('jsViews.js_register');
+  @endsection
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
@@ -11,7 +13,7 @@
                     <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
                         @csrf
 
-                        <!--<div class="form-group row">
+                        {{--<div class="form-group row">
                             <label for="image" class="col-md-4 col-form-label text-md-right">{{ __('Foto') }}</label>
 
                             <div class="col-md-6">
@@ -23,7 +25,7 @@
                                     </span>
                                 @endif
                             </div>
-                        </div>-->
+                        </div>--}}
 
                         <div class="form-group row">
                             <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Nombre') }}</label>
@@ -57,11 +59,11 @@
                             <label for="role" class="col-md-4 col-form-label text-md-right">{{ __('Rol') }}</label>
 
                             <div class="col-md-6">
-                                <select id="role"  class="form-control{{ $errors->has('role') ? ' is-invalid' : '' }}" name="role" value="{{ old('role') }}" autofocus>
-                                    <option value="0">Seleccione un rol de usuario</option>
-                                    <option value="1">Administrador</option>
-                                    <option value="2">Supervisor</option>
-                                    <option value="3">Vendedor</option>
+                                <select id="role" class="form-control{{ $errors->has('role') ? ' is-invalid' : '' }} selectpicker" title="Seleccione rol de usuario" name="role" autofocus>
+                                    @foreach ($roles as $role)
+                                        <option value="{{ $role->id }}">{{ $role->nombre }}</option>
+                                    @endforeach
+                                    
                                 </select>
 
                                 @if ($errors->has('role'))
@@ -71,16 +73,14 @@
                                 @endif
                             </div>
                         </div>
-
                         <div class="form-group row">
-                            <label for="role" class="col-md-4 col-form-label text-md-right">{{ __('Compañia') }}</label>
+                            <label for="company" class="col-md-4 col-form-label text-md-right">{{ __('Compañia') }}</label>
 
-                            <div class="col-md-6">
-                                <select id="company"  class="form-control{{ $errors->has('company') ? ' is-invalid' : '' }}" name="company" value="{{ old('company') }}" autofocus>
-                                    <option value="0">Seleccione compañia</option>
-                                    <option value="1">UMK</option>
-                                    <option value="2">GUMAPHARMA</option>
-                                    <option value="3">PRODUN</option>
+                            <div class="col-md-6" >
+                                <select id="company" title="Seleccione Compañia" size="1" name="company" multiple="multiple"  class= "form-control{{ $errors->has('company') ? ' is-invalid' : '' }} selectpicker" name="company" autofocus>
+                                    @foreach ($companies as $company)
+                                        <option class="options" value="{{  $company->id }}">{{ $company->nombre }}</option>
+                                    @endforeach
                                 </select>
 
                                 @if ($errors->has('company'))
@@ -89,6 +89,7 @@
                                     </span>
                                 @endif
                             </div>
+                            <input id="company_values" name="company_values" type="text" class="form-control" style="display: none" hidden="true">
                         </div>
 
                         <div class="form-group row">
@@ -123,7 +124,7 @@
                             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Contraseña') }}</label>
 
                             <div class="col-md-6">
-                                <input id="password" placeholder="Contraseña" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
+                                <input id="password" placeholder="Contraseña" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" >
 
                                 @if ($errors->has('password'))
                                     <span class="invalid-feedback" role="alert">

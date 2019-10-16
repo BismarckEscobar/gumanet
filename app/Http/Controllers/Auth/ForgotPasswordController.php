@@ -25,8 +25,10 @@ class ForgotPasswordController extends Controller
      *
      * @return void
      */
-    public function __construct()
+   public function __construct()
     {
-        $this->middleware('guest');
+        //$this->middleware('guest'); //Pagina se carga solo si usuario No esta Logeado
+
+        $this->middleware('auth');//pagina se carga unicamente cuando se este logeado
     }
 }

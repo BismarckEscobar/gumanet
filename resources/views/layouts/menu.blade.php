@@ -3,7 +3,7 @@
         <center><img class="rounded mb-3" src="{{ url('images/p20.png') }}" width="75%" ></center>
         <hr style="padding:0; margin:0; margin-bottom: 5px"></hr>
         <label class="pl-3 flow-text" style="font-size: 1.1em; font-weight: bold;"></span>{{ Auth::User()->email }}  </label><br>
-        {{--<span>{{ Auth::User()->role }}</span>--}}
+        <span>{{ Session::get('companyName')}}</span>
         <hr style="padding:0; margin:0;"></hr>
         <ul class="nav flex-column">
             <li class="nav-item">                
