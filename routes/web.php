@@ -15,7 +15,9 @@
 Route::get('/Inventario','inventario_controller@index');
 Route::get('/Metas','metas_controller@index');
 Route::get('/Usuario','usuario_controller@index');
-Route::get('/Reportes','reportes_controller@index');
+
+Route::get('/Reportes','reportes_controller@index'); 
+
 
 //RUTAS LOGIN
 Route::get('/','Auth\LoginController@showLoginForm');//pagina login
