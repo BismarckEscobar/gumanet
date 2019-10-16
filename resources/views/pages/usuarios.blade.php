@@ -31,7 +31,8 @@
             </div>
             <div class="col-sm-2">
                <div class="input-group">
-                    <button style="width: 100%" class="btn btn-primary">{{ 'Nuevo' }}</button>
+                     <a href="{{ route('register') }}" style="width: 100%" class="btn btn-primary">{{ 'Nuevo' }}</a> 
+
                 </div>
             </div>
         </div>

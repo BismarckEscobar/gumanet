@@ -3,7 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use DB;
+use Illuminate\Support\Facades\Hash;//encripta el texto dado
+use Illuminate\Support\Facades\Auth;//muestra datos de usuario autenticado
+use DB;// clase que hace que se usen las bases de datos como objetos
 
 class usuario_model extends Model
 {
@@ -28,5 +30,21 @@ class usuario_model extends Model
         
         return $data;
     }
+
+
+    public static function resetPass($newPass){
+        DB::table('users')->where('email',Auth::User()->email)->update(['password' => Hash::make($newPass['password'])]);
+        return 'La contraseña ha sido reseteada con exito!';
+    }
+
+    public static function getCompanies(){
+        return DB::table('companies')->get();
+    }
+
+     public static function getRoles(){
+        return DB::table('roles')->get();
+    }
+
+   
     
 }

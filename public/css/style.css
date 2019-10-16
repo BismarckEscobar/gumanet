@@ -31,6 +31,12 @@
   direction: ltr;
 }
 
+/*ESTILO MULTISELECT BOOTSTRAP*/
+.bootstrap-select .btn {
+  background-color: white;
+  border-color: gainsboro;
+}
+
 /*ESTILO DATATABLE*/
 .dt-center {
   text-align: center;
