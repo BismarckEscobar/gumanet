@@ -19,15 +19,16 @@ class usuario_controller extends Controller
 
     function index(){
         $data = [
-            'page' => 'Usuario',
+            'page' => 'Usuarios',
             'name' =>  'GUMA@NET'
         ];
+        
         return view('pages.usuarios',$data);
     }
 
     public function getUsuario() {
         return usuario_model::getUsuario();
-        //$obj = usuario_model::getUsuario();
-        //return response()->json($obj);
     }
+    
+
 }
