@@ -94,7 +94,8 @@ class RegisterController extends Controller
      * @return \App\User
      */
     protected function create(array $data)
-     //sas
+     //
+    //
     {
         
         return User::create([
