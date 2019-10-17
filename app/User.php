@@ -42,4 +42,15 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Company::class);
     }
+
+    public function roles() {
+
+        return $this->role === '1' || $this->role === 1;
+    }
+
+    public function gitVersion() {
+        $ApplicationVersion = new \git_version();
+
+        return $ApplicationVersion::get();
+    }
 }

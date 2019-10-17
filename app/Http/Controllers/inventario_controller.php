@@ -7,18 +7,14 @@ use App\Models;
 
 class inventario_controller extends Controller
 {
-
-	 public function __construct()
-  {
-    $this->middleware('auth');//pagina se carga unicamente cuando se este logeado
-  }
+	public function __construct() {
+		$this->middleware(['auth','roles']);//pagina se carga unicamente cuando se este logeado
+  	}
 
 	public function index() {
-		$ApplicationVersion = new \git_version();
 		$data = array(
 			'page' 				=> 'Inventario',
 			'name' 				=> 'GUMA@NET',
-			'appVersion' => $ApplicationVersion::get(),
 			'hideTransaccion' 	=> ''
 		);
 		return view('pages.inventario', $data);

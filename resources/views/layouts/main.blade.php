@@ -65,12 +65,6 @@
         </div>
     </div>
 </div>
-
-{{-- ////////////////////////////////////////////////////////////////////////////////////////
-                                    MODAL CAMBIAR CONTRASEÑA
-//////////////////////////////////////////////////////////////////////////////////////// 
-
-
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -91,9 +85,7 @@
       </div>
     </div>
   </div>
-</div>--}}
-
-
+</div>
 <script src="{{ url('js/ext/feather.min.js') }}"></script>
 <script src="{{ url('js/ext/Chart.min.js') }}"></script>
 <script src="{{ url('js/jquery-2.1.1.min.js') }}"></script>
