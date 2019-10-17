@@ -12,8 +12,7 @@ use App\Company;
 
 class dashboard_controller extends Controller {
   
-  public function __construct()
-  {
+  public function __construct() {
     $this->middleware('auth');
   }
    
@@ -21,10 +20,7 @@ class dashboard_controller extends Controller {
 
     $this->agregarDatosASession();
 
-       $ApplicationVersion = new \git_version();
-
        $data = [
-           'appVersion' => $ApplicationVersion::get(),
            'name' =>  'GUMA@NET'
        ];
       

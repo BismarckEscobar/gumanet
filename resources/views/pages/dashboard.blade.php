@@ -6,7 +6,44 @@
 @endsection
 @section('content') 
 <div class="container-fluid">
-    <h1 class="h4 mb-4">Resumen</h1>
+    <div class="row">
+        <div class="col-sm-8">
+            <h1 class="h4 mb-4 pb-0">Resumen</h1>
+        </div>
+        <div class="col-sm-4">
+            <div class="row">
+                <div class="col-sm-4">
+                  <select class="form-control form-control-sm float-right" id="inputGroupSelect01">
+                    <option selected>Mes</option>
+                    <option value="1">enero</option>
+                    <option value="2">febrero</option>
+                    <option value="3">marzo</option>
+                    <option value="4">abril</option>
+                    <option value="5">mayo</option>
+                    <option value="6">junio</option>
+                    <option value="7">julio</option>
+                    <option value="8">agosto</option>
+                    <option value="9">septiembre</option>
+                    <option value="10">octubre</option>
+                    <option value="11">noviembre</option>
+                    <option value="12">diciembre</option>
+                  </select>
+                </div>
+                <div class="col-sm-4 float-right">
+                  <select class="form-control form-control-sm" id="inputGroupSelect01">
+                    <option selected>Año</option>
+                    <option value="1">2018</option>
+                    <option value="2">2019</option>
+                    <option value="3">2020</option>
+                  </select>                  
+                </div>
+                <div class="col-sm-4"><a href="#!" class="btn-sm btn btn-primary float-right">Aplicar</a></div>
+                
+            </div>
+        </div>
+    </div>
+    
+
     <div class="content-graf">
         <div class="row">
             <div class="graf col-sm-4"><div class="container-vm" id="chart01"></div></div>
@@ -59,6 +96,24 @@
             <div class="col-12">
                 <div class="table-responsive mt-3 mb-5">
                     <table class="table table-bordered table-sm" width="100%" id="dtTemporal"></table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="card text-center">
+                  <div class="card-body">
+                    <h5 class="card-title" id="MontoReal"></h5>
+                    <p class="card-text" id="txtMontoReal"></p>
+                  </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="card text-center">
+                  <div class="card-body">
+                    <h5 class="card-title" id="MontoMeta"></h5>
+                    <p class="card-text" id="txtMontoMeta"></p>
+                  </div>
                 </div>
             </div>
         </div>
