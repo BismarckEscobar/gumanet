@@ -21,10 +21,9 @@ class dashboard_controller extends Controller {
 
     $this->agregarDatosASession();
 
-       $ApplicationVersion = new \git_version();
+       
 
        $data = [
-           'appVersion' => $ApplicationVersion::get(),
            'name' =>  'GUMA@NET'
        ];
       
@@ -33,7 +32,9 @@ class dashboard_controller extends Controller {
 
    public function agregarDatosASession(){
     $request = Request();
+    $ApplicationVersion = new \git_version();
      $company = Company::where('id',$request->session()->get('company_id'))->first();// obtener nombre de empresa mediante el id de empresa
+     $request->session()->put('ApplicationVersion', $ApplicationVersion::get());
      $request->session()->put('companyName', $company->nombre);// agregar nombre de compañia a session[], para obtenert el nombre al cargar otras pagina 
    }
 

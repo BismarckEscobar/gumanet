@@ -6,6 +6,8 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+use App\Role;
+
 
 class User extends Authenticatable
 {
@@ -28,7 +30,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-
+public $timestamps = true;
     /**
      * The attributes that should be cast to native types.
      *
@@ -40,6 +42,12 @@ class User extends Authenticatable
 
     public function companies()
     {
-        return $this->belongsToMany(Company::class);
+        return $this->belongsToMany('App\Company');
     }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
+    
 }
