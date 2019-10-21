@@ -7,11 +7,9 @@ use App\Models;
 
 class inventario_controller extends Controller
 {
-
-	 public function __construct()
-  {
-    $this->middleware('auth');//pagina se carga unicamente cuando se este logeado
-  }
+	public function __construct() {
+		$this->middleware(['auth','roles']);//pagina se carga unicamente cuando se este logeado
+  	}
 
 	public function index() {
 		$data = array(

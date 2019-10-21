@@ -8,13 +8,32 @@ class inventario_model extends Model {
     
     public static function getArticulos() {
         $sql_server = new \sql_server();
-
+        
+        $company_user = auth()->user()->company;
         $query = array();
         $i=0;
-        $query1 = $sql_server->fetchArray("SELECT TOP 50 * FROM iweb_articulos ",SQLSRV_FETCH_ASSOC);
 
+        switch ($company_user) {
+            case '1':
+                $sql_exec = "SELECT TOP 50 * FROM iweb_articulos";
+                break;
+            case '2':
+                $sql_exec = "SELECT TOP 50 * FROM iweb_articulos";
+                break;
+            case '3':
+                $sql_exec = "SELECT TOP 50 * FROM gp_iweb_articulos";
+                break;
+            
+            default:
+                dd('Ups... algo salio mal');
+                break;
+        }
+
+        $query1 = $sql_server->fetchArray( $sql_exec ,SQLSRV_FETCH_ASSOC);
         foreach ($query1 as $key) {
-	    	$query[$i]['ARTICULO'] 			= '<a href="#!" onclick="getDetalleArticulo('."'".$key['ARTICULO']."'".', '."'".$key['DESCRIPCION']."'".')" >'.$key['ARTICULO'].'</a>';
+            $desc_art = str_replace("'", " ", $key['DESCRIPCION']);
+
+	    	$query[$i]['ARTICULO'] 			= '<a href="#!" onclick="getDetalleArticulo('."'".$key['ARTICULO']."'".', '."'".$desc_art."'".')" >'.$key['ARTICULO'].'</a>';
 	    	$query[$i]['CLASE_TERAPEUTICA'] = $key['CLASE_TERAPEUTICA'];
 	    	$query[$i]['DESCRIPCION'] 		= $key['DESCRIPCION'];
 	    	$query[$i]['total'] 			= number_format($key['total'], 0);

@@ -45,9 +45,22 @@ public $timestamps = true;
         return $this->belongsToMany('App\Company');
     }
 
-    public function roles()
+   /*public function roles()
     {
         return $this->belongsToMany(Role::class);
-    }
+    }*/
+
     
+
+    public function roles() {
+
+        return $this->role === '1' || $this->role === 1;
+    }
+
+    public function gitVersion() {
+        $ApplicationVersion = new \git_version();
+
+        return $ApplicationVersion::get();
+    }
+
 }

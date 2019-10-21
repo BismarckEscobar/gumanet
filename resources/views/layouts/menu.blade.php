@@ -1,11 +1,15 @@
 <nav class="col-md-2 d-none d-md-block bg-light sidebar">
     <div class="sidebar-sticky">
-        <center><img class="rounded mb-3" src="{{ url('images/p20.png') }}" width="75%" ></center>
-        <hr style="padding:0; margin:0; margin-bottom: 5px"></hr>
-        <label class="pl-3 flow-text pb-0 mb-0" style="font-size: 1.1em; font-weight: bold;">{{ Auth::User()->email }}  </label><br>
-        <span class="pl-3 flow-text" style="font-size: 1.1em; text-align: right;">{{ Session::get('companyName')}}</span>
+
+        <center>
+            <img class="rounded mb-1 text-center" src="{{ url('images/p20.png') }}" width="75%">
+            <p class="font-weight-bold mt-0 mb-0">{{ Auth::User()->email }}</p>
+            <p class="font-weight-normal">{{ Session::get('companyName')}}</p>
+        </center>
+
         <hr style="padding:0; margin:0;"></hr>
         <ul class="nav flex-column">
+            @if(Auth::User()->roles())
             <li class="nav-item">                
                 <a class="nav-link" href="Dashboard">
                     <span data-feather="menu"></span>
@@ -36,11 +40,26 @@
                     Inventario
                 </a>
             </li>
+
         </ul>
-        <footer class="page-footer font-small blue">
-            <div class="footer-copyright text-center py-3">
-                {{Session::get('ApplicationVersion') }}
-            </div>
-        </footer>
+       
+
+            @else
+            <li class="nav-item">                
+                <a class="nav-link" href="Dashboard">
+                    <span data-feather="menu"></span>
+                    Resumen <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="Inventario">
+                    <span data-feather="shopping-cart"></span>
+                    Inventario
+                </a>
+            </li>
+            @endif
+        </ul>        
+
     </div>
+    @include('layouts.app_version', array( 'appVersion'=>Auth::User()->gitVersion() ))
 </nav>

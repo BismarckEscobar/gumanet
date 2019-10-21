@@ -12,8 +12,7 @@ use App\Company;
 
 class dashboard_controller extends Controller {
   
-  public function __construct()
-  {
+  public function __construct() {
     $this->middleware('auth');
   }
    
@@ -21,7 +20,6 @@ class dashboard_controller extends Controller {
 
     $this->agregarDatosASession();
 
-       
 
        $data = [
            'name' =>  'GUMA@NET'

@@ -371,6 +371,11 @@ function detalleVentasMes(tipo, title) {
                     { "title": "Monto",         "data": "MONTO" }
                 ]
             });
+            $('#MontoReal').text('C$ 5,000.00');
+            $('#txtMontoReal').text('Total real venta');
+
+            $('#MontoMeta').text('C$ 10,000.00')
+            $('#txtMontoMeta').text('Total meta');
         break;
       case 'recu':
         $("#dtTemporal").dataTable({
@@ -403,6 +408,11 @@ function detalleVentasMes(tipo, title) {
                 { "title": "Efectividad",   "data": "EFEC" }
             ]
         });
+        $('#MontoReal').text('C$ 5,000.00');
+        $('#txtMontoReal').text('Total real recuperado');
+
+        $('#MontoMeta').text('C$ 10,000.00')
+        $('#txtMontoMeta').text('Total meta');
         break;
       default:
         mensaje("Ups... algo ha salido mal")

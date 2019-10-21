@@ -1,7 +1,7 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 	    //AGREGO LA RUTA AL NAVEGADOR
-	    $("#item-nav-01").after(`<li class="breadcrumb-item active">Registro</li>`);
+	    $("#item-nav-01").after(`<li class="breadcrumb-item"><a href="Usuario">Usuario</a></li><li class="breadcrumb-item active">Registro</li>`);
 	    
 	});
 //$('select').selectpicker();
