@@ -31,13 +31,20 @@
                 </div>
                 <div class="col-sm-4 float-right">
                   <select class="form-control form-control-sm" id="inputGroupSelect01">
-                    <option selected>Año</option>
-                    <option value="1">2018</option>
-                    <option value="2">2019</option>
-                    <option value="3">2020</option>
+                        <?php
+                            $year = date("Y");
+                            for ($i= 2018; $i <= $year ; $i++) {
+                              if ($i==$year) {
+                                echo'<option selected value="'.$i.'">'.$i.'</option>';
+                              }else {
+                                echo'<option value="'.$i.'">'.$i.'</option>';
+                              }
+                             
+                            }
+                        ?>
                   </select>                  
                 </div>
-                <div class="col-sm-4"><a href="#!" class="btn-sm btn btn-primary float-right">Aplicar</a></div>
+                <div class="col-sm-4"><a href="#!" style="width: 100%" class="btn-sm btn btn-primary float-right">Aplicar</a></div>
                 
             </div>
         </div>
