@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Auth;
 use App\usuario_model;
 use App\Models;
 use App\User;
+use App\Company;
+use App\Role;
+use DB;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -46,11 +49,11 @@ class RegisterController extends Controller
     }
 
     public function getCompanies(){   
-        return usuario_model::getCompanies();
+        return Company::all();
     }
 
     public function getRoles(){   
-        return usuario_model::getRoles();
+        return Role::all();
     }
 
     /**
@@ -93,29 +96,28 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\User
      */
+
+
     protected function create(array $data)
     {
-        
-        return User::create([
+
+
+        $company = array_map('intval',explode(',', $data['company_values']));
+        $user = User::create([
             'name' => $data['name'],
             'surname' => $data['surname'],
             'role' => $data['role'],
-            //'company' => $data['company_values'],//campo oculto que obtiene valores del multi select #company, este campo oculto se llena desde javascript que obtiene los values de las opciones seleccionadas del multiselec comapny
             'email' => $data['email'],
             'description' => $data['description'],
             'password' => Hash::make($data['password'])/*,
             'image' => $data['image'],*/
         ]);
+            
+         $user->companies()->attach($company,['created_at' => new \DateTime(),'updated_at' => new \DateTime()]);
+        return $user;
         
-        User::create([
-            'name' => $data['name'],
-            'surname' => $data['surname'],
-            'role' => $data['role'],
-            'company' => $data['company_values'],//campo oculto que obtiene valores del multi select #company, este campo oculto se llena desde javascript que obtiene los values de las opciones seleccionadas del multiselec comapny
-            'email' => $data['email'],
-            'description' => $data['description'],
-            'password' => Hash::make($data['password'])/*,
-            'image' => $data['image'],*/
-        ]);
     }
+
+
+   
 }

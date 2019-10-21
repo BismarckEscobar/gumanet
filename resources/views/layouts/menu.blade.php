@@ -1,10 +1,12 @@
 <nav class="col-md-2 d-none d-md-block bg-light sidebar">
     <div class="sidebar-sticky">
+
         <center>
             <img class="rounded mb-1 text-center" src="{{ url('images/p20.png') }}" width="75%">
             <p class="font-weight-bold mt-0 mb-0">{{ Auth::User()->email }}</p>
             <p class="font-weight-normal">{{ Session::get('companyName')}}</p>
         </center>
+
         <hr style="padding:0; margin:0;"></hr>
         <ul class="nav flex-column">
             @if(Auth::User()->roles())
@@ -38,6 +40,10 @@
                     Inventario
                 </a>
             </li>
+
+        </ul>
+       
+
             @else
             <li class="nav-item">                
                 <a class="nav-link" href="Dashboard">
@@ -53,6 +59,7 @@
             </li>
             @endif
         </ul>        
+
     </div>
     @include('layouts.app_version', array( 'appVersion'=>Auth::User()->gitVersion() ))
 </nav>
