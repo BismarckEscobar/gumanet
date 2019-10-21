@@ -37,53 +37,8 @@ $(document).ready(function() {
         `+list_dash+`
       </ul>`);
 
-	Highcharts.chart('chart01', {
-	    chart: {
-	        plotBackgroundColor: null,
-	        plotBorderWidth: null,
-	        plotShadow: false,
-	        type: 'pie'
-	    },
-	    title: {
-	        text: 'Ventas del mes'
-	    },
-	    tooltip: {
-	        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-	    },
-	    plotOptions: {
-	        pie: {
-	            allowPointSelect: true,
-	            cursor: 'pointer',
-	            dataLabels: {
-	                enabled: false
-	            },
-	            showInLegend: true
-	        }
-	    },
-	    series: [{
-            cursor: 'pointer',
-            point: {
-                events: {
-                    click: function() {
-                        detalleVentasMes('vent', 'Ventas del Mes');
-                    }
-                }
-            },
-	        name: 'Brands',
-	        colorByPoint: true,
-	        data: [{
-	            name: 'Real',
-	            y: 61.41,
-	            sliced: true,
-	            selected: true
-	        }, {
-	            name: 'Meta',
-	            y: 38.59
-	        }]
-	    }]
-	});
-
-	Highcharts.chart('chart02', {
+	
+	/*Highcharts.chart('chart02', {
 	    chart: {
 	        plotBackgroundColor: null,
 	        plotBorderWidth: null,
@@ -127,7 +82,185 @@ $(document).ready(function() {
 	            y: 24.7
 	        }]
 	    }]
-	});
+	});*/
+
+
+Highcharts.setOptions({
+
+    lang: {
+        numericSymbols: [ 'k' , 'M' , 'B' , 'T' , 'P' , 'E'],
+      decimalPoint: '.',
+      thousandsSep: ','
+    }
+});
+
+
+    Highcharts.chart('chart01', {
+
+        chart: {
+            type: 'column',
+              
+        },
+        title: {
+            text: 'Ventas del mes'
+        },
+        xAxis: {
+            type: 'category'
+        },
+        yAxis: {
+            title: {
+                text: ''
+            }
+
+        },
+
+        legend: {
+            enabled: false
+        },
+        plotOptions: {
+            series: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                borderWidth: 0,
+                dataLabels: {
+                    enabled: true,
+                  formatter: function() {
+                    if (this.y > 1000) {
+                      return Highcharts.numberFormat(this.y / 1000, 1) + "K";
+                    } else {
+                      return this.y
+                    }
+                  }
+                }
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>C${point.y:,.2f}</b>',
+             shared: true,
+            useHTML: true
+        },
+        series: [{
+
+            states: {
+                select: {
+                    color: null
+                }
+            },
+            cursor: 'pointer',
+            point: {
+                events: {
+
+                    click: function(event) {
+
+                                                    
+                         
+                        detalleVentasMes('vent', 'Ventas del Mes');
+                    }
+                }
+            },
+                name: "Ventas",
+                colorByPoint: true,
+                data: [
+                    {
+                        name: "Real",
+                        y: 2262432.74,
+                        drilldown: "Real"
+                    },
+                    {
+                        name: "Meta",
+                        y: 315321.57,
+                        drilldown: "Meta"
+                    },
+                    
+                ]
+            }
+        ]
+        
+    });
+
+
+
+    Highcharts.chart('chart02', {
+
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Recuperacion del Mes'
+        },
+         xAxis: {
+            type: 'category'
+        },
+        yAxis: {
+            title: {
+                text: ''
+            }
+
+        },
+
+        legend: {
+            enabled: false
+        },
+        plotOptions: {
+            series: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                borderWidth: 0,
+                dataLabels: {
+                    enabled: true,
+                  formatter: function() {
+                    if (this.y > 1000) {
+                      return Highcharts.numberFormat(this.y / 1000, 1) + "K";
+                    } else {
+                      return this.y
+                    }
+                  }
+                }
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>C${point.y:,.2f}</b>',
+             shared: true,
+            useHTML: true
+        },
+        series: [{
+            states: {
+                select: {
+                    color: null
+                }
+            },
+            cursor: 'pointer',
+            point: {
+                events: {
+                    click: function() {
+                        detalleVentasMes('recu', 'Recuperacion del Mes');
+                    }
+                }
+            },
+                name: "Recuperación",
+                colorByPoint: true,
+                data: [
+                    {
+                        name: "Real",
+                        y: 11222.74,
+                        drilldown: "Real"
+                    },
+                    {
+                        name: "Meta",
+                        y: 8929.43,
+                        drilldown: "Meta"
+                    },
+                    
+                ]
+            }
+        ]
+        
+    });
+
+
+
 
     // Create the chart
     Highcharts.chart('chart03', {
@@ -151,45 +284,60 @@ $(document).ready(function() {
         },
         plotOptions: {
             series: {
+                allowPointSelect: true,
+                cursor: 'pointer',
                 borderWidth: 0,
                 dataLabels: {
                     enabled: true,
-                    format: '{point.y:.1f}%'
+                  formatter: function() {
+                    if (this.y > 1000) {
+                      return Highcharts.numberFormat(this.y / 1000, 1) + "K";
+                    } else {
+                      return this.y
+                    }
+                  }
                 }
             }
         },
-        tooltip: {
+       tooltip: {
             headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b>'
+            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>C${point.y:,.2f}</b>',
+             shared: true,
+            useHTML: true
         },
         series: [
             {
+                states: {
+                select: {
+                    color: null
+                }
+            },
                 name: "Bodegas",
                 colorByPoint: true,
                 data: [
                     {
                         name: "BC01",
-                        y: 62.74,
+                        y: 6443.74,
                         drilldown: "BC01"
                     },
                     {
                         name: "BC02",
-                        y: 10.57,
+                        y: 10345.57,
                         drilldown: "BC02"
                     },
                     {
                         name: "BC03",
-                        y: 7.23,
+                        y: 799.23,
                         drilldown: "BC03"
                     },
                     {
                         name: "BC04",
-                        y: 5.58,
+                        y: 5434.58,
                         drilldown: "BC04"
                     },
                     {
                         name: "BC05",
-                        y: 4.02,
+                        y: 4432.02,
                         drilldown: "BC05"
                     }
                 ]
@@ -219,45 +367,60 @@ $(document).ready(function() {
         },
         plotOptions: {
             series: {
+                allowPointSelect: true,
+                cursor: 'pointer',
                 borderWidth: 0,
                 dataLabels: {
                     enabled: true,
-                    format: '{point.y:.1f}%'
+                  formatter: function() {
+                    if (this.y > 1000) {
+                      return Highcharts.numberFormat(this.y / 1000, 1) + "K";
+                    } else {
+                      return this.y
+                    }
+                  }
                 }
             }
         },
-        tooltip: {
+         tooltip: {
             headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b>'
+            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>C${point.y:,.2f}</b>',
+             shared: true,
+            useHTML: true
         },
         series: [
             {
+                states: {
+                select: {
+                    color: null
+                }
+            },
                 name: "Clientes",
                 colorByPoint: true,
                 data: [
                     {
                         name: "C1",
-                        y: 62.74,
+                        y: 6243.74,
                         drilldown: "C1"
                     },
                     {
                         name: "C2",
-                        y: 10.57,
+                        y: 10231.57,
                         drilldown: "C2"
                     },
                     {
                         name: "C3",
-                        y: 7.23,
+                        y: 7212.23,
                         drilldown: "C3"
                     },
                     {
                         name: "C4",
-                        y: 5.58,
+                        y: 5232.58,
                         drilldown: "C4"
                     },
                     {
                         name: "C5",
-                        y: 4.02,
+                        y: 4321.02,
                         drilldown: "C5"
                     }
                 ]
@@ -287,45 +450,62 @@ $(document).ready(function() {
         },
         plotOptions: {
             series: {
+                allowPointSelect: true,
+                cursor: 'pointer',
                 borderWidth: 0,
                 dataLabels: {
                     enabled: true,
-                    format: '{point.y:.1f}%'
+                  formatter: function() {
+                    /*if (this.y > 1000000) {
+                      return Highcharts.numberFormat(this.y / 1000000, 2) + "M"
+                    } else */if (this.y > 1000) {
+                      return Highcharts.numberFormat(this.y / 1000, 1) + "K";
+                    } else {
+                      return this.y
+                    }
+                  }
                 }
             }
         },
         tooltip: {
             headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b>'
+            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>C${point.y:,.2f}</b>',
+             shared: true,
+            useHTML: true
         },
         series: [
             {
+                states: {
+                select: {
+                    color: null
+                }
+            },
                 name: "Productos",
                 colorByPoint: true,
                 data: [
                     {
                         name: "P1",
-                        y: 62.74,
+                        y: 962.74,
                         drilldown: "P1"
                     },
                     {
                         name: "P2",
-                        y: 10.57,
+                        y: 10323.57,
                         drilldown: "P2"
                     },
                     {
                         name: "P3",
-                        y: 7.23,
+                        y: 7543.23,
                         drilldown: "P3"
                     },
                     {
                         name: "P4",
-                        y: 5.58,
+                        y: 5432.58,
                         drilldown: "P4"
                     },
                     {
                         name: "P5",
-                        y: 4.02,
+                        y: 4654.02,
                         drilldown: "P5"
                     }
                 ]
@@ -366,7 +546,7 @@ function detalleVentasMes(tipo, title) {
                 'columns': [
                     { "title": "Articulo",      "data": "ARTICULO" },
                     { "title": "Descripcion",   "data": "DESCRIPCION" },
-                    { "title": "Ud. Med.",      "data": "U_MEDIDA" },
+                    { "title": "U/M",      "data": "U_MEDIDA" },
                     { "title": "Cantidad",      "data": "CANTIDAD" },
                     { "title": "Monto",         "data": "MONTO" }
                 ]
