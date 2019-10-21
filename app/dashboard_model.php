@@ -13,7 +13,7 @@ class dashboard_model extends Model {
         $i = 0;
         $json = array();
 
-        switch ($tipo) {
+        switch ($tipo) { 
         	case 'vent':
 		        foreach ($query as $fila) {
 		        	$json[$i]["ARTICULO"] 		= $fila["ARTICULO"];
