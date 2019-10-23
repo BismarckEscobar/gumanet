@@ -47,22 +47,45 @@ class usuario_controller extends Controller
          $company = Company::find($Company_id);
            return $company->users;
     }
+   
 
     public function editUser(Request $request){
 
 
-        $company = array_map('intval',explode(',', $data['company_values']));
-        $user = User::find($request->id);
-        $user->create([
-            'name' => $data['name'],
-            'surname' => $data['surname'],
-            'email' => $data['email'],
-            'role' => $data['role'],
-            'description' => $data['description'],
-        ]);
+        $company = array_map('intval',explode(',', $request->company_id));
 
-         $user->companies()->attach($company,['created_at' => new \DateTime(),'updated_at' => new \DateTime()]);
-        return $user;
+        $user = User::find($request->id);//obtiene los datos especificos con el id ingresado
+            $user->name = $request->name;
+            $user->surname = $request->surname;
+            $user->email = $request->email;
+            $user->role = $request->role;
+            $user->description = $request->description;
+            $user->updated_at = new \DateTime();
+            $user->save();// actualiza datos obtenidod desde el Request[] de existir id, de lo contrario lo crea, en este caso lo actualiza
+         $user->companies()->sync($company);//todos los id que no esten en array $company que esten en la tabla pivote se eliminaran
+
+    }
+
+    public function deleteUser(Request $request){
+        $company = array_map('intval',explode(',', $request->company_id));
+
+        print_r($company);
+        $user = User::find($request->id);//obtiene los datos especificos con el id ingresado
+        $user->delete();//elimina usuario perteneciente al id ingresado anteriormente
+        $user->companies()->detach($company);//elimina los registros de usuarios relacionados con la tabla companies de la tabla pivote o intermedia "company_user"
+    }
+
+    public function changeUserStatus(Request $request) {
+        $statusUser;
+        if ($request->estado == "0") {
+           $statusUser = 1;
+        }else{
+            $statusUser = 0;
+        }
+         $user = User::find($request->id);
+         $user->estado = $statusUser;
+         $user->save();
+
 
     }
     
