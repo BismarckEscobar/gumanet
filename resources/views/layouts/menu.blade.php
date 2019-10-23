@@ -9,7 +9,7 @@
 
         <hr style="padding:0; margin:0;"></hr>
         <ul class="nav flex-column">
-            @if(Auth::User()->roles())
+            @if(Auth::User()->activeRole()==1)
             <li class="nav-item">                
                 <a class="nav-link" href="Dashboard">
                     <span data-feather="menu"></span>

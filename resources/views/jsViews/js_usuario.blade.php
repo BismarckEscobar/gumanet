@@ -46,5 +46,50 @@ $( "#InputDtShowColumnsUser").change(function() {
 	table.page.len(this.value).draw();
 });
 
+$('#company').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {//capturar los valores seleccionados del multiselect en un span para luego obtenerlo en un array
+    $('#edit_company_values').val( $('#company').val());
+});
+
+
+$(document).on('click','#editUserModal', function(){
+    var companiesRes = getCompaniesByUser($(this).data('id'));
+    var companiesId = new Array();
+
+    $.each( companiesRes, function( key, value ) {//agregar id de companies a un arreglo para despues pasarlo al DOM para ser leido por el multiselect
+      companiesId[key] = value.id;
+    });
+
+    $('#edit_company_values').val(companiesId.join(','));
+    
+    $('select[name=editRole]').val($(this).data('role')).selectpicker('refresh');
+        
+    $('select[name=company]').val(companiesId.selectpicker('refresh');//refresca el selectpicker de bootstrap
+
+    $("#idUser").val($(this).data('id'));
+    $("#name").val($(this).data('name'));
+    $("#surname").val($(this).data('surname'));
+    $("#email").val($(this).data('email'));
+    $("#description").val($(this).data('description'));  
+
+  
+});
+
+
+function getCompaniesByUser(idUser){
+    var companiesId = new Array();
+    $.ajax({
+        url:"usuario/"+idUser+"/companies",
+        method:"GET",
+        async:false,
+        success: function(res){
+            
+              companiesId = res;
+        
+        }
+
+    });
+    return companiesId;
+}
+
 
 </script>

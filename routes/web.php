@@ -36,6 +36,7 @@ Route::get('/usuarios','usuario_controller@getUsuario');
 Route::get('/usuario/{id}/companies','usuario_controller@getCompaniesByUserId');
 Route::get('/company/{id}/usuarios','usuario_controller@getUsersByCompanyId');
 Route::post('/usuarios/{id}/edit','usuario_controller@editUser')->name('editUser');
+Route::get('/role','usuario_controller@getRole');
 
 //RUTAS INVENTARIO
 Route::get('/articulos','inventario_controller@getArticulos');

@@ -75,8 +75,13 @@
                             <td style="width: 120px">
                                 <center>
                                 {{-- <a href='#' class ='show-modal btn  btn-sm' data-id='{{ $user->id }}'><span data-feather='eye'></span></a> --}}
-                                <a href='#' class ='btn btn-sm tooltip-test' title="Editar" data-toggle="modal" data-target="#modalEditUsuario" data-id='{{ $user->id }}'><span data-feather='edit'></span></a>
+                                <a href='#' class ='btn btn-sm tooltip-test' title="Editar" data-toggle="modal" id="editUserModal" data-target="#modalEditUsuario" data-id='{{ $user->id }}' data-name='{{ $user->name }}' data-surname='{{ $user->surname }}' data-email='{{ $user->email }}' data-role='{{ $user->role }}' data-description='{{ $user->description }}'><span data-feather='edit'></span></a>
                                 <a href='#' class ='delete-modal btn btn-sm tooltip-test' title="Eliminar" data-toggle="modal" data-target="#modalEliminarUsuario" data-id='{{ $user->id }}'><span data-feather='trash-2'></span></a>
+                                @if($user->estado == 0)
+                                    <a href='#' class ='btn btn-sm tooltip-test' title="Desactivar"  data-id='{{ $user->id }}'><span data-feather='x'></span></a>
+                                @else
+                                    <a href='#' class ='btn btn-sm tooltip-test' title="Activar"  data-id='{{ $user->id }}'><span data-feather='check'></span></a>
+                                @endif
                             </center>
                             </td>
                         </tr>
@@ -93,18 +98,25 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Editar uausrio</h5>
+        <h5 class="modal-title" id="editModalLabel">Editar uausrio</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <form id="formEditUser" method="POST"  enctype="multipart/form-data">
+        <form id="formEditUser" role="modal">
             @csrf
             <div class="form-group row">
-                <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Nombre') }}</label>
+                <label for="id" class="col-md-3 col-form-label text-md-right">{{ __('ID') }}</label>
 
-                <div class="col-md-6">
+                <div class="col-md-8">
+                    <input type="text" class="form-control"  id="idUser"  disabled>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="name" class="col-md-3 col-form-label text-md-right">{{ __('Nombre') }}</label>
+
+                <div class="col-md-8">
                     <input id="name" placeholder="Nombres" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ old('name') }}" autofocus>
 
                     @if ($errors->has('name'))
@@ -115,9 +127,9 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="surname" class="col-md-4 col-form-label text-md-right">{{ __('Apellido') }}</label>
+                <label for="surname" class="col-md-3 col-form-label text-md-right">{{ __('Apellido') }}</label>
 
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <input id="surname" placeholder="Apellidos" type="text" class="form-control{{ $errors->has('surname') ? ' is-invalid' : '' }}" name="surname" value="{{ old('surname') }}" autofocus>
 
                     @if ($errors->has('surname'))
@@ -129,9 +141,9 @@
             </div>
 
             <div class="form-group row">
-                <label for="text" placeholder="Email" class="col-md-4 col-form-label text-md-right">{{ __('Email') }}</label>
+                <label for="text" placeholder="Email" class="col-md-3 col-form-label text-md-right">{{ __('Email') }}</label>
 
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <input id="email" placeholder="Email" type="text" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}">
 
                     @if ($errors->has('email'))
@@ -143,27 +155,27 @@
             </div>
 
             <div class="form-group row">
-                <label for="role" class="col-md-4 col-form-label text-md-right">{{ __('Rol') }}</label>
+                <label for="editRole" class="col-md-3 col-form-label text-md-right">{{ __('Rol') }}</label>
 
-                <div class="col-md-6">
-                    <select id="role" class="form-control{{ $errors->has('role') ? ' is-invalid' : '' }} selectpicker" title="Seleccione rol de usuario" name="role" autofocus>
+                <div class="col-md-8">
+                    <select id="editRole" class="form-control{{ $errors->has('editRole') ? ' is-invalid' : '' }} selectpicker" title="Seleccione rol de usuario" name="editRole" autofocus>
                         @foreach ($roles as $role)
                             <option value="{{ $role->id }}">{{ $role->nombre }}</option>
                         @endforeach
                         
                     </select>
 
-                    @if ($errors->has('role'))
+                    @if ($errors->has('editRole'))
                         <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('role') }}</strong>
+                            <strong>{{ $errors->first('editRole') }}</strong>
                         </span>
                     @endif
                 </div>
             </div>
             <div class="form-group row">
-                <label for="company" class="col-md-4 col-form-label text-md-right">{{ __('Compañia') }}</label>
+                <label for="company" class="col-md-3 col-form-label text-md-right">{{ __('Compañia') }}</label>
 
-                <div class="col-md-6" >
+                <div class="col-md-8" >
                     <select id="company" title="Seleccione Compañia" size="1" name="company" multiple="multiple"  class= "form-control{{ $errors->has('company') ? ' is-invalid' : '' }} selectpicker" name="company" autofocus>
                         @foreach ($companies as $company)
                             <option class="options" value="{{  $company->id }}">{{ $company->nombre }}</option>
@@ -176,18 +188,18 @@
                         </span>
                     @endif
                 </div>
-                <input id="company_values" name="company_values" type="text" class="form-control" style="display: none" hidden="true">
+                <input id="edit_company_values" name="edit_company_values" type="text" class="form-control" style="display: none" hidden="true">
             </div>
 
             <div class="form-group row">
-                <label for="description" class="col-md-4 col-form-label text-md-right">{{ __('Descripción') }}</label>
+                <label for="description" class="col-md-3 col-form-label text-md-right">{{ __('Descripción') }}</label>
 
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <input id="description" placeholder="Descripción" type="text" class="form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" name="description" value="{{ old('description') }}" autofocus>
 
-                    @if ($errors->has('surname'))
+                    @if ($errors->has('description'))
                         <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('surname') }}</strong>
+                            <strong>{{ $errors->first('description') }}</strong>
                         </span>
                     @endif
 
@@ -196,7 +208,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
         <button type="submit" form="formEditUser" class="btn btn-primary">Editar</button>
       </div>
     </div>
@@ -216,13 +228,13 @@
         </button>
       </div>
       <div class="modal-body">
-        Esta seguro de eliminarel registro<span class = "title"></span>?
+        <center><h5>¿Esta seguro de eliminarel registro<span class = "title"></span>?</h5></center>
         <span class="hidden id"> </span>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">
-            <span id="footer_action_button"></span> Close</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Editar</button>
+            <span id="footer_action_button"></span> No</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Si</button>
       </div>
     </div>
   </div>

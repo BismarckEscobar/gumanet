@@ -47,6 +47,7 @@ class usuario_controller extends Controller
          $company = Company::find($Company_id);
            return $company->users;
     }
+   
 
     public function editUser(Request $request){
 
