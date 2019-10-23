@@ -35,7 +35,9 @@ Route::post('/resetPass','resetPass_controller@resetPass')->name('resetPass');
 Route::get('/usuarios','usuario_controller@getUsuario');
 Route::get('/usuario/{id}/companies','usuario_controller@getCompaniesByUserId');
 Route::get('/company/{id}/usuarios','usuario_controller@getUsersByCompanyId');
-Route::post('/usuarios/{id}/edit','usuario_controller@editUser')->name('editUser');
+Route::post('/editUser','usuario_controller@editUser');
+Route::post('/deleteUser','usuario_controller@deleteUser');
+Route::post('/changeUserStatus','usuario_controller@changeUserStatus');
 Route::get('/role','usuario_controller@getRole');
 
 //RUTAS INVENTARIO

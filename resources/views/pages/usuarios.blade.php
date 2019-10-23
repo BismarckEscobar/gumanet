@@ -31,7 +31,7 @@
             </div>
             <div class="col-sm-2">
                <div class="input-group">
-                     <a href="{{ route('register') }}" style="width: 100%" class="btn btn-primary">{{ 'Nuevo' }}</a> 
+                     <a href="{{ route('register') }}" style="width: 100%" class="btn btn-primary">{{ 'Agregar' }}</a> 
 
                 </div>
             </div>
@@ -76,11 +76,11 @@
                                 <center>
                                 {{-- <a href='#' class ='show-modal btn  btn-sm' data-id='{{ $user->id }}'><span data-feather='eye'></span></a> --}}
                                 <a href='#' class ='btn btn-sm tooltip-test' title="Editar" data-toggle="modal" id="editUserModal" data-target="#modalEditUsuario" data-id='{{ $user->id }}' data-name='{{ $user->name }}' data-surname='{{ $user->surname }}' data-email='{{ $user->email }}' data-role='{{ $user->role }}' data-description='{{ $user->description }}'><span data-feather='edit'></span></a>
-                                <a href='#' class ='delete-modal btn btn-sm tooltip-test' title="Eliminar" data-toggle="modal" data-target="#modalEliminarUsuario" data-id='{{ $user->id }}'><span data-feather='trash-2'></span></a>
+                                <a href='#' class ='delete-modal btn btn-sm tooltip-test' title="Eliminar" data-toggle="modal" id="deleteUserModal" data-target="#modalEliminarUsuario" data-id='{{ $user->id }}'><span data-feather='trash-2'></span></a>
                                 @if($user->estado == 0)
-                                    <a href='#' class ='btn btn-sm tooltip-test' title="Desactivar"  data-id='{{ $user->id }}'><span data-feather='x'></span></a>
+                                    <a href='#' class ='btn btn-sm tooltip-test estadoBtn' title="Desactivar"  data-id='{{ $user->id }}'  data-status='0'><span data-feather='x'></span></a>
                                 @else
-                                    <a href='#' class ='btn btn-sm tooltip-test' title="Activar"  data-id='{{ $user->id }}'><span data-feather='check'></span></a>
+                                    <a href='#' class ='btn btn-sm tooltip-test estadoBtn' title="Activar"  data-id='{{ $user->id }}' data-status='1'><span data-feather='check'></span></a>
                                 @endif
                             </center>
                             </td>
@@ -106,7 +106,7 @@
       <div class="modal-body">
         <form id="formEditUser" role="modal">
             @csrf
-            <div class="form-group row">
+            <div class="form-group row" hidden>
                 <label for="id" class="col-md-3 col-form-label text-md-right">{{ __('ID') }}</label>
 
                 <div class="col-md-8">
@@ -208,15 +208,15 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-        <button type="submit" form="formEditUser" class="btn btn-primary">Editar</button>
+        <button type="button"  class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-warning editActionBtn" data-dismiss="modal">Editar</button>
       </div>
     </div>
   </div>
 </div>
 
 
-{{-- MODAL EDITAR USUARIO --}}
+{{-- MODAL ELIMINAR USUARIO --}}
 
 <div class="modal fade" id="modalEliminarUsuario" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -228,13 +228,14 @@
         </button>
       </div>
       <div class="modal-body">
-        <center><h5>¿Esta seguro de eliminarel registro<span class = "title"></span>?</h5></center>
-        <span class="hidden id"> </span>
+        <center><h5>¿Esta seguro de eliminar el registro?</h5></center>
+        <span id="idUserToDelete" hidden></span>
+        <span id="idCompanyToDelete" hidden></span>
       </div>
+
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-            <span id="footer_action_button"></span> No</button>
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Si</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger deleteActionBtn" data-dismiss="modal">Si</button>
       </div>
     </div>
   </div>
