@@ -23,10 +23,10 @@ body {
 }*/
 
 #contentL{
-  position: relative;
-    text-align: left;
-    padding-left: 50px;
-    height: 100%;
+  position: absolute;
+  bottom: 17%;
+  left:5%;
+  text-align: left;
 }
 
 

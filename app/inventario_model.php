@@ -1,6 +1,8 @@
 <?php
 
 namespace App;
+use App\User;
+use App\Company;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -8,24 +10,23 @@ class inventario_model extends Model {
     
     public static function getArticulos() {
         $sql_server = new \sql_server();
-        
-        $company_user = auth()->user()->company;
+        $request = Request();
         $query = array();
         $i=0;
-
+        $company_user = Company::where('id',$request->session()->get('company_id'))->first()->id;
+        
         switch ($company_user) {
             case '1':
-                $sql_exec = "SELECT * FROM iweb_articulos";
+                $sql_exec = "SELECT TOP 50 * FROM iweb_articulos";
                 break;
             case '2':
-                $sql_exec = "SELECT * FROM iweb_articulos";
+                $sql_exec = "SELECT TOP 50 * FROM gp_iweb_articulos";
                 break;
             case '3':
-                $sql_exec = "SELECT * FROM gp_iweb_articulos";
-                break;
-            
-            default:
-                dd('Ups... algo salio mal');
+                $sql_exec = "";
+                break;            
+            default:                
+                dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
                 break;
         }
 
@@ -52,7 +53,7 @@ class inventario_model extends Model {
 
     public static function getBodegaInventario($articulo) {
         $sql_server = new \sql_server();
-        $query = $sql_server->fetchArray('SELECT * FROM GP_iweb_bodegas WHERE ARTICULO = '."'".$articulo."'".' ', SQLSRV_FETCH_ASSOC);
+        $query = $sql_server->fetchArray('SELECT * FROM iweb_bodegas WHERE ARTICULO = '."'".$articulo."'".' ', SQLSRV_FETCH_ASSOC);
 
         $i = 0;
         $json = array();
@@ -91,7 +92,7 @@ class inventario_model extends Model {
 
     public static function getArtBonificados($articulo) {
         $sql_server = new \sql_server();
-        $query = $sql_server->fetchArray('SELECT REGLAS FROM GP_GMV_mstr_articulos WHERE ARTICULO = '."'".$articulo."'".' ', SQLSRV_FETCH_ASSOC);
+        $query = $sql_server->fetchArray('SELECT REGLAS FROM GMV_mstr_articulos WHERE ARTICULO = '."'".$articulo."'".' ', SQLSRV_FETCH_ASSOC);
         $i = 0;
         $json = array();       
         foreach ($query as $fila) {
@@ -113,7 +114,7 @@ class inventario_model extends Model {
         $f1_ = date('Y-m-d', strtotime($f1));
         $f2_ = date('Y-m-d', strtotime($f2)); 
 
-        $query = $sql_server->fetchArray('SELECT * FROM GP_iweb_transacciones WHERE ARTICULO = '."'".$art."'".' AND DESCRTIPO = '."'".$tp."'".' AND FECHA  BETWEEN '."'".$f1."'".' AND '."'".$f2."'".'  ORDER BY ARTICULO ASC', SQLSRV_FETCH_ASSOC);
+        $query = $sql_server->fetchArray('SELECT * FROM iweb_transacciones WHERE ARTICULO = '."'".$art."'".' AND DESCRTIPO = '."'".$tp."'".' AND FECHA  BETWEEN '."'".$f1."'".' AND '."'".$f2."'".'  ORDER BY ARTICULO ASC', SQLSRV_FETCH_ASSOC);
         $i=0;
         $json = array();
         foreach($query as $fila){
@@ -131,7 +132,7 @@ class inventario_model extends Model {
 
     public static function getLotesArticulo($bodega, $articulo) {
         $sql_server = new \sql_server();
-        $query = $sql_server->fetchArray('SELECT * FROM GP_iweb_lotes WHERE BODEGA = '."'".$bodega."'".' AND ARTICULO = '."'".$articulo."'".' ', SQLSRV_FETCH_ASSOC);
+        $query = $sql_server->fetchArray('SELECT * FROM iweb_lotes WHERE BODEGA = '."'".$bodega."'".' AND ARTICULO = '."'".$articulo."'".' ', SQLSRV_FETCH_ASSOC);
         $i = 0;
         $json = array();
         foreach ($query as $fila) {

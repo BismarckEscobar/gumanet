@@ -6,7 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'App\\Company_model' => $baseDir . '/app/Company_model.php',
+    'App\\Company' => $baseDir . '/app/Company.php',
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
     'App\\Http\\Controllers\\Auth\\ForgotPasswordController' => $baseDir . '/app/Http/Controllers/Auth/ForgotPasswordController.php',
@@ -37,6 +37,8 @@ return array(
     'App\\Providers\\EventServiceProvider' => $baseDir . '/app/Providers/EventServiceProvider.php',
     'App\\Providers\\RouteServiceProvider' => $baseDir . '/app/Providers/RouteServiceProvider.php',
     'App\\Providers\\SqlSrvProvider' => $baseDir . '/app/Providers/SqlSrvProvider.php',
+    'App\\Providers\\gitVersionServiceProvider' => $baseDir . '/app/Providers/gitVersionServiceProvider.php',
+    'App\\Role' => $baseDir . '/app/Role.php',
     'App\\User' => $baseDir . '/app/User.php',
     'App\\dashboard_model' => $baseDir . '/app/dashboard_model.php',
     'App\\inventario_model' => $baseDir . '/app/inventario_model.php',
@@ -3836,6 +3838,7 @@ return array(
     'Zend\\Diactoros\\UploadedFileFactory' => $vendorDir . '/zendframework/zend-diactoros/src/UploadedFileFactory.php',
     'Zend\\Diactoros\\Uri' => $vendorDir . '/zendframework/zend-diactoros/src/Uri.php',
     'Zend\\Diactoros\\UriFactory' => $vendorDir . '/zendframework/zend-diactoros/src/UriFactory.php',
+    'git_version' => $baseDir . '/app/Libraries/gitVersion.php',
     'phpDocumentor\\Reflection\\DocBlock' => $vendorDir . '/phpdocumentor/reflection-docblock/src/DocBlock.php',
     'phpDocumentor\\Reflection\\DocBlockFactory' => $vendorDir . '/phpdocumentor/reflection-docblock/src/DocBlockFactory.php',
     'phpDocumentor\\Reflection\\DocBlockFactoryInterface' => $vendorDir . '/phpdocumentor/reflection-docblock/src/DocBlockFactoryInterface.php',

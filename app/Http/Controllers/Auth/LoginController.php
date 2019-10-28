@@ -91,8 +91,8 @@ class LoginController extends Controller
   
 
     private function verifEmpresa($user_id, $company_id){
-        $request['status'] = 0;
-        $data = DB::table('company_user')->where('user_id',$user_id)->where('company_id',$company_id)->where('estado','status')->get();
+        
+        $data = DB::table('company_user')->where('user_id',$user_id)->where('company_id',$company_id)->get();
         return $data;
 
     }
