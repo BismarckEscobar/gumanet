@@ -1,6 +1,8 @@
 <?php
 
 namespace App;
+use App\User;
+use App\Company;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -8,24 +10,23 @@ class inventario_model extends Model {
     
     public static function getArticulos() {
         $sql_server = new \sql_server();
-        
-        $company_user = auth()->user()->company;
+        $request = Request();
         $query = array();
         $i=0;
-
+        $company_user = Company::where('id',$request->session()->get('company_id'))->first()->id;
+        
         switch ($company_user) {
             case '1':
                 $sql_exec = "SELECT TOP 50 * FROM iweb_articulos";
                 break;
             case '2':
-                $sql_exec = "SELECT TOP 50 * FROM iweb_articulos";
-                break;
-            case '3':
                 $sql_exec = "SELECT TOP 50 * FROM gp_iweb_articulos";
                 break;
-            
-            default:
-                dd('Ups... algo salio mal');
+            case '3':
+                $sql_exec = "";
+                break;            
+            default:                
+                dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
                 break;
         }
 
