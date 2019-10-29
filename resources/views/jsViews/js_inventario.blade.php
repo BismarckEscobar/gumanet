@@ -51,10 +51,8 @@ $( "#InputDtShowColumnsArtic").change(function() {
 	table.page.len(this.value).draw();
 });
 
-
 $('nav .nav.nav-tabs a').click(function(){
     var idNav = $(this).attr('id');
-
     switch(idNav) {
         case 'navBodega':
             getDataBodega(articulo_g);
@@ -76,8 +74,10 @@ var articulo_g = 0;
 function getDetalleArticulo(articulo, descripcion) {
     articulo_g = articulo;
     $("#tArticulo").html(descripcion+`<p class="text-muted">`+articulo+`</p>`);
-    
     getDataBodega(articulo);
+
+    var target = '#nav-bod';
+    $('a[data-toggle=tab][href=' + target + ']').tab('show');
 
     $("#mdDetalleArt").modal('show');
 }
@@ -100,7 +100,6 @@ function getDataBodega(articulo) {
             { "data": "CANT_DISPONIBLE" }
         ],
         "columnDefs": [
-            {"className": "detail_AR", "targets": [ 0 ]},
             { "width": "5%", "targets": [ 0, 1 ] }
         ],
         "info": false,
@@ -195,7 +194,7 @@ $("#btnSearch").click(function() {
     });
 });
     
-$(document).on('click', '.detail_AR', function(ef) {
+$(document).on('click', '#exp_more', function(ef) {
     var table = $('#tblBodega').DataTable();
     var tr = $(this).closest('tr');
     var row = table.row(tr);
@@ -227,6 +226,7 @@ $(document).on('click', '.detail_AR', function(ef) {
 
         format(row.child,data.BODEGA,articulo_g);
         tr.addClass('shown');
+        
         ef.target.innerHTML = "expand_less";
         ef.target.style.background = '#ff5252';
         ef.target.style.color = '#e2e2e2';
