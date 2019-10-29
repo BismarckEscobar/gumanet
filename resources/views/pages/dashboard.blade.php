@@ -49,15 +49,13 @@
             </div>
         </div>
     </div>
-    
-
     <div class="content-graf">
-        <div class="row">
+        <div class="row" id="ct01">
             <div class="graf col-sm-4"><div class="container-vm" id="chart01"></div></div>
             <div class="graf col-sm-4"><div class="container-rm" id="chart02"></div></div>
             <div class="graf col-sm-4"><div class="container-vb" id="chart03"></div></div>
         </div>
-        <div class="row mt-5">
+        <div class="row mt-5" id="ct02">
             <div class="graf col-sm-6"><div class="container-tc" id="chart04"></div></div>
             <div class="graf col-sm-6"><div class="container-tp" id="chart05"></div></div>
         </div>
