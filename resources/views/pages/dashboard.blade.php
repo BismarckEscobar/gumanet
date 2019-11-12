@@ -9,7 +9,8 @@
     <div class="row">
         <div class="col-sm-8">
             <h1 class="h4 mb-4 pb-0">Resumen</h1>
-        </div>
+        </div> 
+        
         <div class="col-sm-4">
             <div class="row">
                 <div class="col-sm-4">
