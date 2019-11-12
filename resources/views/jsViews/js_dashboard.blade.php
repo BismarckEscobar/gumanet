@@ -11,9 +11,9 @@ $(document).ready(function() {
     var list_dash = '';
 
     //GUARDO VARIABLES EN COOKIES
-    $(".content-graf .graf div").each(function(){
+    $(".content-graf .graf div").each(function() {
         name_class = $(this).attr('class');
-        ( $.cookie( name_class )=='not_visible' )?($(this).hide()):($(this).show());
+        ( $.cookie( name_class )=='not_visible' )?($('div.'+name_class).parent().hide()):($('div.'+name_class).parent().show());
 
         visibility = ( $.cookie( name_class )=='not_visible' )?'':'checked';
 
@@ -37,8 +37,9 @@ $(document).ready(function() {
         `+list_dash+`
       </ul>`);
 
+	reordenandoPantalla();
 	
-	/*Highcharts.chart('chart02', {
+    /*Highcharts.chart('chart02', {
 	    chart: {
 	        plotBackgroundColor: null,
 	        plotBorderWidth: null,
@@ -617,15 +618,33 @@ $(".active-page-details").click( function() {
 
 /*OCULTANDO GRAFICAS DASHBOARD*/
 $(document).on('change', '.dash-opc', function(e) {
-    if( $(this).prop('checked') ) {
+    val01 = $(this).val();
 
+    if( $(this).prop('checked') ) {
         $.cookie( $(this).val() , 'yes_visible');
-        $("."+( $(this).val() )).show();
+        $('div.'+val01).parent().show();
         $.removeCookie($(this).val());
     }else {
         $.cookie( $(this).val() , 'not_visible');
-        $("."+( $(this).val() )).hide();
+        $('div.'+val01).parent().hide();
     }
+    location.reload();
 });
+
+function reordenandoPantalla() {
+    var x = 0;
+    $(".content-graf div.row").each(function(e) {
+        var div01 = $(this).attr('id');
+        $("#" + div01 + " div.graf").each(function() {
+            ($(this).is(":visible"))?x++:x=x;            
+        })
+
+        cont = 12 / x;
+
+        $( "#" + div01 + " div.graf" ).removeClass( "col-sm-*" ).addClass( "col-sm-"+cont );
+        x=0;
+
+    });
+}
 
 </script>
