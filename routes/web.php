@@ -16,7 +16,7 @@ Route::get('/Inventario','inventario_controller@index');
 Route::get('/Metas','metas_controller@index');
 Route::get('/Usuario','usuario_controller@index');
 
-Route::get('/Reportes','reportes_controller@index'); 
+Route::get('/Reportes','reportes_controller@index');
 
 
 //RUTAS LOGIN
@@ -50,6 +50,11 @@ Route::post('/lotes','inventario_controller@getLotesArticulo');
 
 //RUTAS DETALLE DE VENTAS
 Route::get('/detalles/{tipo}','dashboard_controller@getDetalleVentas');
+
+//RUTAS GRAFICAS DASHBOARDS
+Route::get('/dataGraf/{mes}/{anio}','dashboard_controller@getDataGraficas');
+Route::get('/top10Cls','dashboard_controller@getTop10Clientes');
+Route::get('/valBodegas','dashboard_controller@getValBodegas');
 
 
 
