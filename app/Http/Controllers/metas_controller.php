@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\User;
 
 class metas_controller extends Controller
 {
@@ -14,9 +15,12 @@ class metas_controller extends Controller
 	 }
 	 
     function index(){
+        $users = User::all();
         $data = [
+            'page' => 'Metas',
             'name' =>  'GUMA@NET'
         ];
-        return view('pages.metas',$data);
+        
+        return view('pages.metas',compact('data','users'));
     }
 }
