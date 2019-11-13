@@ -23,4 +23,15 @@ class metas_controller extends Controller
         
         return view('pages.metas',compact('data','users'));
     }
+    public function meta_exp(){
+        if(!empty($_FILE["exldata"])){
+            $file_array = explode(".", $_FILE["exldata"]["name"]);
+            if($file_array[1]=="xls"){
+
+            }else{
+                echo "Archivo invalido";
+            }
+
+        }
+    }
 }
