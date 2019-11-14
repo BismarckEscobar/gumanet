@@ -40,4 +40,19 @@ class dashboard_controller extends Controller {
 		$obj = dashboard_model::getDetalleVentas($tipo);
 		return response()->json($obj);
 	}
+
+  public function getTop10Clientes() {
+    $obj = dashboard_model::getTop10Clientes();
+    return response()->json($obj);
+  }
+
+  public function getValBodegas() {
+    $obj = dashboard_model::getValBodegas();
+    return response()->json($obj);
+  }
+
+  public function getDataGraficas($mes, $anio) {
+    $obj = dashboard_model::getDataGraficas($mes, $anio);
+    return response()->json($obj);
+  }
 }

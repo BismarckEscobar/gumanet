@@ -14,24 +14,23 @@
         <div class="col-sm-4">
             <div class="row">
                 <div class="col-sm-4">
-                  <select class="form-control form-control-sm float-right" id="inputGroupSelect01">
-                    <option selected>Mes</option>
-                    <option value="1">enero</option>
-                    <option value="2">febrero</option>
-                    <option value="3">marzo</option>
-                    <option value="4">abril</option>
-                    <option value="5">mayo</option>
-                    <option value="6">junio</option>
-                    <option value="7">julio</option>
-                    <option value="8">agosto</option>
-                    <option value="9">septiembre</option>
+                  <select class="form-control form-control-sm float-right" id="opcMes">
+                    <option value="01">enero</option>
+                    <option value="02">febrero</option>
+                    <option value="03">marzo</option>
+                    <option value="04">abril</option>
+                    <option value="05">mayo</option>
+                    <option value="06">junio</option>
+                    <option value="07">julio</option>
+                    <option value="08">agosto</option>
+                    <option value="09">septiembre</option>
                     <option value="10">octubre</option>
                     <option value="11">noviembre</option>
                     <option value="12">diciembre</option>
                   </select>
                 </div>
                 <div class="col-sm-4 float-right">
-                  <select class="form-control form-control-sm" id="inputGroupSelect01">
+                  <select class="form-control form-control-sm" id="opcAnio">
                         <?php
                             $year = date("Y");
                             for ($i= 2018; $i <= $year ; $i++) {
@@ -45,7 +44,7 @@
                         ?>
                   </select>                  
                 </div>
-                <div class="col-sm-4"><a href="#!" style="width: 100%" class="btn-sm btn btn-primary float-right">Aplicar</a></div>
+                <div class="col-sm-4"><a href="#!" style="width: 100%" id="filterM_A" class="btn-sm btn btn-primary float-right">Aplicar</a></div>
                 
             </div>
         </div>
@@ -54,11 +53,11 @@
         <div class="row" id="ct01">
             <div class="graf col-sm-4"><div class="container-vm" id="chart01"></div></div>
             <div class="graf col-sm-4"><div class="container-rm" id="chart02"></div></div>
-            <div class="graf col-sm-4"><div class="container-vb" id="chart03"></div></div>
+            <div class="graf col-sm-4"><div class="container-vb" id="grafBodega"></div></div>
         </div>
         <div class="row mt-5" id="ct02">
-            <div class="graf col-sm-6"><div class="container-tc" id="chart04"></div></div>
-            <div class="graf col-sm-6"><div class="container-tp" id="chart05"></div></div>
+            <div class="graf col-sm-6"><div class="container-tc" id="grafClientes"></div></div>
+            <div class="graf col-sm-6"><div class="container-tp" id="grafProductos"></div></div>
         </div>
     </div>
     <!-- PAGINA TEMPORAL DE DETALLES -->

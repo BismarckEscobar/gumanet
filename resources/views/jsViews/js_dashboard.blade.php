@@ -1,5 +1,10 @@
 <script>
 $(document).ready(function() {
+    var date    = new Date();
+    var anio    = parseInt(date.getFullYear())
+    var mes     = parseInt(date.getMonth()+1);
+
+    actualizandoGraficasDashboard(mes, anio)
 
     var list_chk = {
                     'container-vm' : 'Ventas del mes',
@@ -38,63 +43,14 @@ $(document).ready(function() {
       </ul>`);
 
 	reordenandoPantalla();
-	
-    /*Highcharts.chart('chart02', {
-	    chart: {
-	        plotBackgroundColor: null,
-	        plotBorderWidth: null,
-	        plotShadow: false,
-	        type: 'pie'
-	    },
-	    title: {
-	        text: 'Recuperación del mes'
-	    },
-	    tooltip: {
-	        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-	    },
-	    plotOptions: {
-	        pie: {
-	            allowPointSelect: true,
-	            cursor: 'pointer',
-	            dataLabels: {
-	                enabled: false
-	            },
-	            showInLegend: true
-	        }
-	    },
-	    series: [{
-            cursor: 'pointer',
-            point: {
-                events: {
-                    click: function() {
-                        detalleVentasMes('recu', 'Recuperacion del Mes');
-                    }
-                }
-            },
-	        name: 'Brands',
-	        colorByPoint: true,
-	        data: [{
-	            name: 'Real',
-	            y: 75.3,
-	            sliced: true,
-	            selected: true
-	        }, {
-	            name: 'Meta',
-	            y: 24.7
-	        }]
-	    }]
-	});*/
 
-
-Highcharts.setOptions({
-
-    lang: {
-        numericSymbols: [ 'k' , 'M' , 'B' , 'T' , 'P' , 'E'],
-      decimalPoint: '.',
-      thousandsSep: ','
-    }
-});
-
+    Highcharts.setOptions({
+        lang: {
+            numericSymbols: [ 'k' , 'M' , 'B' , 'T' , 'P' , 'E'],
+          decimalPoint: '.',
+          thousandsSep: ','
+        }
+    });
 
     Highcharts.chart('chart01', {
 
@@ -180,8 +136,6 @@ Highcharts.setOptions({
         
     });
 
-
-
     Highcharts.chart('chart02', {
 
         chart: {
@@ -260,16 +214,14 @@ Highcharts.setOptions({
         
     });
 
-
-
-
-    // Create the chart
-    Highcharts.chart('chart03', {
+    //GRAFICA: VALORIZACION DE INVENTARIO
+    val_bodega = {
         chart: {
-            type: 'column'
+            type: 'column',
+            renderTo: 'grafBodega'
         },
         title: {
-            text: 'Valorización'
+            text: 'Valorización de Bodegas'
         },
         xAxis: {
             type: 'category'
@@ -286,180 +238,12 @@ Highcharts.setOptions({
         plotOptions: {
             series: {
                 allowPointSelect: true,
-                cursor: 'pointer',
+                
                 borderWidth: 0,
                 dataLabels: {
                     enabled: true,
                   formatter: function() {
                     if (this.y > 1000) {
-                      return Highcharts.numberFormat(this.y / 1000, 1) + "K";
-                    } else {
-                      return this.y
-                    }
-                  }
-                }
-            }
-        },
-       tooltip: {
-            headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>C${point.y:,.2f}</b>',
-             shared: true,
-            useHTML: true
-        },
-        series: [
-            {
-                states: {
-                select: {
-                    color: null
-                }
-            },
-                name: "Bodegas",
-                colorByPoint: true,
-                data: [
-                    {
-                        name: "BC01",
-                        y: 6443.74,
-                        drilldown: "BC01"
-                    },
-                    {
-                        name: "BC02",
-                        y: 10345.57,
-                        drilldown: "BC02"
-                    },
-                    {
-                        name: "BC03",
-                        y: 799.23,
-                        drilldown: "BC03"
-                    },
-                    {
-                        name: "BC04",
-                        y: 5434.58,
-                        drilldown: "BC04"
-                    },
-                    {
-                        name: "BC05",
-                        y: 4432.02,
-                        drilldown: "BC05"
-                    }
-                ]
-            }
-        ]
-    });
-
-    // Create the chart
-    Highcharts.chart('chart04', {
-        chart: {
-            type: 'column'
-        },
-        title: {
-            text: 'Top 10 de clientes'
-        },
-        xAxis: {
-            type: 'category'
-        },
-        yAxis: {
-            title: {
-                text: ''
-            }
-
-        },
-        legend: {
-            enabled: false
-        },
-        plotOptions: {
-            series: {
-                allowPointSelect: true,
-                cursor: 'pointer',
-                borderWidth: 0,
-                dataLabels: {
-                    enabled: true,
-                  formatter: function() {
-                    if (this.y > 1000) {
-                      return Highcharts.numberFormat(this.y / 1000, 1) + "K";
-                    } else {
-                      return this.y
-                    }
-                  }
-                }
-            }
-        },
-         tooltip: {
-            headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>C${point.y:,.2f}</b>',
-             shared: true,
-            useHTML: true
-        },
-        series: [
-            {
-                states: {
-                select: {
-                    color: null
-                }
-            },
-                name: "Clientes",
-                colorByPoint: true,
-                data: [
-                    {
-                        name: "C1",
-                        y: 6243.74,
-                        drilldown: "C1"
-                    },
-                    {
-                        name: "C2",
-                        y: 10231.57,
-                        drilldown: "C2"
-                    },
-                    {
-                        name: "C3",
-                        y: 7212.23,
-                        drilldown: "C3"
-                    },
-                    {
-                        name: "C4",
-                        y: 5232.58,
-                        drilldown: "C4"
-                    },
-                    {
-                        name: "C5",
-                        y: 4321.02,
-                        drilldown: "C5"
-                    }
-                ]
-            }
-        ]
-    });
-
-    // Create the chart
-    Highcharts.chart('chart05', {
-        chart: {
-            type: 'column'
-        },
-        title: {
-            text: 'Top 10 de Prod. mas vendidos'
-        },
-        xAxis: {
-            type: 'category'
-        },
-        yAxis: {
-            title: {
-                text: ''
-            }
-
-        },
-        legend: {
-            enabled: false
-        },
-        plotOptions: {
-            series: {
-                allowPointSelect: true,
-                cursor: 'pointer',
-                borderWidth: 0,
-                dataLabels: {
-                    enabled: true,
-                  formatter: function() {
-                    /*if (this.y > 1000000) {
-                      return Highcharts.numberFormat(this.y / 1000000, 2) + "M"
-                    } else */if (this.y > 1000) {
                       return Highcharts.numberFormat(this.y / 1000, 1) + "K";
                     } else {
                       return this.y
@@ -469,52 +253,193 @@ Highcharts.setOptions({
             }
         },
         tooltip: {
-            headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>C${point.y:,.2f}</b>',
-             shared: true,
-            useHTML: true
+            pointFormat: '<span style="color:black"><b>C$ {point.y}</b></span>'
         },
-        series: [
-            {
-                states: {
-                select: {
-                    color: null
-                }
-            },
-                name: "Productos",
+        series:[{
                 colorByPoint: true,
-                data: [
-                    {
-                        name: "P1",
-                        y: 962.74,
-                        drilldown: "P1"
-                    },
-                    {
-                        name: "P2",
-                        y: 10323.57,
-                        drilldown: "P2"
-                    },
-                    {
-                        name: "P3",
-                        y: 7543.23,
-                        drilldown: "P3"
-                    },
-                    {
-                        name: "P4",
-                        y: 5432.58,
-                        drilldown: "P4"
-                    },
-                    {
-                        name: "P5",
-                        y: 4654.02,
-                        drilldown: "P5"
-                    }
-                ]
+                data: [],
+                showInLegend: false
+            }]    
+    };
+
+    //GRAFICA: TOP 10 CLIENTES
+    clientes = {
+        chart: {
+            type: 'column',
+            renderTo: 'grafClientes'
+        },
+        title: {
+            text: 'Top 10 Clientes'
+        },
+        xAxis: {
+            type: 'category'
+        },
+        yAxis: {
+            title: {
+                text: ''
             }
-        ]
-    });
+
+        },
+        legend: {
+            enabled: false
+        },
+        plotOptions: {
+            series: {
+                allowPointSelect: true,
+                
+                borderWidth: 0,
+                dataLabels: {
+                    enabled: true,
+                  formatter: function() {
+                    if (this.y > 1000) {
+                      return Highcharts.numberFormat(this.y / 1000, 1) + "K";
+                    } else {
+                      return this.y
+                    }
+                  }
+                }
+            }
+        },
+        tooltip: {
+            pointFormat: '<span style="color:black"><b>C$ {point.y}</b></span>'
+        },
+        series:[{
+                colorByPoint: true,
+                data: [],
+                showInLegend: false
+            }]        
+    }
+
+    //GRAFICA: TOP 10 PRODUCTOS
+    productos = {
+        chart: {
+            type: 'column',
+            renderTo: 'grafProductos'
+        },
+        title: {
+            text: 'Top 10 Productos mas vendidos'
+        },
+        subtitle: {
+            text: 'The point value at {point.x} is {point.y}'
+        },
+        xAxis: {
+            type: 'category'
+        },
+        yAxis: {
+            title: {
+                text: ''
+            }
+
+        },
+        legend: {
+            enabled: false
+        },
+        plotOptions: {
+            series: {
+                allowPointSelect: true,
+                
+                borderWidth: 0,
+                dataLabels: {
+                    enabled: true,
+                  formatter: function() {
+                    if (this.y > 1000) {
+                      return Highcharts.numberFormat(this.y / 1000, 1) + "K";
+                    } else {
+                      return this.y
+                    }
+                  }
+                }
+            }
+        },
+        tooltip: {
+            pointFormat: '<span style="color:black"><b>C$ {point.y}</b></span>'
+        },
+        series:[{
+                colorByPoint: true,
+                data: [],
+                showInLegend: false
+            }]        
+    }
 
 });
+
+
+$("#filterM_A").click( function(e) {
+    var mes = $('#opcMes option:selected').val();
+    var anio = $('#opcAnio option:selected').val();
+    actualizandoGraficasDashboard(mes,anio)
+})
+
+var val_bodega = {};
+var clientes = {};
+function actualizandoGraficasDashboard(mes, anio) {
+    $.getJSON("dataGraf/"+mes+"/"+anio, function(json) {
+        
+        var dta = [];
+        var title = [];
+
+        $.each(json, function (i, item) {
+
+            switch (item['tipo']) { 
+                case 'dtaBodega':
+                    dta = [];
+                    title = [];
+                    $.each(item['data'], function(i, x) {
+                        dta.push({
+                            name  : x['bodega'],
+                            y     : x['data']
+                        })
+
+                        title.push(x['name'])
+                    });
+
+                    
+                    val_bodega.xAxis.categories = title;
+                    val_bodega.series[0].data = dta;
+                    val_bodega.subtitle = 'Datos hasta la fecha';
+                    chart = new Highcharts.Chart(val_bodega);
+
+                break;
+                case 'dtaCliente':
+                    dta = [];
+                    title = [];
+                    $.each(item['data'], function(i, x) {
+                        dta.push({
+                            name  : x['cliente'],
+                            y     : x['data']
+                        })
+
+                        title.push(x['name'])
+                    });
+                    
+                    clientes.xAxis.categories = title;
+                    clientes.series[0].data = dta;
+                    chart = new Highcharts.Chart(clientes);
+
+                break;
+                case 'dtaProductos':
+                    dta = [];
+                    title = [];
+                    $.each(item['data'], function(i, x) {
+                        dta.push({
+                            name  : x['articulo'],
+                            y     : x['data']
+                        })
+
+                        title.push(x['name'])
+                    });
+                    
+                    productos.xAxis.categories = title;
+                    productos.series[0].data = dta;
+                    chart = new Highcharts.Chart(productos);
+                break;
+                default:
+                alert('Ups... parece que ocurrio un error :(');
+            }
+        });        
+
+    });
+}
 
 function detalleVentasMes(tipo, title) {
     $('#title-page-tem').text(title);

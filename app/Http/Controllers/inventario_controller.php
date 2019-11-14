@@ -30,7 +30,7 @@ class inventario_controller extends Controller
 		return response()->json($obj);
 	}
 
-	public function getBodegaInventario($articulo) {		
+	public function getBodegaInventario($articulo) {
 		$obj = inventario_model::getBodegaInventario($articulo);
 		return response()->json($obj);
 	}

@@ -79,6 +79,10 @@ function getDetalleArticulo(articulo, descripcion) {
     var target = '#nav-bod';
     $('a[data-toggle=tab][href=' + target + ']').tab('show');
 
+    $("#tbody1")
+    .empty()
+    .append(`<tr><td colspan='5'><center>Aún no ha realizado ninguna busqueda</center></td></tr>`);
+
     $("#mdDetalleArt").modal('show');
 }
 
