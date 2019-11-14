@@ -15,7 +15,8 @@ class reportes_controller extends Controller
 	 
     function index(){
         $data = [
-            'name' =>  'GUMA@NET'
+            'name' =>  'GUMA@NET',
+            'page' => 'Ventas',
         ];
         return view('pages.reportes',$data);
     }
