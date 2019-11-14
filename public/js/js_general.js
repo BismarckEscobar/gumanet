@@ -30,8 +30,10 @@ function mensaje(mensaje, tipo) {
     })
 }
 
-$(".active-menu").click( function() {
-    $("#sidebar").toggleClass('active');
+$("body").click( function(e) {
+    if ( $("#sidebar").hasClass('active') || $(e.target).hasClass('active-menu') ) {
+        $("#sidebar").toggleClass('active');
+    }    
 });
 
 feather.replace();

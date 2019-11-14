@@ -43,7 +43,7 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li  class="breadcrumb-item" id="item-nav-01"><a href="Dashboard">Dashboard</a></li>                    
-                    <li class="ml-auto"><a href="#!" class="active-menu"><i class="material-icons" style="font-size: 20px">menu</i></a></li>
+                    <li class="ml-auto"><a href="#!" class="active-menu"><i class="active-menu material-icons" style="font-size: 20px">menu</i></a></li>
                 </ol>
             </nav>
             <div class="p-3">
