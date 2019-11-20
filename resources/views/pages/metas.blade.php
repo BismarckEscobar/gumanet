@@ -5,6 +5,25 @@
   @include('jsViews.js_meta')
 @endsection
 @section('content')
+
+
+<div style="position: relative;">
+  <!-- Then put toasts within -->
+  <div class="toast mx-auto"  data-delay="5000" style="  right: 0; z-index: 1000; position: absolute; top: 0" id="toast1" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <strong class="mr-auto"><h5>Datos Procesado</h5></strong>
+      <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="toast-body" style="font-size: 1.3em">
+      Los datos han sido procesado exitosamente!
+    </div>
+  </div>
+
+
+ 
+
 <div class="row" style="margin: 0 auto">
     <div class="card mt-3" style="width: 100%">
       <div class="card-body">                
@@ -31,7 +50,7 @@
 				<div class="form-check form-check-inline">
 					  <input class="form-check-input" type="radio" name="radioMeta" id="radioMeta2" value="option2">
 					  <label class="form-check-label" for="radioMeta2">
-					    Ver Meta
+					    Ver Historial
 					  </label>
 				</div>
 			</div>
@@ -72,14 +91,15 @@
         </div>
         <div class="row justify-content-center">
             <div class="col-md-6 mb-2">
-            	<form method="POST" id="export_excel">
+            	<form method="POST" id="export_excel" name="export_excel" enctype="multipart/form-data">
 		            <div class="input-group">
 					  <div class="custom-file" id="contInputExlFileMetas">
-					    <input type="file" class="custom-file-input" id="addExlFileMetas">
+					    <input type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" value="upload" class="custom-file-input" name="addExlFileMetas" id="addExlFileMetas"/>
 					    <label class="custom-file-label" for="addExlFileMetas">Seleccione un archivo Ecxel
 					    </label>
 					  </div>
 					</div>
+					{{-- @csrf --}} 
 				</form>
 			</div>
 		</div>
@@ -88,11 +108,16 @@
             <div class="col-md-6">
             	<div class="input-group">
                      <a href="#" style="width: 100%" class="btn btn-primary"  id="btnShowModalExl"></a> 
-
+                     <button style="width: 100%" class="btn btn-primary" type="button" id="disabledLoaderBtn"  disabled>
+						  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+						  Cargando Espere un momento...
+					</button>
                 </div>
 
             </div>
         </div>
+
+
 
       </div>
     </div>
@@ -107,59 +132,59 @@
 	        <hr>
 	        <div class="row">
 	        	<div class="col-12">
-
-	        		<table id="tblVerMetasAgregadas">
-			        	<thead class="text-center">
-			                <tr>
-			                    <th>NOMBRE</th>
-			                    <th>USUARIO</th>
-			                    <th>ROL</th>
-			                    <th>DESCRIPCIÓN</th>
-			                    <th>FECHA INGRESO</th>
-			                    <th>ESTADO</th>
-			                    <th >OPCIONES</th>
-			                </tr>
-			        	</thead>
-			        	<tbody>
-			                @csrf
-			                @foreach($users as $user)
-			                    <tr class="post{{ $user->id }}">
-			                        <td>{{ $user->name." ".$user->surname }}</td>
-			                        <td>{{ $user->email }}</td>
-			                        <td>
-			                            {{ App\Role::find($user->role)->nombre }}
-			                        </td>
-			                        <td>{{ $user->description }}</td>
-			                        <td>{{ $user->created_at }}</td>
-			                        <td>
-			                            @if($user->estado == 0)
-			                                Activo
-			                            @else
-			                                Inactivo
-			                            @endif
-			                        </td>
-			                        <td style="width: 120px">
-			                            <center>
-			                            {{-- <a href='#' class ='show-modal btn  btn-sm' data-id='{{ $user->id }}'><span data-feather='eye'></span></a> --}}
-			                            <a href='#' class ='btn btn-sm tooltip-test' title="Editar" data-toggle="modal" id="editUserModal" data-target="#modalEditUsuario" data-id='{{ $user->id }}' data-name='{{ $user->name }}' data-surname='{{ $user->surname }}' data-email='{{ $user->email }}' data-role='{{ $user->role }}' data-description='{{ $user->description }}'><span data-feather='edit'></span></a>
-			                            <a href='#' class ='delete-modal btn btn-sm tooltip-test' title="Eliminar" data-toggle="modal" id="deleteUserModal" data-target="#modalEliminarUsuario" data-id='{{ $user->id }}'><span data-feather='trash-2'></span></a>
-			                            @if($user->estado == 0)
-			                                <a href='#' class ='btn btn-sm tooltip-test estadoBtn' title="Desactivar"  data-id='{{ $user->id }}'  data-status='0'><span data-feather='x'></span></a>
-			                            @else
-			                                <a href='#' class ='btn btn-sm tooltip-test estadoBtn' title="Activar"  data-id='{{ $user->id }}' data-status='1'><span data-feather='check'></span></a>
-			                            @endif
-			                        </center>
-			                        </td>
-			                    </tr>
-			                @endforeach
-			            </tbody>
-			        </table>
-			        
-			      </div>
-	        	</div>
+	            	<div class="table-responsive mt-3 mb-5">
+		        		<table class="table table-bordered table-sm" width="100%" id="tblVerMetasAgregadas">
+				        	<thead class="text-center">
+				                <tr>
+				                    <th>NOMBRE</th>
+				                    <th>USUARIO</th>
+				                    <th>ROL</th>
+				                    <th>DESCRIPCIÓN</th>
+				                    <th>FECHA INGRESO</th>
+				                    <th>ESTADO</th>
+				                    <th >OPCIONES</th>
+				                </tr>
+				        	</thead>
+				        	<tbody>
+				                @csrf
+				                @foreach($users as $user)
+				                    <tr class="post{{ $user->id }}">
+				                        <td>{{ $user->name." ".$user->surname }}</td>
+				                        <td>{{ $user->email }}</td>
+				                        <td>
+				                            {{ App\Role::find($user->role)->nombre }}
+				                        </td>
+				                        <td>{{ $user->description }}</td>
+				                        <td>{{ $user->created_at }}</td>
+				                        <td>
+				                            @if($user->estado == 0)
+				                                Activo
+				                            @else
+				                                Inactivo
+				                            @endif
+				                        </td>
+				                        <td style="width: 120px">
+				                            <center>
+				                            {{-- <a href='#' class ='show-modal btn  btn-sm' data-id='{{ $user->id }}'><span data-feather='eye'></span></a> --}}
+				                            <a href='#' class ='btn btn-sm tooltip-test' title="Editar" data-toggle="modal" id="editUserModal" data-target="#modalEditUsuario" data-id='{{ $user->id }}' data-name='{{ $user->name }}' data-surname='{{ $user->surname }}' data-email='{{ $user->email }}' data-role='{{ $user->role }}' data-description='{{ $user->description }}'><span data-feather='edit'></span></a>
+				                            <a href='#' class ='delete-modal btn btn-sm tooltip-test' title="Eliminar" data-toggle="modal" id="deleteUserModal" data-target="#modalEliminarUsuario" data-id='{{ $user->id }}'><span data-feather='trash-2'></span></a>
+				                            @if($user->estado == 0)
+				                                <a href='#' class ='btn btn-sm tooltip-test estadoBtn' title="Desactivar"  data-id='{{ $user->id }}'  data-status='0'><span data-feather='x'></span></a>
+				                            @else
+				                                <a href='#' class ='btn btn-sm tooltip-test estadoBtn' title="Activar"  data-id='{{ $user->id }}' data-status='1'><span data-feather='check'></span></a>
+				                            @endif
+				                        </center>
+				                        </td>
+				                    </tr>
+				                @endforeach
+				            </tbody>
+				        </table>
+				    </div>
+			    </div>
 	        </div>
 	    </div>
 	</div>
+</div>
 </div>
 
 
@@ -170,64 +195,38 @@
   <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Eliminar uausrio</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Datos de Metas de <span id="mesModalExl"></span> del <span id="annoModalExl"></span> </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-        <table id="tblExcelImportMeta">
-        	<thead class="text-center">
-                <tr>
-                    <th>NOMBRE</th>
-                    <th>USUARIO</th>
-                    <th>ROL</th>
-                    <th>DESCRIPCIÓN</th>
-                    <th>FECHA INGRESO</th>
-                    <th>ESTADO</th>
-                    <th >OPCIONES</th>
-                </tr>
-        	</thead>
-        	<tbody>
-                @csrf
-                @foreach($users as $user)
-                    <tr class="post{{ $user->id }}">
-                        <td>{{ $user->name." ".$user->surname }}</td>
-                        <td>{{ $user->email }}</td>
-                        <td>
-                            {{ App\Role::find($user->role)->nombre }}
-                        </td>
-                        <td>{{ $user->description }}</td>
-                        <td>{{ $user->created_at }}</td>
-                        <td>
-                            @if($user->estado == 0)
-                                Activo
-                            @else
-                                Inactivo
-                            @endif
-                        </td>
-                        <td style="width: 120px">
-                            <center>
-                            {{-- <a href='#' class ='show-modal btn  btn-sm' data-id='{{ $user->id }}'><span data-feather='eye'></span></a> --}}
-                            <a href='#' class ='btn btn-sm tooltip-test' title="Editar" data-toggle="modal" id="editUserModal" data-target="#modalEditUsuario" data-id='{{ $user->id }}' data-name='{{ $user->name }}' data-surname='{{ $user->surname }}' data-email='{{ $user->email }}' data-role='{{ $user->role }}' data-description='{{ $user->description }}'><span data-feather='edit'></span></a>
-                            <a href='#' class ='delete-modal btn btn-sm tooltip-test' title="Eliminar" data-toggle="modal" id="deleteUserModal" data-target="#modalEliminarUsuario" data-id='{{ $user->id }}'><span data-feather='trash-2'></span></a>
-                            @if($user->estado == 0)
-                                <a href='#' class ='btn btn-sm tooltip-test estadoBtn' title="Desactivar"  data-id='{{ $user->id }}'  data-status='0'><span data-feather='x'></span></a>
-                            @else
-                                <a href='#' class ='btn btn-sm tooltip-test estadoBtn' title="Activar"  data-id='{{ $user->id }}' data-status='1'><span data-feather='check'></span></a>
-                            @endif
-                        </center>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-        
+      <div class="modal-body" id="bodyModalMetasExldata">
+        <div class="table-responsive mt-3 mb-5">
+	        <table class="table table-bordered table-sm" width="100%" id="tblExcelImportMeta">
+	        	<thead class="text-center">
+	                <tr>
+	                    <th>RUTA</th>
+	                    <th>CODIGO</th>
+	                    <th>CLIENTE</th>
+	                    <th>ARTICULO</th>
+	                    <th>DESCRIPCION</th>
+	                    <th>VALOR</th>
+	                    <th>UNIDAD</th>
+	                </tr>
+	            </thead>
+	            <tbody id="tbodyTblExlImportMeta">
+	            </tbody>
+	        </table>
+	    </div>
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-danger procesarActionBtn" data-dismiss="modal">Procesar</button>
+        <button type="button" id="cancelModalMetaBtn" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger procesarActionBtn" id="procesarModalMetaExl">Procesar</button>
+        <button style="width: 100%" class="btn btn-danger" type="button" id="disabledLoaderBtnProcess"  disabled>
+			  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+			  Procesando datos...
+		</button>
       </div>
     </div>
   </div>
