@@ -161,8 +161,27 @@ class metas_model extends Model
     }
 
 
-    public static function getHistorialMeta(){
-        
+    public static function getHistorialMeta($mes, $anno){
+        $fecha =  date('Y-m-d', strtotime($anno.'-'.$mes.'-01'));
+         $type = 'select';
+        $cnnType=SQLSRV_FETCH_ASSOC;
+        $sql_exec = 'SELECT * FROM "meta_data" WHERE fechaMeta = '."'".$fecha."'".'';
+
+        $i=0;
+        $data  = array();
+        $query = (new self)->cnn_SQL_Server($sql_exec, NULL, $type, $cnnType);
+        foreach ($query as $key) {
+            $data['data'][$i]['ruta'] = $key['ruta']; 
+            $data['data'][$i]['codigo'] = $key['codigo']; 
+            $data['data'][$i]['cliente'] = $key['cliente']; 
+            $data['data'][$i]['articulo'] = $key['articulo']; 
+            $data['data'][$i]['descripcion'] = $key['descripcion']; 
+            $data['data'][$i]['valor'] = $key['valor']; 
+            $data['data'][$i]['unidad'] = $key['unidad']; 
+            $i++;
+        }
+
+        return $data;
     }
 
 

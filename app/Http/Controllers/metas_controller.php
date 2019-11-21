@@ -73,7 +73,9 @@ class metas_controller extends Controller
     }
 
     public function getHistorialMeta(){
-        echo metas_model::getHistorialMeta();
+        $mes = $_POST['mes'];
+        $anno = $_POST['anno'];
+        echo json_encode(metas_model::getHistorialMeta($mes, $anno));
     }
 
     public function getExlFromTmpTable(){

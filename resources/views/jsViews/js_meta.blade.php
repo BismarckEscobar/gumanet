@@ -6,8 +6,10 @@
     $("#disabledLoaderBtnProcess").hide();
 
 
+	
 
-    $("#tblExcelImportMeta,#tblVerMetasAgregadas").DataTable({
+
+    $("#tblExcelImportMeta").DataTable({
     	
     	"info":    false,
     	"lengthMenu": [[10,30,50,100,-1], [20,30,50,100,"Todo"]],
@@ -73,7 +75,7 @@
 		    }else{
 		    	getHistorialMeta();
 
-		    	$('#tblVerMetasAgregadas').DataTable();
+		    	//$('#tblVerMetasAgregadas').DataTable();
 		    	$('#verMetasAgregadasXMes').show();
 	    	}
 		}else{
@@ -103,7 +105,7 @@
 		//$("#addExlFileMetas").prop('disabled', false);
 	    $("#contInputExlFileMetas").show();
 	    $("#verMetasAgregadasXMes").hide();
-	    $('#tblVerMetasAgregadas').DataTable();
+	    //$('#tblVerMetasAgregadas').DataTable();
 	    $("#alertMetas").hide();
 	});
 
@@ -113,23 +115,59 @@
 		//$("#addExlFileMetas").prop('disabled', true);
 	    $("#contInputExlFileMetas").hide();
 	    $("#verMetasAgregadasXMes").hide();
-	    $('#tblVerMetasAgregadas').DataTable();
+	    //$('#tblVerMetasAgregadas').DataTable();
 	    $("#alertMetas").hide();
 	});
 
 
-	function getHistorialMeta($mes, $año){
-		var mes = $("#selectMesMeta option:selected").val();
-		var anno = $("#selectAnnoMeta option:selected").val();
-		$.ajax({
-			url : "get_historial_meta",
-			method: "POST",
-			data:{mes:mes,
-				anno:anno},
-			success: function(){
+	function getHistorialMeta(){
+		$("#tblVerMetasAgregadas").DataTable().clear().draw();
+		$("#tblVerMetasAgregadas").dataTable().fnDestroy();
+		$mes = $("#selectMesMeta option:selected").val();
+		$anno = $("#selectAnnoMeta option:selected").val();
 
-			}
+		$("#tblVerMetasAgregadas").DataTable({
+			"processing": true,
+	        "serverSide": true,
+	    	ajax:{
+	    		url: "get_historial_meta",
+	    		type: 'POST',
+               data: {
+               	mes : $mes,
+               	anno: $anno
+               }
+	    	},
+	    	"pageLength" : 10,
+	    	"info":    false,
+    	"lengthMenu": [[10,30,50,100,-1], [20,30,50,100,"Todo"]],
+    	"language": {
+    	    "zeroRecords": "Cargando...",
+    	    "paginate": {
+    	        "first":      "Primera",
+    	        "last":       "Última ",
+    	        "next":       "Siguiente",
+    	        "previous":   "Anterior"
+    	    },
+    	    "lengthMenu": "MOSTRAR _MENU_",
+    	    "emptyTable": "NO HAY DATOS DISPONIBLES",
+    	    "search":     "BUSCAR"
+    	},
+	    	"columns":[
+		    	{"data":'ruta'},
+		        {"data":'codigo'},
+		        {"data":'cliente'},                      
+		        {"data":'articulo'},
+		        {"data":'descripcion'},    
+		        {"data":'valor'},
+			    {"data":'unidad'}
+		    ]
 		});
+
+		$("#tblVerMetasAgregadas_length").hide();
+    	$("#tblVerMetasAgregadas_filter").hide();
+		$('#mesHistorialMeta').text($("#selectMesMeta option:selected").text());
+        $('#annoHistorialMeta').text($("#selectAnnoMeta option:selected").text());
+			
 	}
 
 	function validarCamposMeta(){

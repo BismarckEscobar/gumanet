@@ -126,58 +126,24 @@
 <div class="row" id="verMetasAgregadasXMes" style="margin: 0 auto">
     <div class="card mt-3" style="width: 100%">
 	    <div class="card-body">         
-	    	<h5 class="card-title">{{ "Recuperación" }}</h5>
+	    	<h5 class="card-title">{{ "Datos de Metas / " }}<span id="mesHistorialMeta"></span> {{ " " }} <span id="annoHistorialMeta"></span></h5>
 	        <hr>     
-	        <h5 class="card-title">{{ "Cuota" }}</h5>
-	        <hr>
+	       
 	        <div class="row">
 	        	<div class="col-12">
 	            	<div class="table-responsive mt-3 mb-5">
 		        		<table class="table table-bordered table-sm" width="100%" id="tblVerMetasAgregadas">
 				        	<thead class="text-center">
-				                <tr>
-				                    <th>NOMBRE</th>
-				                    <th>USUARIO</th>
-				                    <th>ROL</th>
-				                    <th>DESCRIPCIÓN</th>
-				                    <th>FECHA INGRESO</th>
-				                    <th>ESTADO</th>
-				                    <th >OPCIONES</th>
+				               <tr>
+				                    <th>RUTA</th>
+				                    <th>CODIGO</th>
+				                    <th>CLIENTE</th>
+				                    <th>ARTICULO</th>
+				                    <th>DESCRIPCION</th>
+				                    <th>VALOR</th>
+				                    <th>UNIDAD</th>
 				                </tr>
 				        	</thead>
-				        	<tbody>
-				                @csrf
-				                @foreach($users as $user)
-				                    <tr class="post{{ $user->id }}">
-				                        <td>{{ $user->name." ".$user->surname }}</td>
-				                        <td>{{ $user->email }}</td>
-				                        <td>
-				                            {{ App\Role::find($user->role)->nombre }}
-				                        </td>
-				                        <td>{{ $user->description }}</td>
-				                        <td>{{ $user->created_at }}</td>
-				                        <td>
-				                            @if($user->estado == 0)
-				                                Activo
-				                            @else
-				                                Inactivo
-				                            @endif
-				                        </td>
-				                        <td style="width: 120px">
-				                            <center>
-				                            {{-- <a href='#' class ='show-modal btn  btn-sm' data-id='{{ $user->id }}'><span data-feather='eye'></span></a> --}}
-				                            <a href='#' class ='btn btn-sm tooltip-test' title="Editar" data-toggle="modal" id="editUserModal" data-target="#modalEditUsuario" data-id='{{ $user->id }}' data-name='{{ $user->name }}' data-surname='{{ $user->surname }}' data-email='{{ $user->email }}' data-role='{{ $user->role }}' data-description='{{ $user->description }}'><span data-feather='edit'></span></a>
-				                            <a href='#' class ='delete-modal btn btn-sm tooltip-test' title="Eliminar" data-toggle="modal" id="deleteUserModal" data-target="#modalEliminarUsuario" data-id='{{ $user->id }}'><span data-feather='trash-2'></span></a>
-				                            @if($user->estado == 0)
-				                                <a href='#' class ='btn btn-sm tooltip-test estadoBtn' title="Desactivar"  data-id='{{ $user->id }}'  data-status='0'><span data-feather='x'></span></a>
-				                            @else
-				                                <a href='#' class ='btn btn-sm tooltip-test estadoBtn' title="Activar"  data-id='{{ $user->id }}' data-status='1'><span data-feather='check'></span></a>
-				                            @endif
-				                        </center>
-				                        </td>
-				                    </tr>
-				                @endforeach
-				            </tbody>
 				        </table>
 				    </div>
 			    </div>
@@ -195,7 +161,7 @@
   <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Datos de Metas de <span id="mesModalExl"></span> del <span id="annoModalExl"></span> </h5>
+        <h5 class="modal-title" id="exampleModalLabel">Datos de Metas / <span id="mesModalExl"></span> del <span id="annoModalExl"></span> </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
