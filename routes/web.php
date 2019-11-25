@@ -15,8 +15,7 @@
 Route::get('/Inventario','inventario_controller@index');
 Route::get('/Metas','metas_controller@index');
 Route::get('/Usuario','usuario_controller@index');
-
-Route::get('/Reportes','reportes_controller@index');
+Route::get('/Reportes','reportes_controller@index'); 
 
 
 //RUTAS LOGIN
@@ -47,6 +46,14 @@ Route::get('/objPrecios/{articulo}','inventario_controller@getPreciosArticulos')
 Route::get('/objBonificado/{articulo}','inventario_controller@getArtBonificados');
 Route::post('/transacciones','inventario_controller@transaccionesDetalle');
 Route::post('/lotes','inventario_controller@getLotesArticulo');
+
+//RUTAS METAS
+Route::post('/meta_exp','metas_controller@exportMetaFromExl');
+Route::get('/get_tmp_exl_data','metas_controller@getExlFromTmpTable');
+Route::get('/add_data_meta','metas_controller@add_data_meta');
+Route::post('/calc_and_add_unidad_meta','metas_controller@calcAddUnidadMeta');
+Route::get('/truncate_tmp_exl_tbl','metas_controller@truncate_tmp_exl_tbl');
+Route::post('/get_historial_meta','metas_controller@getHistorialMeta');
 
 //RUTAS DETALLE DE VENTAS
 Route::get('/detalles/{tipo}/{mes}/{anio}','dashboard_controller@getDetalleVentas');
