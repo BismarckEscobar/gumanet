@@ -15,18 +15,21 @@
             <div class="row">
                 <div class="col-sm-4">
                   <select class="form-control form-control-sm float-right" id="opcMes">
-                    <option value="01">enero</option>
-                    <option value="02">febrero</option>
-                    <option value="03">marzo</option>
-                    <option value="04">abril</option>
-                    <option value="05">mayo</option>
-                    <option value="06">junio</option>
-                    <option value="07">julio</option>
-                    <option value="08">agosto</option>
-                    <option value="09">septiembre</option>
-                    <option value="10">octubre</option>
-                    <option value="11">noviembre</option>
-                    <option value="12">diciembre</option>
+                    <?php
+                        setlocale(LC_ALL, 'es_ES');
+                        $mes = date("m");
+
+                        for ($i= 1; $i <= 12 ; $i++) {
+                            $dateObj   = DateTime::createFromFormat('!m', $i);
+                            $monthName = strftime('%B', $dateObj->getTimestamp());
+                            
+                            if ($i==$mes) {
+                                echo'<option selected value="'.$i.'">'.$monthName.'</option>';
+                            }else {
+                                echo'<option value="'.$i.'">'.$monthName.'</option>';
+                            }
+                        }
+                    ?>
                   </select>
                 </div>
                 <div class="col-sm-4 float-right">
@@ -51,7 +54,7 @@
     </div>
     <div class="content-graf">
         <div class="row" id="ct01">
-            <div class="graf col-sm-4"><div class="container-vm" id="chart01"></div></div>
+            <div class="graf col-sm-4"><div class="container-vm" id="grafVentas"></div></div>
             <div class="graf col-sm-4"><div class="container-rm" id="chart02"></div></div>
             <div class="graf col-sm-4"><div class="container-vb" id="grafBodega"></div></div>
         </div>
@@ -100,7 +103,8 @@
         <div class="row">
             <div class="col-12">
                 <div class="table-responsive mt-3 mb-5">
-                    <table class="table table-bordered table-sm" width="100%" id="dtTemporal"></table>
+                    <div id="cjVentas"><table class="table table-bordered table-sm" width="100%" id="dtVentas" ></table></div>
+                    <div id="cjRecuperacion"><table class="table table-bordered table-sm" width="100%" id="dtRecuperacion"></table></div>                    
                 </div>
             </div>
         </div>

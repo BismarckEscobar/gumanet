@@ -49,14 +49,15 @@ Route::post('/transacciones','inventario_controller@transaccionesDetalle');
 Route::post('/lotes','inventario_controller@getLotesArticulo');
 
 //RUTAS DETALLE DE VENTAS
-Route::get('/detalles/{tipo}','dashboard_controller@getDetalleVentas');
+Route::get('/detalles/{tipo}/{mes}/{anio}','dashboard_controller@getDetalleVentas');
 
 //RUTAS GRAFICAS DASHBOARDS
 Route::get('/dataGraf/{mes}/{anio}','dashboard_controller@getDataGraficas');
 Route::get('/top10Cls','dashboard_controller@getTop10Clientes');
 Route::get('/valBodegas','dashboard_controller@getValBodegas');
 
-
+//RUTAS REPORTES VENTAS
+Route::post('/ventasDetalle','reportes_controller@detalleVentas');
 
 
 
