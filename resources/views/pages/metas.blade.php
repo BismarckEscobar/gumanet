@@ -35,7 +35,7 @@
 				</div>
         	</div>
         </div>
-        <div class="row justify-content-center mb-2">
+        <div class="row justify-content-center mb-2" hidden="true">
 
             <div class="col-md-3">
 		        <div class="form-check form-check-inline">
