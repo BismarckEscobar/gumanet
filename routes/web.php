@@ -58,6 +58,11 @@ Route::post('/get_historial_meta','metas_controller@getHistorialMeta');
 //RUTAS DETALLE DE VENTAS
 Route::get('/detalles/{tipo}','dashboard_controller@getDetalleVentas');
 
+//RUTAS GRAFICAS DASHBOARDS
+Route::get('/dataGraf/{mes}/{anio}','dashboard_controller@getDataGraficas');
+Route::get('/top10Cls','dashboard_controller@getTop10Clientes');
+Route::get('/valBodegas','dashboard_controller@getValBodegas');
+
 
 
 
