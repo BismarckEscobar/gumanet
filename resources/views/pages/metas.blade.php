@@ -35,7 +35,7 @@
 				</div>
         	</div>
         </div>
-        <div class="row justify-content-center mb-2" hidden="true">
+        <div class="row justify-content-center mb-2">
 
             <div class="col-md-3">
 		        <div class="form-check form-check-inline">
@@ -95,7 +95,7 @@
 		            <div class="input-group">
 					  <div class="custom-file" id="contInputExlFileMetas">
 					    <input type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" value="upload" class="custom-file-input" name="addExlFileMetas" id="addExlFileMetas"/>
-					    <label class="custom-file-label" for="addExlFileMetas">Seleccione un archivo Ecxel
+					    <label class="custom-file-label" id="fileLabelMeta" for="addExlFileMetas">Seleccione un archivo Ecxel
 					    </label>
 					  </div>
 					</div>
@@ -180,8 +180,6 @@
 	                    <th>UNIDAD</th>
 	                </tr>
 	            </thead>
-	            <tbody id="tbodyTblExlImportMeta">
-	            </tbody>
 	        </table>
 	    </div>
       </div>
