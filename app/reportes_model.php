@@ -79,7 +79,7 @@ class reportes_model extends Model
 			return $query;
         }
 
-        $sql_server->close();
+        $sql_server->close(); 
         return false;
     }
 
