@@ -1,81 +1,62 @@
 <script>
 	$(document).ready(function() {
-    //AGREGO LA RUTA AL NAVEGADOR
-    $("#item-nav-01").after(`<li class="breadcrumb-item active">Metas</li>`);
-    $('#disabledLoaderBtn').hide();
-    $("#disabledLoaderBtnProcess").hide();
+	    //AGREGO LA RUTA AL NAVEGADOR
+	    $("#item-nav-01").after(`<li class="breadcrumb-item active">Metas</li>`);
+	    $('#disabledLoaderBtn').hide();
+	    $("#disabledLoaderBtnProcess").hide();
+
+	    $("#verMetasAgregadasXMes").hide();
+
+	    $("#alertMetas").hide();
 
 
-	
+	    if($("#radioMeta1").is(':checked')){
 
-
-    $("#tblExcelImportMeta").DataTable({
-    	
-    	"info":    false,
-    	"lengthMenu": [[10,30,50,100,-1], [20,30,50,100,"Todo"]],
-    	"language": {
-    	    "zeroRecords": "Cargando...",
-    	    "paginate": {
-    	        "first":      "Primera",
-    	        "last":       "Última ",
-    	        "next":       "Siguiente",
-    	        "previous":   "Anterior"
-    	    },
-    	    "lengthMenu": "MOSTRAR _MENU_",
-    	    "emptyTable": "NO HAY DATOS DISPONIBLES",
-    	    "search":     "BUSCAR"
-    	},
-    	
-        "columnDefs": [
-            { "width": "3%", "targets": [ 0 ] },
-            { "width": "3%", "targets": [ 1 ] },
-            { "width": "24%", "targets": [ 2 ] },
-            { "width": "10%", "targets": [ 3 ] },
-            { "width": "40%", "targets": [ 4 ] },
-            { "width": "10%", "targets": [ 5 ] },
-            { "width": "10%", "targets": [ 6 ] }
-        ],
-    });
-
-
-
-
-    $("#tblExcelImportMeta_length").hide();
-    $("#tblExcelImportMeta_filter").hide();
-
-    $("#tblVerMetasAgregadas_length").hide();
-    $("#tblVerMetasAgregadas_filter").hide();
-
-    $("#verMetasAgregadasXMes").hide();
-
-    $("#alertMetas").hide();
-
-
-    if($("#radioMeta1").is(':checked')){
-
-    	$("#btnShowModalExl").text("Agregar");
-    }else{
-    	$("#btnShowModalExl").text("Visualizar");
-    }
+	    	$("#btnShowModalExl").text("Agregar");
+	    }else{
+	    	$("#btnShowModalExl").text("Visualizar");
+	    }
     
-    
-});
+	});
+
+	$('.custom-file-input').on('change',function(){
+    	
+    	if ($(this).val()=='') {
+			$('#fileLabelMeta').text('Seleccione un archivo Ecxel');
+    	}else{
+    		$('#fileLabelMeta').text($(this).val());
+    	}
+	});
+
+
+
 
 	$("#btnShowModalExl").on('click', function(){
 
 		if (validarCamposMeta()) {
+
 			$("#alertMetas").hide();
 
 			if($("#radioMeta1").is(':checked')){
 
-				$('#btnShowModalExl').hide();
-				$('#disabledLoaderBtn').show();
-				truncate_tmp_exl_tbl();
-				exportarDatosExlAModalMetas();
+				if(!existeFechaMeta()){
+
+					$('#btnShowModalExl').hide();
+					$('#disabledLoaderBtn').show();
+					truncate_tmp_exl_tbl();//Borrar registro de tabla temporal en phpMyAdmin
+					exportarDatosExlAModalMetas();//Funcion para exportar datos de excel a la tabla temporal
+
+				}else{
+					$("#alertMetas").show();
+					$("#alertMetas").css({"color":"red","font-weight":"bold"});
+					$("#alertMetas").text("Ya existe meta con la fecha seleccioanda");
+				}
+
 		    }else{
+		    	
+		    	$('#tblVerMetasAgregadas').DataTable().destroy();
 		    	getHistorialMeta();
 
-		    	//$('#tblVerMetasAgregadas').DataTable();
 		    	$('#verMetasAgregadasXMes').show();
 	    	}
 		}else{
@@ -99,42 +80,130 @@
 		
 	});
 
+	$('#procesarModalMetaExl').on('click', function(){
+		
+		$("#procesarModalMetaExl").hide();
+		$("#cancelModalMetaBtn").hide();
+		$("#disabledLoaderBtnProcess").show();
+		addDatatableDatosMeta();
+
+	});
+
 
 	$("#radioMeta1").on('click', function(){
 		$("#btnShowModalExl").text("Agregar");
-		//$("#addExlFileMetas").prop('disabled', false);
 	    $("#contInputExlFileMetas").show();
 	    $("#verMetasAgregadasXMes").hide();
-	    //$('#tblVerMetasAgregadas').DataTable();
 	    $("#alertMetas").hide();
 	});
 
 
 	$("#radioMeta2").on('click', function(){
 		$("#btnShowModalExl").text("Visualizar");
-		//$("#addExlFileMetas").prop('disabled', true);
 	    $("#contInputExlFileMetas").hide();
 	    $("#verMetasAgregadasXMes").hide();
-	    //$('#tblVerMetasAgregadas').DataTable();
 	    $("#alertMetas").hide();
 	});
 
 
 	function getHistorialMeta(){
-		$("#tblVerMetasAgregadas").DataTable().clear().draw();
-		$("#tblVerMetasAgregadas").dataTable().fnDestroy();
-		$mes = $("#selectMesMeta option:selected").val();
-		$anno = $("#selectAnnoMeta option:selected").val();
+		inicialDataTablesMetas('#tblVerMetasAgregadas','get_historial_meta');		
+	}
 
-		$("#tblVerMetasAgregadas").DataTable({
+	function get_tmp_exl_data(){
+		inicialDataTablesMetas('#tblExcelImportMeta','get_tmp_exl_data');
+	}
+	
+	function truncate_tmp_exl_tbl(){
+		$.ajax({
+			url:"truncate_tmp_exl_tbl"
+		});
+	}
+
+
+	function exportarDatosExlAModalMetas(){
+		var formData = new FormData($("#export_excel")[0]);
+		var mes = $("#selectMesMeta option:selected").val();
+		var anno = $("#selectAnnoMeta option:selected").val();
+
+		formData.append("mes", mes);
+		formData.append("anno", anno);
+		$.ajax({
+			url:"export_meta_from_exl",
+			method:"POST",
+			data:formData,
+			contentType:false,
+            processData: false,
+            success: function(){
+
+            	$('#mesModalExl').text($("#selectMesMeta option:selected").text());
+	            $('#annoModalExl').text(anno);
+				$('#tblExcelImportMeta').DataTable().destroy();
+            	get_tmp_exl_data();
+            	$('#disabledLoaderBtn').hide();
+		        $('#modalShowModalExl').modal({backdrop: 'static', keyboard: false});
+		    	$('#modalShowModalExl').modal('show');
+		    	$('#btnShowModalExl').show();
+            	
+            	
+            }
+		});
+
+
+	}
+	function addDatatableDatosMeta(){
+    	
+		$.ajax({
+		url:"add_data_meta",
+		success: function(data){
+			
+			$('#modalShowModalExl').modal('hide');
+			$("#procesarModalMetaExl").show();
+			$("#cancelModalMetaBtn").show();
+			$("#disabledLoaderBtnProcess").hide();
+			$('#toast1').toast('show');
+		}
+       });
+    }
+	function calcMetaAddMetaUnidad(){
+		var mes = $("#selectMesMeta option:selected").val();
+		var anno = $("#selectAnnoMeta option:selected").val();
+		
+		/*$.ajax({
+			url:"calc_and_add_unidad_meta",
+			success: function(data){
+				
+			}
+
+		});*/
+
+
+	}
+
+	
+
+
+	function inicialDataTablesMetas(dtName,dataUrl){
+		$(dtName).DataTable().clear().draw();
+		$(dtName).dataTable().fnDestroy();
+		mes = $("#selectMesMeta option:selected").val();
+		anno = $("#selectAnnoMeta option:selected").val();
+
+		$(dtName).DataTable({
 			"processing": true,
 	        "serverSide": true,
 	    	ajax:{
-	    		url: "get_historial_meta",
+	    		url:dataUrl,
 	    		type: 'POST',
                data: {
-               	mes : $mes,
-               	anno: $anno
+               	mes : mes,
+               	anno: anno,
+               	success: function(res){
+               		if (res == 0) {
+
+               		}
+
+               	}
                }
 	    	},
 	    	"pageLength" : 10,
@@ -151,24 +220,36 @@
     	    "lengthMenu": "MOSTRAR _MENU_",
     	    "emptyTable": "NO HAY DATOS DISPONIBLES",
     	    "search":     "BUSCAR"
-    	},
+    	}, 
+    	"columnDefs": [
+            { "width": "3%", "targets": [ 0 ] },
+            { "width": "3%", "targets": [ 1 ] },
+            { "width": "24%", "targets": [ 2 ] },
+            { "width": "10%", "targets": [ 3 ] },
+            { "width": "40%", "targets": [ 4 ] },
+            { "width": "10%", "targets": [ 5 ] },
+            { "width": "10%", "targets": [ 6 ] }
+        ],
 	    	"columns":[
-		    	{"data":'ruta'},
-		        {"data":'codigo'},
-		        {"data":'cliente'},                      
-		        {"data":'articulo'},
-		        {"data":'descripcion'},    
-		        {"data":'valor'},
-			    {"data":'unidad'}
+		    	{data:'ruta', name:'ruta'},
+		        {data:'codigo', name:'codigo'},
+		        {data:'cliente', name:'cliente'},
+		        {data:'articulo', name:'articulo'},
+		        {data:'descripcion', name:'descripcion'},
+		        {data:'valor', name: 'valor'},
+			    {data:'unidad', name:'unidad'}
 		    ]
 		});
 
-		$("#tblVerMetasAgregadas_length").hide();
-    	$("#tblVerMetasAgregadas_filter").hide();
-		$('#mesHistorialMeta').text($("#selectMesMeta option:selected").text());
-        $('#annoHistorialMeta').text($("#selectAnnoMeta option:selected").text());
-			
+		$(dtName+'_length').hide();
+    	$(dtName+'_filter').hide();
+		$('#mesHistorialMeta').text($('#selectMesMeta option:selected').text());
+        $('#annoHistorialMeta').text($('#selectAnnoMeta option:selected').text());
+
 	}
+
+
+	
 
 	function validarCamposMeta(){
 		if($("#radioMeta1").is(':checked')){
@@ -189,139 +270,32 @@
 		
 	}
 
+	function existeFechaMeta(){
 
-	function truncate_tmp_exl_tbl(){
-		$.ajax({
-			url:"truncate_tmp_exl_tbl"
-		});
-	}
-
-
-
-	function exportarDatosExlAModalMetas(){
-		var formData = new FormData($("#export_excel")[0]);
 		var mes = $("#selectMesMeta option:selected").val();
 		var anno = $("#selectAnnoMeta option:selected").val();
+		var resultado;
 
-		formData.append("mes", mes);
-		formData.append("anno", anno);
 		$.ajax({
-			url:"meta_exp",
-			method:"POST",
-			data:formData,
-			contentType:false,
-            processData: false,
-            success: function(){
-            	$('#mesModalExl').text($("#selectMesMeta option:selected").text());
-	            $('#annoModalExl').text(anno);
-				
-            	get_tmp_exl_data();
+			url:'existe_Fecha_Meta',
+    		type: 'POST',
+    		async:false,
+            data: {
+           		mes : mes,
+           		anno: anno
+            },
+            success: function(res){
             	
-            	
+            	if (res == true){
+            		resultado = true;
+            	}else{
+            		resultado = false;
+            	}
             }
 		});
 
-
+		return resultado;
 	}
-
-
-	function get_tmp_exl_data(){
-		
-		$.ajax({
-			url:"get_tmp_exl_data",
-			success: function(data){
-
-				var e =JSON.parse(data); 
-				var ObjTable = $("#tblExcelImportMeta").DataTable();
-				$("#tblExcelImportMeta").DataTable().clear().draw();
-				
-				if(e[0]== null){
-
-	            }else{
-
-
-	                for (f=0;f<e.length;f++){
-
-	                    ObjTable.row.add( [
-	                        e[f].ruta,
-	                        e[f].codigo,
-	                        e[f].cliente,                      
-	                        e[f].articulo,
-	                        e[f].descripcion,    
-	                        e[f].valor,
-	                        e[f].unidad
-	                    ] ).draw( false )
-	                }
-	            }
-
-	            
-	            $('#disabledLoaderBtn').hide();
-	            $('#modalShowModalExl').modal({backdrop: 'static', keyboard: false});
-            	$('#modalShowModalExl').modal('show');
-            	$('#btnShowModalExl').show();
-			}
-
-		});
-
-
-	}
-
-	$('#procesarModalMetaExl').on('click', function(){
-		
-		$("#procesarModalMetaExl").hide();
-		$("#cancelModalMetaBtn").hide();
-		$("#disabledLoaderBtnProcess").show();
-		addDatatableDatosMeta();
-
-	});
-
-
-    function addDatatableDatosMeta(){
-    	
-    	/*var myTable = $('#tblExcelImportMeta').DataTable();
-
-    	var data = myTable.rows().data().toArray();
-    	console.log(data);
-    	
-
-    	$.ajax({
-			url:"add_data_meta",
-			type: 'POST',
-       		dataType: 'json',
-			data: {data:data},
-			success: function(data){
-				//calcMetaAddMetaUnidad();
-			}
-
-		});*/
-			$.ajax({
-			url:"add_data_meta",
-			success: function(data){
-				//calcMetaAddMetaUnidad();
-				$('#modalShowModalExl').modal('hide');
-				$("#procesarModalMetaExl").show();
-				$("#cancelModalMetaBtn").show();
-				$("#disabledLoaderBtnProcess").hide();
-				$('#toast1').toast('show');
-			}
-           });
-    }
-
-	function calcMetaAddMetaUnidad(){
-		var mes = $("#selectMesMeta option:selected").val();
-		var anno = $("#selectAnnoMeta option:selected").val();
-		
-		/*$.ajax({
-			url:"calc_and_add_unidad_meta",
-			success: function(data){
-				
-			}
-
-		});*/
-
-
-	}
-
-
+	
 
 </script>

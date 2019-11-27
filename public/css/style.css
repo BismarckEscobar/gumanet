@@ -10,6 +10,10 @@
   background-color: #cec7c7;
 }
 
+#customFile .custom-file-control:lang(en)::before {
+  content: "Click me";
+}
+
 .input-fecha {
   height: 30px;
   width: 100%;
