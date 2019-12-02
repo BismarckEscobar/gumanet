@@ -6,7 +6,7 @@ use App;
 use App\metas_model;
 use App\Models;
 use App\User;
-use App\Metadata;
+use App\Gn_couta_x_producto;
 use App\Tmp_meta_exl;
 use App\Company;
 use DataTables;
@@ -27,7 +27,9 @@ class metas_controller extends Controller
 	public function __construct()
 	 {
 	    $this->middleware('auth');//pagina se carga unicamente cuando se este logeado
-        ini_set('memory_limit', '1024M');
+        ini_set('memory_limit', '3048M');
+        error_reporting(E_ALL);
+        ini_set('display_errors', 1);
 	 }
 	 
     function index(){
@@ -70,25 +72,37 @@ class metas_controller extends Controller
 
                     $i = 2;//contador
                     $param=0;
+                    $nomRuta = $objPHPExcel->getActiveSheet()->getCell('A1')->getCalculatedValue();
+                    $nomCodigo = $objPHPExcel->getActiveSheet()->getCell('B1')->getCalculatedValue();
+                    $nomClte = $objPHPExcel->getActiveSheet()->getCell('C1')->getCalculatedValue();
+                    $nomArt = $objPHPExcel->getActiveSheet()->getCell('D1')->getCalculatedValue();
+                    $nomDescrip = $objPHPExcel->getActiveSheet()->getCell('E1')->getCalculatedValue();
+                    $nomVal = $objPHPExcel->getActiveSheet()->getCell('F1')->getCalculatedValue();
+                    $nomUnidad = $objPHPExcel->getActiveSheet()->getCell('G1')->getCalculatedValue();
 
-                    while ($param==0) {
-                        
-                        
+                    if($nomRuta == '' || $nomCodigo == '' || $nomClte == '' || $nomArt == '' || $nomDescrip == '' || $nomVal == '' || $nomUnidad == '' ){
 
-                        Tmp_meta_exl::insert(array('fechaMeta' => $anno.'/'.$mes.'/01',
-                            'ruta' => $objPHPExcel->getActiveSheet()->getCell('A'.$i)->getCalculatedValue(),
-                            'codigo' => $this->addZeros($objPHPExcel->getActiveSheet()->getCell('B'.$i)->getCalculatedValue()),
-                            'cliente' => $objPHPExcel->getActiveSheet()->getCell('C'.$i)->getCalculatedValue(),
-                            'articulo' => $objPHPExcel->getActiveSheet()->getCell('D'.$i)->getCalculatedValue(),
-                            'descripcion' => $objPHPExcel->getActiveSheet()->getCell('E'.$i)->getCalculatedValue(),
-                            'valor' => $objPHPExcel->getActiveSheet()->getCell('F'.$i)->getCalculatedValue(),
-                            'unidad' => $objPHPExcel->getActiveSheet()->getCell('G'.$i)->getCalculatedValue(),
-                            'created_at' => new\DateTime()));
+                    }else{
+
+                        while ($param==0) {
                             
-                        $i++;
-                        if($objPHPExcel->getActiveSheet()->getCell('A'.$i)->getCalculatedValue()==NULL){
-                            $param=1;
-                        }           
+                            
+
+                            Tmp_meta_exl::insert(array('fechaMeta' => $anno.'/'.$mes.'/01',
+                                'ruta' => $objPHPExcel->getActiveSheet()->getCell('A'.$i)->getCalculatedValue(),
+                                'codigo' => $this->addZeros($objPHPExcel->getActiveSheet()->getCell('B'.$i)->getCalculatedValue()),
+                                'cliente' => $objPHPExcel->getActiveSheet()->getCell('C'.$i)->getCalculatedValue(),
+                                'articulo' => $objPHPExcel->getActiveSheet()->getCell('D'.$i)->getCalculatedValue(),
+                                'descripcion' => $objPHPExcel->getActiveSheet()->getCell('E'.$i)->getCalculatedValue(),
+                                'valor' => $objPHPExcel->getActiveSheet()->getCell('F'.$i)->getCalculatedValue(),
+                                'unidad' => $objPHPExcel->getActiveSheet()->getCell('G'.$i)->getCalculatedValue(),
+                                'created_at' => new\DateTime()));
+                                
+                            $i++;
+                            if($objPHPExcel->getActiveSheet()->getCell('A'.$i)->getCalculatedValue()==NULL){
+                                $param=1;
+                            }           
+                        }
                     }
 
 
@@ -112,32 +126,53 @@ class metas_controller extends Controller
 
 
     public function getTmpExlData(){
-        $metaData = Tmp_meta_exl::all();
         
-       return DataTables::of($metaData)->make(true);
+          
+       //return DataTables::of(Tmp_meta_exl::latest()->get())->make(true);
+        $tempTable = Tmp_meta_exl::query();
+        return DataTables::of($tempTable)->make(true);
       
     }
 
 
      public function getHistorialMeta(Request $request){
+        $idPeriodo = '';
             
         if($request->isMethod('post')){
             $mes = $request->input('mes');
             $anno = $request->input('anno');
+            $metaData = array();            
 
             $fecha =  date('Y-m-d', strtotime($anno.'-'.$mes.'-01'));
+            $company_id = Company::where('id',$request->session()->get('company_id'))->first()->id;
+            $idPeriodo = DB::connection('sqlsrv')->table('metacuota_GumaNet')->where('Fecha',$fecha)->where('IdCompany',$company_id)->get(['IdPeriodo']);
+       
 
-            $metaData = Metadata::where('fechaMeta', $fecha)->get();
+            if($idPeriodo->isNotEmpty()){
+                
+                $metaData = Gn_couta_x_producto::where('IdPeriodo',$idPeriodo[0]->IdPeriodo)->get();
 
-            //$metaData2 = DB::connection('sqlsrv')->table('meta_datas')->where('fechaMeta', $fecha)->get();
-            if(empty($metaData)){
-                return 0;
             }else{
-                return DataTables::of($metaData)->make(true);
+                $metaData['data']['CodVendedor'] = 'No Hay Datos';
+                $metaData['data']['CodProducto'] = 'No Hay Datos';
+                $metaData['data']['NombreProducto'] = 'No Hay Datos';
+                $metaData['data']['Meta'] = 'No Hay Datos';
+                $metaData['data']['val'] = 'No Hay Datos';
             }
+           
+           
+                
+            
+               
+
+            
+             
+            return DataTables::of($metaData)->make(true);
+            
         }
        
     }
+
 
 
     public function existeFechaMeta(Request $request){
@@ -145,8 +180,8 @@ class metas_controller extends Controller
             $mes = $request->input('mes');
             $anno = $request->input('anno');
             $fecha =  date('Y-m-d', strtotime($anno.'-'.$mes.'-01'));
-
-            $res = Metadata::where('fechaMeta', $fecha)->take(1)->get();
+            $res = DB::connection('sqlsrv')->table('metacuota_GumaNet')->where('Fecha', $fecha)->get();
+            //$res = Metadata::where('fechaMeta', $fecha)->take(1)->get();
             if (empty($res[0])){
                 return 0;
             }else{
@@ -156,10 +191,8 @@ class metas_controller extends Controller
     }
 
 
-////función se mostrara en las gráficas
-    public function calcAddUnidadMeta(){
-       return Tmp_meta_exl::select(Tmp_meta_exl::raw('mes, anno, ruta, articulo, descripcion, sum(valor) as valor, sum(unidad) as unidad'))->groupBy('ruta','articulo', 'descripcion', 'mes', 'anno')->get();
-    }
+
+    
 
     public function truncate_tmp_exl_tbl(){
         Tmp_meta_exl::truncate();
@@ -167,26 +200,56 @@ class metas_controller extends Controller
 
 
     public function add_data_meta(Request $request){
-
+        $metaXProducto = array();
         $data = json_decode(json_encode(Tmp_meta_exl::all()), True); //class stdObjet to array
-        $fecha = date('Y-m-d', strtotime(substr($data[0]['fechaMeta'],0,10))); //devuelve los primeros 10 digitos de la cadena
-        $company_user = Company::where('id',$request->session()->get('company_id'))->first()->id;
-         $this->cambiarEstadoMeta();
-       ///////AGREGA ENCABEZADO DE META
-        $idPeriodo = DB::connection('sqlsrv')->table('metacuota_GumaNet')->insertGetId(['Tipo'=>'CUOTA', 'Estado' => 1,'Fecha' => $fecha,'IdCompany' => $company_user]);//inserta registro y retorna su ID debe ser autoincremento
-        $this->addDataFromTmpToDataMeta($data,$idPeriodo);
+
+        
+         if(empty($data)){
+            return 0;
+        }else{
+            $fecha = date('Y-m-d', strtotime(substr($data[0]['fechaMeta'],0,10))); //devuelve los primeros 10 digitos de la cadena
+            $fechaDesc = date('d-m-Y', strtotime(substr($data[0]['fechaMeta'],0,10))); //devuelve los primeros 10 digitos de la cadena
+            $company_user = Company::where('id',$request->session()->get('company_id'))->first()->id;
+            $this->cambiarEstadoMeta();
+            ///////AGREGA ENCABEZADO DE META
+            $idPeriodo = DB::connection('sqlsrv')->table('metacuota_GumaNet')->insertGetId(['Tipo'=>'CUOTA', 'Descripcion' => 'COUTA-'.$fechaDesc, 'Estado' => 1,'Fecha' => $fecha,'IdCompany' => $company_user]);//inserta registro y retorna su ID, debe ser autoincremento
+            //$this->addDataFromTmpToDataMeta($data,$idPeriodo);
+            $metaXProducto = $this->calcAddUnidadMeta();
+            $this->addDataFromTmpToCoutaXProd($metaXProducto,$idPeriodo);
+            return 1;
+        }
     }
 
 
-    private function addDataFromTmpToDataMeta($data, $idPeriodo){
+
+
+
+    private function calcAddUnidadMeta(){
+       $coleccion = Tmp_meta_exl::select('fechaMeta', 'ruta', 'articulo', 'descripcion',\DB::raw('sum(valor) as valor, sum(unidad) as unidad'))->groupBy('ruta','articulo','descripcion','fechaMeta')->get();
+       return $coleccion;
+    }
+
+
+    private function addDataFromTmpToCoutaXProd($metaXProducto, $idPeriodo){//Agregar datos Calculados
+       
+       foreach ($metaXProducto as $key){
+            Gn_couta_x_producto::insert(['CodVendedor' => $key['ruta'],'CodProducto' => $key['articulo'],'NombreProducto' => $key['descripcion'], 'FHGrabacion' => new\DateTime(),'Meta' => $key['unidad'], 'IdPeriodo' => $idPeriodo, 'val' => $key['valor']]);
+        }
+        
+    }
+
+
+    /*private function addDataFromTmpToCoutaXProd($data, $idPeriodo){
+        
+       
         //////AGREGAR DATOS PARA CALCULAR METAS///////
        
-        foreach ($data as $key) {
+       /foreach ($data as $key) {
             $fecha = date('Y-m-d', strtotime($key['created_at']));
             Metadata::insert(['fechaMeta'=> $key['fechaMeta'], 'ruta'=> $key['ruta'], 'codigo'=> $key['codigo'], 'cliente'=> $key['cliente'], 'articulo'=> $key['articulo'], 'descripcion'=> $key['descripcion'], 'valor'=> $key['valor'], 'unidad'=> $key['unidad'], 'created_at'=> $key['created_at'], 'IdPeriodo' => $idPeriodo]);
         }
         
-    }
+    }*/
 
     private function cambiarEstadoMeta(){
         DB::connection('sqlsrv')->table('metacuota_GumaNet')->where('Estado',1)->update(['Estado' => 0]);
