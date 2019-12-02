@@ -176,7 +176,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\SqlSrvProvider::class,
         App\Providers\gitVersionServiceProvider::class,
-        Yajra\Datatables\DatatablesServiceProvider::class
+        Yajra\DataTables\DatatablesServiceProvider::class
 
     ],
 
@@ -228,7 +228,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'sql_server' => App\Libraries\sql_server::class,
         'git_version' => App\Libraries\git_version::class,
-        'Datatables' => Yajra\Datatables\Facades\Datatables::class
+        'Datatables' => Yajra\Datatables\Facades\DataTables::class
 
     ],
 

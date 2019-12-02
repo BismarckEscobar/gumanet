@@ -10,7 +10,7 @@
 	    $("#alertMetas").hide();
 
 
-	    if($("#radioMeta1").is(':checked')){
+	    if($("#radioMeta1").is(':checked')){//cambiar texto del boton
 
 	    	$("#btnShowModalExl").text("Agregar");
 	    }else{
@@ -19,7 +19,7 @@
     
 	});
 
-	$('.custom-file-input').on('change',function(){
+	$('.custom-file-input').on('change',function(){//Mostrar nombrede archivo al seleccionarlo
     	
     	if ($(this).val()=='') {
 			$('#fileLabelMeta').text('Seleccione un archivo Ecxel');
@@ -30,23 +30,23 @@
 
 
 
-
+	//Boton muestra modal de datos de metas a agregar o muestra datos de metas segun la fecha en de pendencia de que ratio Button este selecionado
 	$("#btnShowModalExl").on('click', function(){
 
-		if (validarCamposMeta()) {
+		if (validarCamposMeta()) {//Validar mes y año que no esten vacios
 
 			$("#alertMetas").hide();
 
 			if($("#radioMeta1").is(':checked')){
 
-				if(!existeFechaMeta()){
+				if(!existeFechaMeta()){// si no existe mes y año seleciionados en datos de metas muestra el modal
 
 					$('#btnShowModalExl').hide();
 					$('#disabledLoaderBtn').show();
 					truncate_tmp_exl_tbl();//Borrar registro de tabla temporal en phpMyAdmin
 					exportarDatosExlAModalMetas();//Funcion para exportar datos de excel a la tabla temporal
 
-				}else{
+				}else{// existe mes y a{ño uestra un alerta de bootstrap 
 					$("#alertMetas").show();
 					$("#alertMetas").css({"color":"red","font-weight":"bold"});
 					$("#alertMetas").text("Ya existe meta con la fecha seleccioanda");
@@ -54,8 +54,8 @@
 
 		    }else{
 		    	
-		    	$('#tblVerMetasAgregadas').DataTable().destroy();
-		    	getHistorialMeta();
+		    	
+		    	getHistorialMeta();//funcion para visualizar datos de metas por fecha agregados anteriormente 
 
 		    	$('#verMetasAgregadasXMes').show();
 	    	}
@@ -107,14 +107,58 @@
 
 
 	function getHistorialMeta(){
-		inicialDataTablesMetas('#tblVerMetasAgregadas','get_historial_meta');		
+
+		var columnDefs = new Array();
+		var columns= new Array();
+
+		columnDefs=[//tamaños de cplumans del datatable
+				{ "width": "3%", "targets": [ 0 ] },
+	            { "width": "3%", "targets": [ 1 ] },
+	            { "width": "24%", "targets": [ 2 ] },
+	            { "width": "10%", "targets": [ 3 ] },
+	            { "width": "10%", "targets": [ 4 ] }
+	            ];
+		   
+	    columns=[//variables para recibir datos de columnas del datatable
+	    		{data:'CodVendedor', name:'CodVendedor'},
+	    		{data:'CodProducto', name:'CodProducto'},
+		        {data:'NombreProducto', name:'NombreProducto'},
+		        {data:'Meta', name:'Meta'},
+		        {data:'val', name:'val'}
+		        ];
+
+		inicialDataTablesMetas('#tblVerMetasAgregadas','get_historial_meta', columns);	// funcion que recibe el id del datatable a mostrar el url de la ruta y las vasriables para los datos de las columnas
 	}
 
 	function get_tmp_exl_data(){
-		inicialDataTablesMetas('#tblExcelImportMeta','get_tmp_exl_data');
+
+		var columnDefs = new Array();
+		var columns= new Array();
+
+		columnDefs=[//tamaños de cplumans del datatable
+				{ "width": "3%", "targets": [ 0 ] },
+	            { "width": "3%", "targets": [ 1 ] },
+	            { "width": "24%", "targets": [ 2 ] },
+	            { "width": "10%", "targets": [ 3 ] },
+	            { "width": "40%", "targets": [ 4 ] },
+	            { "width": "10%", "targets": [ 5 ] },
+	            { "width": "10%", "targets": [ 6 ] }
+	            ];
+		   
+	    columns=[//variables para recibir datos de columnas del datatable
+	    		{data:'ruta', name:'ruta'},
+		        {data:'codigo', name:'codigo'},
+		        {data:'cliente', name:'cliente'},
+		        {data:'articulo', name:'articulo'},
+		        {data:'descripcion', name:'descripcion'},
+		        {data:'valor', name: 'valor'},
+			    {data:'unidad', name:'unidad'}
+		        ];
+
+		inicialDataTablesMetas('#tblExcelImportMeta','get_tmp_exl_data',columns);// funcion que recibe el id del datatable a mostrar el url de la ruta y las vasriables para los datos de las columnas
 	}
 	
-	function truncate_tmp_exl_tbl(){
+	function truncate_tmp_exl_tbl(){// funcion que trunca la tabla temporal que esta en phpMyadmin mysql antes de agregarle datos
 		$.ajax({
 			url:"truncate_tmp_exl_tbl"
 		});
@@ -135,13 +179,12 @@
 			contentType:false,
             processData: false,
             success: function(){
-
+            	//esconder, cambiar texto, y mostrar modal
             	$('#mesModalExl').text($("#selectMesMeta option:selected").text());
 	            $('#annoModalExl').text(anno);
-				$('#tblExcelImportMeta').DataTable().destroy();
             	get_tmp_exl_data();
             	$('#disabledLoaderBtn').hide();
-		        $('#modalShowModalExl').modal({backdrop: 'static', keyboard: false});
+		        $('#modalShowModalExl').modal({backdrop: 'static', keyboard: false}); //modal no desaparecera si se le hace clik fuera de el
 		    	$('#modalShowModalExl').modal('show');
 		    	$('#btnShowModalExl').show();
             	
@@ -156,12 +199,26 @@
 		$.ajax({
 		url:"add_data_meta",
 		success: function(data){
+			if(data!=0){
+				$('#tituloToastMeta').text("Datos Procesados");
+				$('#tituloToastMeta').css('color','black');
+				$('#toastProcesoMetaText').text("Los datos han sido procesado exitosamente!");
+				$('#modalShowModalExl').modal('hide');
+				$("#procesarModalMetaExl").show();
+				$("#cancelModalMetaBtn").show();
+				$("#disabledLoaderBtnProcess").hide();
+				$('#toast1').toast('show');//mostrar toast despues de procesar datos calculados (suma) hacia el servidor
+			}else{
+				$('#tituloToastMeta').text("Erro de plantilla");
+				$('#toastProcesoMetaText').text("Documento excel no coinside con la plantilla configurada");
+				$('#tituloToastMeta').css('color','red');
+				$('#modalShowModalExl').modal('hide');
+				$("#procesarModalMetaExl").show();
+				$("#cancelModalMetaBtn").show();
+				$("#disabledLoaderBtnProcess").hide();
+				$('#toast1').toast('show');//mostrar toast despues de procesar datos calculados (suma) hacia el servidor
+			}
 			
-			$('#modalShowModalExl').modal('hide');
-			$("#procesarModalMetaExl").show();
-			$("#cancelModalMetaBtn").show();
-			$("#disabledLoaderBtnProcess").hide();
-			$('#toast1').toast('show');
 		}
        });
     }
@@ -183,71 +240,51 @@
 	
 
 
-	function inicialDataTablesMetas(dtName,dataUrl){
-		$(dtName).DataTable().clear().draw();
-		$(dtName).dataTable().fnDestroy();
+	function inicialDataTablesMetas(dtName,dataUrl, columns){
+		//$(dtName).DataTable().clear().draw();
+		
+		$(dtName).dataTable().fnDestroy();//destruir dataatble e inicializarlo nuevamente para eliminar datos solicitados anteriormente
 		mes = $("#selectMesMeta option:selected").val();
 		anno = $("#selectAnnoMeta option:selected").val();
 
 		$(dtName).DataTable({
-			"processing": true,
-	        "serverSide": true,
-	    	ajax:{
-	    		url:dataUrl,
-	    		type: 'POST',
-               data: {
-               	mes : mes,
-               	anno: anno,
-               	success: function(res){
-               		if (res == 0) {
-
-               		}
-
-               	}
-               }
-	    	},
-	    	"pageLength" : 10,
-	    	"info":    false,
-    	"lengthMenu": [[10,30,50,100,-1], [20,30,50,100,"Todo"]],
-    	"language": {
-    	    "zeroRecords": "Cargando...",
-    	    "paginate": {
-    	        "first":      "Primera",
-    	        "last":       "Última ",
-    	        "next":       "Siguiente",
-    	        "previous":   "Anterior"
+			'processing': true,
+	        'serverSide': true,//proceso desde el servidor
+	    	'ajax':{
+	    		'url':dataUrl,
+	    		'type': 'POST',
+                'data': {
+               	'mes': mes,
+               	'anno': anno
+               	},
+            },
+	    	'pageLength' : 10,
+	    	'info':    false,
+    	'lengthMenu': [[10,30,50,100,-1], [20,30,50,100,'Todo']],
+    	'language': {
+    		'sProcessing': 'Procesando...',
+    	    'zeroRecords': 'Cargando...',
+    	    'paginate': {
+    	        'first':      'Primera',
+    	        'last':       'Última ',
+    	        'next':       'Siguiente',
+    	        'previous':   'Anterior'
     	    },
-    	    "lengthMenu": "MOSTRAR _MENU_",
-    	    "emptyTable": "NO HAY DATOS DISPONIBLES",
-    	    "search":     "BUSCAR"
+    	    'lengthMenu': 'MOSTRAR _MENU_',
+    	    'emptyTable': 'NO HAY DATOS DISPONIBLES',
+    	    'infoEmpty': 'NO HAY DATOS DISPONIBLES',
+    	    'search':     'BUSCAR'
     	}, 
-    	"columnDefs": [
-            { "width": "3%", "targets": [ 0 ] },
-            { "width": "3%", "targets": [ 1 ] },
-            { "width": "24%", "targets": [ 2 ] },
-            { "width": "10%", "targets": [ 3 ] },
-            { "width": "40%", "targets": [ 4 ] },
-            { "width": "10%", "targets": [ 5 ] },
-            { "width": "10%", "targets": [ 6 ] }
-        ],
-	    	"columns":[
-		    	{data:'ruta', name:'ruta'},
-		        {data:'codigo', name:'codigo'},
-		        {data:'cliente', name:'cliente'},
-		        {data:'articulo', name:'articulo'},
-		        {data:'descripcion', name:'descripcion'},
-		        {data:'valor', name: 'valor'},
-			    {data:'unidad', name:'unidad'}
-		    ]
+	    	'columns': columns
+		    
 		});
 
-		$(dtName+'_length').hide();
-    	$(dtName+'_filter').hide();
+		$(dtName+'_length').hide();//esconder select que muestra cantidad de registros por pagina
+    	$(dtName+'_filter').hide();//Esconde input de filtro de tabla por texto escrito
 		$('#mesHistorialMeta').text($('#selectMesMeta option:selected').text());
         $('#annoHistorialMeta').text($('#selectAnnoMeta option:selected').text());
 
 	}
-
 
 	
 

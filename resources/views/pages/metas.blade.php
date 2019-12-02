@@ -11,13 +11,13 @@
   <!-- Then put toasts within -->
   <div class="toast mx-auto"  data-delay="5000" style="  right: 0; z-index: 1000; position: absolute; top: 0" id="toast1" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="toast-header">
-      <strong class="mr-auto"><h5>Datos Procesado</h5></strong>
+      <strong class="mr-auto"><h5 id="tituloToastMeta"></h5></strong>
       <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
-    <div class="toast-body" style="font-size: 1.3em">
-      Los datos han sido procesado exitosamente!
+    <div class="toast-body" id="toastProcesoMetaText" style="font-size: 1.3em">
+      
     </div>
   </div>
 
@@ -95,7 +95,7 @@
 		            <div class="input-group">
 					  <div class="custom-file" id="contInputExlFileMetas">
 					    <input type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" value="upload" class="custom-file-input" name="addExlFileMetas" id="addExlFileMetas"/>
-					    <label class="custom-file-label" id="fileLabelMeta" for="addExlFileMetas">Seleccione un archivo Ecxel
+					    <label class="custom-file-label" id="fileLabelMeta" for="addExlFileMetas" data-label="Buscar">Seleccione un archivo Ecxel
 					    </label>
 					  </div>
 					</div>
@@ -135,13 +135,11 @@
 		        		<table class="table table-bordered table-sm" width="100%" id="tblVerMetasAgregadas">
 				        	<thead class="text-center">
 				               <tr>
-				                    <th>RUTA</th>
-				                    <th>CODIGO</th>
-				                    <th>CLIENTE</th>
-				                    <th>ARTICULO</th>
-				                    <th>DESCRIPCION</th>
-				                    <th>VALOR</th>
-				                    <th>UNIDAD</th>
+                          <th>RUTA</th>
+			                    <th>COD</th>
+			                    <th>PRODUCTO</th>
+			                    <th>META</th>
+			                    <th>VALOR</th>
 				                </tr>
 				        	</thead>
 				        </table>

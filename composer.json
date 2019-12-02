@@ -14,6 +14,7 @@
         "laravel/tinker": "^1.0",
         "phpoffice/phpexcel": "dev-master",
         "snapappointments/bootstrap-select": "^1.13",
+        "yajra/laravel-datatables": "^1.5",
         "yajra/laravel-datatables-oracle": "~8.0"
     },
     "require-dev": {
