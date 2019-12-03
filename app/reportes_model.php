@@ -85,6 +85,7 @@ class reportes_model extends Model
 
     public static function returndetalleVentas($clase, $cliente, $articulo, $mes, $anio) {
         $sql_server = new \sql_server();
+        $Dta = array();
 
         $sql_exec = '';
         $request = Request();
@@ -93,6 +94,7 @@ class reportes_model extends Model
         switch ($company_user) {
             case '1':
                 $sql_exec = "EXEC Umk_VentaLinea_Articulo ".$mes.", ".$anio.", '".$clase."', '".$cliente."', '".$articulo."'";
+                $sql_meta = "EXEC UMK_meta_articulos ".$mes.", ".$anio.", '".$clase."', '".$cliente."', '".$articulo."'";
                 break;
             case '2':
                 $sql_exec = "EXEC Gp_VentaLinea_Articulo ".$mes.", ".$anio.", '".$clase."', '".$cliente."', '".$articulo."'";
@@ -105,9 +107,10 @@ class reportes_model extends Model
                 break;
         }
         $query = $sql_server->fetchArray($sql_exec, SQLSRV_FETCH_ASSOC);
+        $query2 = $sql_server->fetchArray($sql_meta, SQLSRV_FETCH_ASSOC);
 
         if( count($query)>0 ){
-			return $query;
+			return $Dta = array('objDt' => $query, 'meta' => intval($query2[0]['meta']));
         }
 
         $sql_server->close();

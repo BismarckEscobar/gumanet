@@ -102,8 +102,8 @@ $(document).ready(function() {
             cursor: 'pointer',
             point: {
                 events: {
-                    click: function() {
-                        detalleVentasMes('vent', 'Ventas del Mes');
+                    click: function(e) {
+                        detalleVentasMes('vent', 'Ventas del Mes', 'data');
                     }
                 }
             },
@@ -428,6 +428,7 @@ function actualizandoGraficasDashboard(mes, anio) {
                     ventas.xAxis.categories = title;
                     ventas.series[0].data = dta;
                     chart = new Highcharts.Chart(ventas);
+                    $("#MontoMeta").text('C$ ' + numeral(json[3].data[1].data).format('0,0.00') )
                 break;
                 default:
                 alert('Ups... parece que ocurrio un error :(');
@@ -436,7 +437,7 @@ function actualizandoGraficasDashboard(mes, anio) {
     });
 }
 
-function detalleVentasMes(tipo, title) {
+function detalleVentasMes(tipo, title, data) {
     $('#title-page-tem').text(title);
     $("#page-details").toggleClass('active');
     mes = $("#opcMes option:selected").val();
@@ -495,7 +496,7 @@ function detalleVentasMes(tipo, title) {
             });
             $('#txtMontoReal').text('Total real ventas');
 
-            $('#MontoMeta').text('C$ 0.00')
+            //$('#MontoMeta').text('C$ 0.00')
             $('#txtMontoMeta').text('Total meta');
         break;
       case 'recu':
@@ -534,7 +535,7 @@ function detalleVentasMes(tipo, title) {
         $('#MontoReal').text('C$ 5,000.00');
         $('#txtMontoReal').text('Total real recuperado');
 
-        $('#MontoMeta').text('C$ 10,000.00')
+        $('#MontoMeta').text('C$ 0,000.00')
         $('#txtMontoMeta').text('Total meta');
         break;
       default:
