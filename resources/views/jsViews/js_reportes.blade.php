@@ -67,9 +67,9 @@ $("#filterData").click( function() {
             anio 		: $('#cmbAnio option:selected').val()
         },
         success: function (json) {
-			if (json) {
-				dataVentasClientes(json);
-				dataVentasArticulos(json);
+			if (json['objDt']) {
+				dataVentasClientes(json['objDt']);
+				dataVentasArticulos(json['objDt'], json['meta']);
 			}else {
 				mensaje("No se encontraron registros que coincidan con la busqueda", "error")
 				$("#MontoMeta").text('0.00');
@@ -140,7 +140,7 @@ function dataVentasClientes(json) {
 	});
 }
 
-function dataVentasArticulos(json) {
+function dataVentasArticulos(json, meta) {
 	table = $('#tblArticulos').DataTable ( {
 				"data":json,
 				"destroy": true,
@@ -188,9 +188,9 @@ function dataVentasArticulos(json) {
 		                }, 0 );
 		            $('#MontoMeta2').text('C$'+ numeral(total).format('0,0.00'));
 
-		            dta = [{name: 'Real', y: total},{name:'Meta', y:mta}]
+		            dta = [{name: 'Real', y: total},{name:'Meta', y:meta}]
 		            subtitle= (total==0)?'':($("#cmbClase option:selected").text());
-		            graficaVentas(dta, subtitle)
+		            graficaVentas(dta,subtitle)
 		        },
 				"fnInitComplete": function () {
 					$("#tblArticulos_length").hide();
@@ -200,7 +200,7 @@ function dataVentasArticulos(json) {
 }
 
 var ventasGraf = {};
-function graficaVentas(data, subtitle) {    
+function graficaVentas(data,subtitle) {    
 	ventasGraf.series[0].data = data;
 	ventasGraf.title.text = 'Clase Terapeutica';
 	ventasGraf.subtitle.text = subtitle;
