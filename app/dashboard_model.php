@@ -160,6 +160,7 @@ class dashboard_model extends Model {
         switch ($company_user) {
             case '1':
                 $sql_exec = "EXEC Umk_VentaLinea_Articulo ".$mes.", ".$anio.", '', '', ''";
+                $sql_meta = "EXEC UMK_meta_articulos ".$mes.", ".$anio.", '', '', ''";
                 break;
             case '2':
                 $sql_exec = "EXEC Gp_VentaLinea_Articulo ".$mes.", ".$anio.", '', '', '' ";
@@ -173,6 +174,7 @@ class dashboard_model extends Model {
         }
 
         $query = $sql_server->fetchArray($sql_exec, SQLSRV_FETCH_ASSOC);
+        $query2 = $sql_server->fetchArray($sql_meta, SQLSRV_FETCH_ASSOC);
 
         foreach ($query as $key) {
             $total = $total + floatval($key['total']);
@@ -182,7 +184,7 @@ class dashboard_model extends Model {
         $json[0]['data'] =  $total;
 
         $json[1]['name'] = 'Meta';
-        $json[1]['data'] = '250000';
+        $json[1]['data'] = intval($query2[0]['meta']);
 
         return $json;
         $sql_server->close();
