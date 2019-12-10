@@ -110,7 +110,8 @@ $(document).ready(function() {
         }]    
     };
 
-
+//Recuperacion del mes
+/*
     Highcharts.chart('chart02', {
 
         chart: {
@@ -185,7 +186,67 @@ $(document).ready(function() {
             }
         ]
         
-    });
+    });*/
+
+    recuperacionMes = {
+
+       chart: {
+            type: 'column',
+            renderTo: 'grafRecupera'
+        },
+        title: {
+            text: 'Recuperación del mes'
+        },
+        xAxis: {
+            type: 'category'
+        },
+        yAxis: {
+            title: {
+                text: ''
+            }
+
+        },
+        legend: {
+            enabled: false
+        },
+        plotOptions: {
+            series: {
+                allowPointSelect: true,
+                borderWidth: 0,
+                dataLabels: {
+                    enabled: true,
+                  formatter: function() {
+                    if (this.y > 1000) {
+                      return Highcharts.numberFormat(this.y / 1000, 1) + "K";
+                    } else {
+                      return this.y
+                    }
+                  }
+                }
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:11px">Ventas</span><br>',
+            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>C${point.y:,.2f}</b>',
+            shared: true,
+            useHTML: true
+        },
+        series:[{
+            colorByPoint: true,
+            data: [],
+            showInLegend: false,
+            cursor: 'pointer',
+            point: {
+                events: {
+                    click: function(e) {
+                        detalleVentasMes('recu', 'Recuperacion del Mes');
+                    }
+                }
+            },
+        }]
+    };
+
+ 
 
     //GRAFICA: VALORIZACION DE INVENTARIO
     val_bodega = {
@@ -229,10 +290,10 @@ $(document).ready(function() {
             pointFormat: '<span style="color:black"><b>C$ {point.y}</b></span>'
         },
         series:[{
-                colorByPoint: true,
-                data: [],
-                showInLegend: false
-            }]    
+            colorByPoint: true,
+            data: [],
+            showInLegend: false
+        }]    
     };
 
     //GRAFICA: TOP 10 CLIENTES
@@ -277,10 +338,10 @@ $(document).ready(function() {
             pointFormat: '<span style="color:{point.color}"><b>C${point.y:,.2f}</b>',
         },
         series:[{
-                colorByPoint: true,
-                data: [],
-                showInLegend: false
-            }]        
+            colorByPoint: true,
+            data: [],
+            showInLegend: false
+        }]        
     }
 
     //GRAFICA: TOP 10 PRODUCTOS
@@ -343,9 +404,10 @@ $("#filterM_A").click( function(e) {
 var val_bodega = {};
 var clientes = {};
 var ventas = {};
+var recuperacionMes = {};
 function actualizandoGraficasDashboard(mes, anio) {
 
-    $("#grafClientes, #grafProductos, #grafVentas, #grafBodega")
+    $("#grafClientes, #grafProductos, #grafVentas, #grafBodega, #grafRecupera")
     .empty()
     .append(`<div style="height:400px; background:#ffff; padding:20px">
                 <div class="d-flex align-items-center">
@@ -428,6 +490,23 @@ function actualizandoGraficasDashboard(mes, anio) {
                     ventas.xAxis.categories = title;
                     ventas.series[0].data = dta;
                     chart = new Highcharts.Chart(ventas);
+                    $("#MontoMeta").text('C$ ' + numeral(json[3].data[1].data).format('0,0.00') )
+                break;
+                case 'dtaRecupera':
+                    dta = [];
+                    title = [];
+                    $.each(item['data'], function(i, x) {
+                        dta.push({
+                            name  : x['name'],
+                            y     : x['data']
+                        })
+
+                        title.push(x['name'])
+                    });
+                    
+                    recuperacionMes.xAxis.categories = title;
+                    recuperacionMes.series[0].data = dta;
+                    chart = new Highcharts.Chart(recuperacionMes);
                     $("#MontoMeta").text('C$ ' + numeral(json[3].data[1].data).format('0,0.00') )
                 break;
                 default:

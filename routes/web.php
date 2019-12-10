@@ -49,12 +49,16 @@ Route::post('/lotes','inventario_controller@getLotesArticulo');
 
 //RUTAS METAS
 Route::post('/export_meta_from_exl','metas_controller@exportMetaFromExl');
+Route::post('/export_meta_from_exl_venta','metas_controller@exportMetaFromExlVenta');
 Route::post('/get_tmp_exl_data','metas_controller@getTmpExlData');
 Route::get('/add_data_meta','metas_controller@add_data_meta');
 Route::post('/calc_and_add_unidad_meta','metas_controller@calcAddUnidadMeta');
 Route::get('/truncate_tmp_exl_tbl','metas_controller@truncate_tmp_exl_tbl');
 Route::post('/get_historial_meta','metas_controller@getHistorialMeta');
 Route::post('/existe_Fecha_Meta','metas_controller@existeFechaMeta');
+Route::post('/existe_Fecha_Meta_venta','metas_controller@existeFechaMetaVenta');
+Route::post('/addDataRecuToDB','metas_controller@addDataRecuToDB');
+Route::post('/getHistoriaMetaRecu','metas_controller@getHistoriaMetaRecu');
 
 //RUTAS DETALLE DE VENTAS
 Route::get('/detalles/{tipo}/{mes}/{anio}','dashboard_controller@getDetalleVentas');

@@ -251,9 +251,54 @@ class dashboard_model extends Model {
             'tipo' => 'dtaVentasMes',
             'data' => dashboard_model::getVentasMes($mes, $anio)
         );
+        $dtaRecupera[] = array(
+            'tipo' => 'dtaRecupera',
+            'data' => dashboard_model::getRecuperaMes($mes, $anio)
+        );
 
-        $array_merge = array_merge($dtaBodega, $dtaTop10Cl, $dtaTop10Pr, $dtaVtasMes);
+        $array_merge = array_merge($dtaBodega, $dtaTop10Cl, $dtaTop10Pr, $dtaVtasMes, $dtaRecupera);
         return $array_merge;
+        $sql_server->close();
+
+    }
+    public static function getRecuperaMes($mes, $anio){
+         $total = 0;
+        $sql_server = new \sql_server();
+
+        $sql_exec = '';
+        $request = Request();
+        $company_user = Company::where('id',$request->session()->get('company_id'))->first()->id;
+        
+        switch ($company_user) {
+            case '1':
+                $sql_exec = "EXEC Umk_VentaLinea_Articulo ".$mes.", ".$anio.", '', '', ''";
+                $sql_meta = "EXEC UMK_meta_articulos ".$mes.", ".$anio.", '', '', ''";
+                break;
+            case '2':
+                $sql_exec = "EXEC Gp_VentaLinea_Articulo ".$mes.", ".$anio.", '', '', '' ";
+                break;
+            case '3':
+                $sql_exec = "";
+                break;            
+            default:                
+                dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
+                break;
+        }
+
+        $query = $sql_server->fetchArray($sql_exec, SQLSRV_FETCH_ASSOC);
+        $query2 = $sql_server->fetchArray($sql_meta, SQLSRV_FETCH_ASSOC);
+
+        foreach ($query as $key) {
+            $total = $total + floatval($key['total']);
+        }
+
+        $json[0]['name'] = 'Real';
+        $json[0]['data'] =  $total;
+
+        $json[1]['name'] = 'Meta';
+        $json[1]['data'] = intval($query2[0]['meta']);
+
+        return $json;
         $sql_server->close();
 
     }

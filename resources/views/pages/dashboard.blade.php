@@ -55,7 +55,7 @@
     <div class="content-graf">
         <div class="row" id="ct01">
             <div class="graf col-sm-4"><div class="container-vm" id="grafVentas"></div></div>
-            <div class="graf col-sm-4"><div class="container-rm" id="chart02"></div></div>
+            <div class="graf col-sm-4"><div class="container-rm" id="grafRecupera"></div></div>
             <div class="graf col-sm-4"><div class="container-vb" id="grafBodega"></div></div>
         </div>
         <div class="row mt-5" id="ct02">
