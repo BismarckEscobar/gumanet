@@ -24,131 +24,153 @@
 
  
 
-<div class="row" style="margin: 0 auto">
+  <div class="row" style="margin: 0 auto">
     <div class="card mt-3" style="width: 100%">
       <div class="card-body">                
         <h5 class="card-title">{{ $data['page'] }}</h5>
         <div class="row">
         	<div class="col-12">
         		<div class="alert alert-primary" role="alert"  id="alertMetas">
-				  
-				</div>
+  			  
+  			    </div>
         	</div>
         </div>
-        <div class="row justify-content-center mb-2">
+        
+        <div class="row justify-content-center mb-2" id="optionMeta">
+          <div class="col-md-3">
+  	        <div class="form-check form-check-inline">
+  					  <input class="form-check-input" type="radio" name="radioMeta" id="radioMeta1" value="option1" checked>
+  					  <label class="form-check-label" for="radioMeta1" id="radioMeta1Label">
+  					    Agergar meta
+  					  </label>
+  			    </div>
+  		     </div>
 
-            <div class="col-md-3">
-		        <div class="form-check form-check-inline">
-					  <input class="form-check-input" type="radio" name="radioMeta" id="radioMeta1" value="option1" checked>
-					  <label class="form-check-label" for="radioMeta1">
-					    Agergar Meta
-					  </label>
-				</div>
-			</div>
-
-			<div class="col-md-3">
-				<div class="form-check form-check-inline">
-					  <input class="form-check-input" type="radio" name="radioMeta" id="radioMeta2" value="option2">
-					  <label class="form-check-label" for="radioMeta2">
-					    Ver Historial
-					  </label>
-				</div>
-			</div>
-
-		</div>
+    			<div class="col-md-3">
+    				<div class="form-check form-check-inline">
+    					  <input class="form-check-input" type="radio" name="radioMeta" id="radioMeta2" value="option2">
+    					  <label class="form-check-label" for="radioMeta2" id="radioMeta2Label">
+    					    Ver Historial
+    					  </label>
+    				</div>
+    			</div>
+  	    </div>
+        <div class="row justify-content-center">
+          <div class="col-md-6 mb-2">
+            <div class="input-group">
+              <select class="custom-select" id="selectTipoMeta" name="selectTipoMeta">
+                <option value="00">Tipo meta</option>
+                <option value="vent">Venta</option>
+                <option value="recu">Recuperación</option>
+              </select>
+            </div>
+          </div>
+        </div>
 
         <div class="row justify-content-center">
             <div class="col-md-3 mb-2">
-                 <div class="input-group">
-                    <select class="custom-select" id="selectMesMeta" name="selectMesMeta">
-                    	<option value="00">Mes</option>
-                        <option value="01">Enero</option>
-                        <option value="02">Febrero</option>
-                        <option value="03">Marzo</option>
-                        <option value="04">Abril</option>
-                        <option value="05">Mayo</option>
-                        <option value="06">Junio</option>
-                        <option value="07">Julio</option>
-                        <option value="08">Agosto</option>
-                        <option value="09">Septiembre</option>
-                        <option value="10">Octubre</option>
-                        <option value="11">Noviembre</option>
-                        <option value="12">Diciembre</option>
-                    </select>
-                </div>
+               <div class="input-group">
+                  <select class="custom-select" id="selectMesMeta" name="selectMesMeta">
+                  	<option value="00">Mes</option>
+                      <option value="01">Enero</option>
+                      <option value="02">Febrero</option>
+                      <option value="03">Marzo</option>
+                      <option value="04">Abril</option>
+                      <option value="05">Mayo</option>
+                      <option value="06">Junio</option>
+                      <option value="07">Julio</option>
+                      <option value="08">Agosto</option>
+                      <option value="09">Septiembre</option>
+                      <option value="10">Octubre</option>
+                      <option value="11">Noviembre</option>
+                      <option value="12">Diciembre</option>
+                  </select>
+              </div>
             </div>
             <div class="col-md-3 mb-2">
-                 <div class="input-group">
-                    <select class="custom-select" id="selectAnnoMeta" name="selectAnnoMeta">
-                    	<option value="00">Año</option>
-                        <option value="2016">2016</option>
-                        <option value="2017">2017</option>
-                        <option value="2018">2018</option>
-                        <option value="2019">2019</option>
-                    </select>
+               <div class="input-group">
+                  <select class="custom-select" id="selectAnnoMeta" name="selectAnnoMeta">
+                  	<option value="00">Año</option>
+                      <option value="2016">2016</option>
+                      <option value="2017">2017</option>
+                      <option value="2018">2018</option>
+                      <option value="2019">2019</option>
+                  </select>
                 </div>
             </div>
         </div>
         <div class="row justify-content-center">
-            <div class="col-md-6 mb-2">
-            	<form method="POST" id="export_excel" name="export_excel" enctype="multipart/form-data">
-		            <div class="input-group">
-					  <div class="custom-file" id="contInputExlFileMetas">
-					    <input type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" value="upload" class="custom-file-input" name="addExlFileMetas" id="addExlFileMetas"/>
-					    <label class="custom-file-label" id="fileLabelMeta" for="addExlFileMetas" data-label="Buscar">Seleccione un archivo Ecxel
-					    </label>
-					  </div>
-					</div>
-					{{-- @csrf --}} 
-				</form>
-			</div>
-		</div>
-		
-		 <div class="row justify-content-center">
-            <div class="col-md-6">
-            	<div class="input-group">
-                     <a href="#" style="width: 100%" class="btn btn-primary"  id="btnShowModalExl"></a> 
-                     <button style="width: 100%" class="btn btn-primary" type="button" id="disabledLoaderBtn"  disabled>
-						  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-						  Cargando Espere un momento...
-					</button>
-                </div>
+          <div class="col-md-6 mb-2">
+          	<form method="POST" id="export_excel" name="export_excel" enctype="multipart/form-data">
+              <div class="input-group">
+    					  <div class="custom-file" id="contInputExlFileMetas">
+    					    <input type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" value="upload" class="custom-file-input" name="addExlFileMetas" id="addExlFileMetas"/>
+    					    <label class="custom-file-label" id="fileLabelMeta" for="addExlFileMetas" data-label="Buscar">Seleccione un archivo Ecxel
+    					    </label>
+    					  </div>
+    					</div>
+    					{{-- @csrf --}} 
+    				</form>
+    			</div>
+  	    </div>
 
+  	
+  	    <div class="row justify-content-center">
+          <div class="col-md-6">
+          	<div class="input-group">
+              <a href="#" style="width: 100%" class="btn btn-primary"  id="btnShowModalExl"></a> 
+              <button style="width: 100%" class="btn btn-primary" type="button" id="disabledLoaderBtn"  disabled>
+  				      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+  				  Cargando Espere un momento...
+  			      </button>
             </div>
+          </div>
         </div>
-
-
-
       </div>
     </div>
-</div>  
+  </div>  
 
-<div class="row" id="verMetasAgregadasXMes" style="margin: 0 auto">
+  <div class="row" id="verMetasAgregadasXMes" style="margin: 0 auto">
     <div class="card mt-3" style="width: 100%">
 	    <div class="card-body">         
 	    	<h5 class="card-title">{{ "Datos de Metas / " }}<span id="mesHistorialMeta"></span> {{ " " }} <span id="annoHistorialMeta"></span></h5>
 	        <hr>     
 	       
-	        <div class="row">
+	        <div class="row" id="bloqueTblVerMetasAgregadas">
 	        	<div class="col-12">
 	            	<div class="table-responsive mt-3 mb-5">
 		        		<table class="table table-bordered table-sm" width="100%" id="tblVerMetasAgregadas">
 				        	<thead class="text-center">
-				               <tr>
-                          <th>RUTA</th>
-			                    <th>COD</th>
-			                    <th>PRODUCTO</th>
-			                    <th>META</th>
-			                    <th>VALOR</th>
-				                </tr>
+			               <tr>
+                        <th>RUTA</th>
+		                    <th>CODIGO</th>
+		                    <th>PRODUCTO</th>
+		                    <th>META</th>
+		                    <th>VALOR</th>
+			                </tr>
 				        	</thead>
 				        </table>
-				    </div>
-			    </div>
+				      </div>
+			      </div>
 	        </div>
-	    </div>
-	</div>
-</div>
+          <div class="row" id="bloqueTblExcelVerMetaRecu">
+            <div class="col-12">
+              <div class="table-responsive mt-3 mb-5">
+                <table class="table table-bordered table-sm" width="100%" id="tblExcelVerMetaRecu">
+                  <thead class="text-center">
+                    <tr>
+                        <th>RUTA</th>
+                        <th>VENDEDOR</th>
+                        <th>META</th>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+            </div>
+          </div>
+  	  </div>
+	  </div>
+  </div>
 </div>
 
 
@@ -165,7 +187,7 @@
         </button>
       </div>
       <div class="modal-body" id="bodyModalMetasExldata">
-        <div class="table-responsive mt-3 mb-5">
+        <div class="table-responsive mt-3 mb-5" id="bloqueTblExcVenta">
 	        <table class="table table-bordered table-sm" width="100%" id="tblExcelImportMeta">
 	        	<thead class="text-center">
 	                <tr>
@@ -179,7 +201,18 @@
 	                </tr>
 	            </thead>
 	        </table>
-	    </div>
+	      </div>
+        <div class="table-responsive mt-3 mb-5" id="bloqueTblExcRecup">
+          <table class="table table-bordered table-sm" width="100%" id="tblExcelImportMetaRecu">
+            <thead class="text-center">
+                  <tr>
+                      <th>RUTA</th>
+                      <th>VENDEDOR</th>
+                      <th>META</th>
+                  </tr>
+              </thead>
+          </table>
+        </div>
       </div>
 
       <div class="modal-footer">

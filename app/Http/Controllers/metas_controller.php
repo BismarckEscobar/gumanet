@@ -8,6 +8,7 @@ use App\Models;
 use App\User;
 use App\Gn_couta_x_producto;
 use App\Tmp_meta_exl;
+use App\meta_recuperacion_exl;
 use App\Company;
 use DataTables;
 use DB;
@@ -45,7 +46,10 @@ class metas_controller extends Controller
 
 
 
-    public function exportMetaFromExl(Request $request){
+
+
+
+    public function exportMetaFromExlVenta(Request $request){
         
         $file_directory = "tmp_excel/";
 
@@ -53,7 +57,6 @@ class metas_controller extends Controller
             
             $mes = $request->input('mes');
             $anno = $request->input('anno');
-
 
 
             $file_array = explode(".", $_FILES["addExlFileMetas"]["name"]);
@@ -68,48 +71,169 @@ class metas_controller extends Controller
                 //$sheet_data = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
 
                 try{
-
-
                     $i = 2;//contador
                     $param=0;
+                
                     $nomRuta = $objPHPExcel->getActiveSheet()->getCell('A1')->getCalculatedValue();
-                    $nomCodigo = $objPHPExcel->getActiveSheet()->getCell('B1')->getCalculatedValue();
-                    $nomClte = $objPHPExcel->getActiveSheet()->getCell('C1')->getCalculatedValue();
-                    $nomArt = $objPHPExcel->getActiveSheet()->getCell('D1')->getCalculatedValue();
-                    $nomDescrip = $objPHPExcel->getActiveSheet()->getCell('E1')->getCalculatedValue();
-                    $nomVal = $objPHPExcel->getActiveSheet()->getCell('F1')->getCalculatedValue();
-                    $nomUnidad = $objPHPExcel->getActiveSheet()->getCell('G1')->getCalculatedValue();
+                    $nomVende = $objPHPExcel->getActiveSheet()->getCell('B1')->getCalculatedValue();
+                    $metaRecu = $objPHPExcel->getActiveSheet()->getCell('C1')->getCalculatedValue();
+                   
 
-                    if($nomRuta == '' || $nomCodigo == '' || $nomClte == '' || $nomArt == '' || $nomDescrip == '' || $nomVal == '' || $nomUnidad == '' ){
+                    if($nomRuta == '' || $nomVende == '' || $metaRecu == ''){
 
                     }else{
+                        $jsonArray = array();
+                         $nomRuta = $objPHPExcel->getActiveSheet()->getCell('A1')->getCalculatedValue();
+                        $nomVende = $objPHPExcel->getActiveSheet()->getCell('B1')->getCalculatedValue();
+                        $meta = $objPHPExcel->getActiveSheet()->getCell('C1')->getCalculatedValue();
+                        $limite = $objPHPExcel->getActiveSheet()->getCell('D1')->getCalculatedValue();
+                       
 
-                        while ($param==0) {
-                            
-                            
+                        if(strlen($nomRuta) != NULL & strlen($nomVende) != NULL & strlen($meta) != NULL & strlen($limite) == NULL)
+                        {
+                        
+                            while ($param==0) {
 
-                            Tmp_meta_exl::insert(array('fechaMeta' => $anno.'/'.$mes.'/01',
-                                'ruta' => $objPHPExcel->getActiveSheet()->getCell('A'.$i)->getCalculatedValue(),
-                                'codigo' => $this->addZeros($objPHPExcel->getActiveSheet()->getCell('B'.$i)->getCalculatedValue()),
-                                'cliente' => $objPHPExcel->getActiveSheet()->getCell('C'.$i)->getCalculatedValue(),
-                                'articulo' => $objPHPExcel->getActiveSheet()->getCell('D'.$i)->getCalculatedValue(),
-                                'descripcion' => $objPHPExcel->getActiveSheet()->getCell('E'.$i)->getCalculatedValue(),
-                                'valor' => $objPHPExcel->getActiveSheet()->getCell('F'.$i)->getCalculatedValue(),
-                                'unidad' => $objPHPExcel->getActiveSheet()->getCell('G'.$i)->getCalculatedValue(),
-                                'created_at' => new\DateTime()));
-                                
-                            $i++;
-                            if($objPHPExcel->getActiveSheet()->getCell('A'.$i)->getCalculatedValue()==NULL){
-                                $param=1;
-                            }           
+                                $jsonArray[$i-2]['ruta'] =$objPHPExcel->getActiveSheet()->getCell('A'.$i)->getCalculatedValue();
+                                $jsonArray[$i-2]['vendedor'] =$objPHPExcel->getActiveSheet()->getCell('B'.$i)->getCalculatedValue();
+                                $jsonArray[$i-2]['meta'] =$objPHPExcel->getActiveSheet()->getCell('C'.$i)->getCalculatedValue();
+                                /*
+                                meta_recuperacion_exl::insert(array('fechaMeta' => $anno.'/'.$mes.'/01','FHGrabacion'=> new\DateTime(),
+                                    'ruta' => $objPHPExcel->getActiveSheet()->getCell('A'.$i)->getCalculatedValue(),
+                                    'vendedor' => $this->addZeros($objPHPExcel->getActiveSheet()->getCell('B'.$i)->getCalculatedValue()),
+                                    'meta' => $objPHPExcel->getActiveSheet()->getCell('C'.$i)->getCalculatedValue()));
+                                    */          
+
+                                $i++;
+                                if($objPHPExcel->getActiveSheet()->getCell('A'.$i)->getCalculatedValue()==NULL){
+                                    $param=1;
+                                } 
+                            }
                         }
+                        return $jsonArray;
                     }
-
+                    
 
                 }catch(Exception $e){
                     echo "excepción: ".$e;
                 }
-                //metas_model::saveExlToTmpTable($objPHPExcel,$mes,$anno);
+             
+
+            }else{
+                echo "Archivo invalido";
+            }
+           
+
+        }else{
+            echo "no paso";
+        }
+    }
+
+
+
+        public function addDataRecuToDB(Request $request){
+            
+        
+
+            $data = array();
+            $data = $request->all();
+
+            if (isset($data['datas'])) {
+              
+
+                if (count($data['datas']) > 0) {
+                 
+                    $company_id = Company::where('id',$request->session()->get('company_id'))->first()->id;
+                    foreach($data['datas'] as $key)  { 
+
+                        meta_recuperacion_exl::insert(array('idCompanny' => $company_id,'fechaMeta' => $key['anno'].'/'.$key['mes'].'/01','ruta' => $key['ruta'],'vendedor' => $key['vendedor'],'meta' => $key['meta'],'FHGrabacion' => new\DateTime()));
+                    
+                    }
+
+                    return 1;
+                }else{
+                    return 0;
+                }
+            
+            }else{
+                return 0;
+              
+            
+        }
+            }
+
+
+
+
+
+
+
+
+    public function exportMetaFromExl(Request $request){
+        
+        $file_directory = "tmp_excel/";
+
+        if(!empty($_FILES["addExlFileMetas"])){
+            
+            $mes = $request->input('mes');
+            $anno = $request->input('anno');
+            $tipo = $request->input('tipo');
+
+
+
+
+            $file_array = explode(".", $_FILES["addExlFileMetas"]["name"]);
+            $new_file_name = "tmp_excel.". $file_array[1];
+            move_uploaded_file($_FILES["addExlFileMetas"]["tmp_name"], $file_directory . $new_file_name);
+            if($file_array[1]=="xlsx" || $file_array[1]=="xls"){
+                
+
+                $file_type  = PHPExcel_IOFactory::identify("tmp_excel/".$new_file_name);
+                $objReader  = PHPExcel_IOFactory::createReader($file_type);
+                $objPHPExcel = $objReader->load($file_directory . $new_file_name);
+
+                try{
+                        $i = 2;//contador
+                        $param=0;
+                    
+                        $nomRuta = $objPHPExcel->getActiveSheet()->getCell('A1')->getCalculatedValue();
+                        $nomCodigo = $objPHPExcel->getActiveSheet()->getCell('B1')->getCalculatedValue();
+                        $nomClte = $objPHPExcel->getActiveSheet()->getCell('C1')->getCalculatedValue();
+                        $nomArt = $objPHPExcel->getActiveSheet()->getCell('D1')->getCalculatedValue();
+                        $nomDescrip = $objPHPExcel->getActiveSheet()->getCell('E1')->getCalculatedValue();
+                        $nomVal = $objPHPExcel->getActiveSheet()->getCell('F1')->getCalculatedValue();
+                        $nomUnidad = $objPHPExcel->getActiveSheet()->getCell('G1')->getCalculatedValue();
+
+                        if($nomRuta == '' || $nomCodigo == '' || $nomClte == '' || $nomArt == '' || $nomDescrip == '' || $nomVal == '' || $nomUnidad == '' ){
+
+                        }else{
+
+                            while ($param==0) {
+                                
+                                
+
+                                Tmp_meta_exl::insert(array('fechaMeta' => $anno.'/'.$mes.'/01',
+                                    'ruta' => $objPHPExcel->getActiveSheet()->getCell('A'.$i)->getCalculatedValue(),
+                                    'codigo' => $this->addZeros($objPHPExcel->getActiveSheet()->getCell('B'.$i)->getCalculatedValue()),
+                                    'cliente' => $objPHPExcel->getActiveSheet()->getCell('C'.$i)->getCalculatedValue(),
+                                    'articulo' => $objPHPExcel->getActiveSheet()->getCell('D'.$i)->getCalculatedValue(),
+                                    'descripcion' => $objPHPExcel->getActiveSheet()->getCell('E'.$i)->getCalculatedValue(),
+                                    'valor' => $objPHPExcel->getActiveSheet()->getCell('F'.$i)->getCalculatedValue(),
+                                    'unidad' => $objPHPExcel->getActiveSheet()->getCell('G'.$i)->getCalculatedValue(),
+                                    'created_at' => new\DateTime()));
+                                    
+                                $i++;
+                                if($objPHPExcel->getActiveSheet()->getCell('A'.$i)->getCalculatedValue()==NULL){
+                                    $param=1;
+                                }           
+                            }
+                        }
+                        
+                    
+                }catch(Exception $e){
+                    echo "excepción: ".$e;
+                }
+               
 
                 
 
@@ -174,14 +298,28 @@ class metas_controller extends Controller
     }
 
 
+    public function getHistoriaMetaRecu(Request $request){
+         if($request->isMethod('post')){
+            $mes = $request->input('mes');
+            $anno = $request->input('anno');
+            $metaDataVenta = array();            
 
-    public function existeFechaMeta(Request $request){
+            $fecha =  date('Y-m-d', strtotime($anno.'-'.$mes.'-01'));
+            $company_id = Company::where('id',$request->session()->get('company_id'))->first()->id;
+
+             $metaDataVenta = meta_recuperacion_exl::where('idCompanny',$company_id)->where('fechaMeta',$fecha)->get();
+
+             return DataTables::of($metaDataVenta)->make(true);
+        }
+    }
+
+    public function existeFechaMetaVenta(Request $request){
         if($request->isMethod('post')){
             $mes = $request->input('mes');
             $anno = $request->input('anno');
             $fecha =  date('Y-m-d', strtotime($anno.'-'.$mes.'-01'));
-            $res = DB::connection('sqlsrv')->table('metacuota_GumaNet')->where('Fecha', $fecha)->get();
-            //$res = Metadata::where('fechaMeta', $fecha)->take(1)->get();
+             $company_id = Company::where('id',$request->session()->get('company_id'))->first()->id;
+            $res = meta_recuperacion_exl::where('fechaMeta', $fecha)->where('idCompanny', $company_id)->get();
             if (empty($res[0])){
                 return 0;
             }else{
@@ -191,8 +329,21 @@ class metas_controller extends Controller
     }
 
 
+    public function existeFechaMeta(Request $request){
+        if($request->isMethod('post')){
+            $mes = $request->input('mes');
+            $anno = $request->input('anno');
+            $fecha =  date('Y-m-d', strtotime($anno.'-'.$mes.'-01'));
+            $company_id = Company::where('id',$request->session()->get('company_id'))->first()->id;
+            $res = DB::connection('sqlsrv')->table('metacuota_GumaNet')->where('Fecha', $fecha)->where('idCompany', $company_id)->get();
+            if (empty($res[0])){
+                return 0;
+            }else{
+                return 1;
+            }
+        }
+    }
 
-    
 
     public function truncate_tmp_exl_tbl(){
         Tmp_meta_exl::truncate();
