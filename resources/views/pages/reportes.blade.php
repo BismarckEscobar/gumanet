@@ -12,12 +12,21 @@
 			<div class="row">
 				<div class="col-sm-3 p-1">
 					<select class="selectpicker form-control form-control-sm" id="cmbClase" data-show-subtext="true" data-live-search="true">
+						<option value="">CLASE TERAPEUTICA - TODOS</option>
                     @foreach($clases as $key)
-						<option>{{ $key['clase'] }}</option>
+						<option value="{{ $key['clase'] }}">{{ $key['clase'] }}</option>
                     @endforeach
 					</select>
 				</div>
-				<div class="col-sm-3 p-1">
+				<div class="col-sm-2 p-1">
+					<select class="selectpicker form-control form-control-sm" id="cmbRutas" data-show-subtext="true" data-live-search="true">
+						<option value="">RUTAS - TODOS</option>
+                   		 @foreach($rutas as $key)
+							<option>{{ $key['VENDEDOR'] }}</option>
+                    	@endforeach
+					</select>
+				</div>
+				<div class="col-sm-2 p-1">
 					<select class="selectpicker form-control form-control-sm" id="cmbCliente" data-show-subtext="true" data-live-search="true">
 						<option selected value="">CLIENTES - TODOS</option>
 	                    @foreach($clientes as $key)
@@ -25,7 +34,7 @@
 	                    @endforeach
 					</select>
 				</div>
-				<div class="col-sm-3 p-1">
+				<div class="col-sm-2 p-1">
 					<select class="selectpicker form-control form-control-sm" id="cmbArticulo" data-show-subtext="true" data-live-search="true">
 						<option value="" selected>ARTICULOS - TODOS</option>
 	                    @foreach($articulos as $key)
@@ -92,6 +101,7 @@
 								<tr>
 									<th>Codigo</th>
 									<th>Nombre</th>
+									<th>Ruta</th>
 									<th>Factura</th>
 									<th>Fecha</th>
 									<th>Monto</th>
@@ -121,7 +131,9 @@
 			</div>
 		</div>
     </div>
-    <div class="row mt-3">
+
+    {{-- Modulo Articulos oculto --}}
+    <div class="row mt-3" hidden="true">
     	<div class="col-sm-12">
     		<div class="card">
     			<div class="card-body">
@@ -166,6 +178,93 @@
 				</div>		
 			</div>
 		</div>
+    </div>
+    <!-- PAGINA TEMPORAL DE DETALLES -->
+    <div id="page-details" class="p-4" style="background-color: #f1f5f8">
+        <div class="row">
+            <div class="col-sm-12">
+                <a href="#!" class="active-page-details btn btn-outline-primary btn-sm">Regresar</a>
+            </div>
+        </div>
+        <div class="row center">
+            <div class="col-sm-12">
+                <div class="card mt-3">
+                    <div class="card-body">
+	                    <h5 class="card-title" id="title-page-tem">DETALLE DE FACTURA</h5>
+	                    <hr>
+	                    <div class="row">
+	                        <div class="col-2">
+	                        	<div class="col-12">
+	                        		<h6 >CÓDIGO</h6>
+	                        	</div>
+	                        	<div class="col-12">
+	                        		<span id="txtCodDF"> $0.00</span>
+	                        	</div>
+	                        </div>
+	                        <div class="col-3">
+	                        	<div class="col-12">
+	                        		<h6>NOMBRE</h6>
+	                        	</div>
+	                        	<div class="col-12">
+	                        		<span id="txtNomDF"> $0.00</span>
+	                        	</div>
+	                        </div>
+	                        <div class="col-1">
+	                        	<div class="col-12">
+	                        		<h6>RUTA</h6>
+	                        	</div>
+	                        	<div class="col-12">
+	                        		<span id="txtRutaDF">$0.00</span>
+	                        	</div>
+	                        </div>
+	                        <div class="col-2">
+	                        	<div class="col-12">
+	                        		<h6>FACTURA</h6>
+	                        	</div>
+	                        	<div class="col-12">
+	                        		<span id="txtNFactDF"> $0.00</span>
+	                        	</div>
+	                        </div>
+	                        <div class="col-2">
+	                        	<div class="col-12">
+	                        		<h6>FECHA</h6>
+	                        	</div>
+	                        	<div class="col-12">
+	                        		<span id="txtFechaDF">$0.00</span>
+	                        	</div>
+	                        </div>
+	                        <div class="col-2">
+	                        	<div class="col-12">
+	                        		<h6>MONTO</h6>
+	                        	</div>
+	                        	<div class="col-12">
+	                        		<span id="txtMontoDF">$0.00</span>
+	                        	</div>
+	                        </div>
+	                    </div>
+	                    <hr>
+	                    <div class="row">
+	                        <div class="col-sm-12">
+	                        	<div class="table-responsive mt-3 mb-5">
+									<table id="tblDetalleFacturaVenta" class="table table-bordered" width="100%">
+										<thead>
+											<tr>
+												<th>Articulo</th>
+												<th>Nombre</th>
+												<th>Cantidad</th>
+												<th>Precio x ud.</th>
+												<th>Total</th>
+											</tr>
+										</thead>
+										<tbody></tbody>
+									</table>
+			    				</div>
+	                        </div>
+	                    </div>
+                	</div>
+                </div>
+            </div>
+        </div>
     </div>
 </div> 
 @endsection

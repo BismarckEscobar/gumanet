@@ -101,12 +101,19 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-12">
+            <div class="col-4">
                 <div class="table-responsive mt-3 mb-5">
-                    <div id="cjVentas"><table class="table table-bordered table-sm" width="100%" id="dtVentas" ></table></div>
-                    <div id="cjRecuperacion"><table class="table table-bordered table-sm" width="100%" id="dtRecuperacion"></table></div>                    
+                    <div id="cjRutVentas"><table class="table table-bordered table-sm" width="100%" id="dtTotalXRutaVent" ></table></div>        
                 </div>
             </div>
+            <div class="col-8">
+                <div class="table-responsive mt-3 mb-5">
+                    <div id="cjVentas"><table class="table table-bordered table-sm" width="100%" id="dtVentas" ></table></div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div id="cjRecuperacion"><table class="table table-bordered table-sm" width="100%" id="dtRecuperacion"></table></div>    
+            </div>  
         </div>
         <div class="row">
             <div class="col-sm-3">
