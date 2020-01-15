@@ -44,6 +44,9 @@ $(document).ready(function() {
     dataVentasClientes(false);
     dataVentasArticulos(false);
 });
+$(".active-page-details").click( function() {//Regresar ala ventana anterior
+    $("#page-details").toggleClass('active');
+});
 
 $('#btnSearchArt').on('keyup', function() {
     var table = $('#tblArticulos').DataTable();
@@ -60,7 +63,8 @@ $("#filterData").click( function() {
         type: "POST",
         url: "ventasDetalle",
         data:{
-            clase 		: $("#cmbClase option:selected").text(),
+            clase 		: $("#cmbClase option:selected").val(),
+            ruta 		: $("#cmbRutas option:selected").val(),
             cliente 	: $("#cmbCliente option:selected").val(),
             articulo 	: $("#cmbArticulo option:selected").val(),
             mes 		: $('#cmbMes option:selected').val(),
@@ -104,13 +108,24 @@ function dataVentasClientes(json) {
 			"emptyTable": "Aún no ha realizado ninguna busqueda",
 			"search":     "BUSCAR"
 		},
+		
+
 		'columns': [
 			{ "data": "cliente" },
 			{ "data": "nombre" },
-			{ "data": "factura" },
+			{ "data": "ruta" },
+			{ "data": "factura", 
+				render: function(data, type, row, meta){
+        			if(type === 'display'){
+            			data = '<a href="#" id="facturaLink" value="'+ data +'">' + data + '</a>';
+        			}
+            		return data;
+         		}
+	     	},
 			{ "data": "fecha02" },
 			{ "data": "Monto", render: $.fn.dataTable.render.number( ',', '.', 2 ) }
 		],
+
 		"columnDefs": [
 			{"className": "text-right", "targets": [ 4 ]},
 			{"className": "text-center", "targets": [ 0, 2, 3 ]},
@@ -126,7 +141,7 @@ function dataVentasClientes(json) {
                         i : 0;
             };
             total = api
-                .column( 4 )
+                .column( 5 )
                 .data()
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
@@ -138,6 +153,85 @@ function dataVentasClientes(json) {
 			$("#tblClientes_filter").hide();
 		}
 	});
+}
+
+$('#tblClientes tbody').on('click', 'td', function() {
+	var table = $('#tblClientes').DataTable();
+ 	/*var data = table.cell(this).data();// devuelve un string de la celda seleccionada
+            alert(data);*/
+ 	var datos = new Array();
+ 	datos = table.row( this ).data();// retorna un array con los datos de la fila
+ 	$("#page-details").toggleClass('active');
+ 	console.log(datos);
+
+ 	$('#txtCodDF').text(datos['cliente']);
+    $('#txtNomDF').text(datos['nombre']);
+    $('#txtRutaDF').text(datos['ruta']);
+    $('#txtNFactDF').text(datos['factura']);
+    $('#txtFechaDF').text(datos['fecha02']);
+    $('#txtMontoDF').text(parseFloat(datos['Monto']).toFixed(2));
+
+    AgregarDetallefactDT(datos['factura']);
+    
+});
+
+function AgregarDetallefactDT(nFact){
+	
+	$.ajax({
+		url:'getDetFactVenta',
+		type: 'POST',
+		data:{factura: nFact},
+		success: function (json) {
+			if (json['objDt']) {
+				llenarDtDetalleFactura(json['objDt']);
+			}else {
+				mensaje("No se encontraron registros que coincidan con la busqueda", "error")
+				
+				$('#tblDetalleFacturaVenta').DataTable()
+				.clear()
+				.draw();
+			}
+        }
+
+	});
+}
+
+function llenarDtDetalleFactura(json){
+	table = $('#tblDetalleFacturaVenta').DataTable({
+		"data":json,
+				"destroy": true,
+				"info":    false,
+				"lengthMenu": [[5,10,-1], [5,10,"Todo"]],
+				"language": {
+					"zeroRecords": "Cargando...",
+					"paginate": {
+						"first":      "Primera",
+						"last":       "Última ",
+						"next":       "Siguiente",
+						"previous":   "Anterior"
+					},
+					"lengthMenu": "MOSTRAR _MENU_",
+					"emptyTable": "Aún no ha realizado ninguna busqueda",
+					"search":     "BUSCAR"
+				},
+				'columns': [
+					{ "data": "ARTICULO" },
+					{ "data": "DESCRIPCION" },
+					{ "data": "CANTIDAD", render: $.fn.dataTable.render.number( ',', '.', 2 ) },
+					{ "data": "PRECIO_UNITARIO", render: $.fn.dataTable.render.number( ',', '.', 2 ) },
+					{ "data": "PRECIO_TOTAL", render: $.fn.dataTable.render.number( ',', '.', 2 ) }
+				],
+				"columnDefs": [
+					{"className": "text-right", "targets": [ 2, 3, 4 ]},
+					{"className": "text-center", "targets": [ 0 ]},
+					{ "width": "30%", "targets": [ 1 ] },
+					{ "width": "5%", "targets": [ 0, 2, 3, 4 ] }
+				],
+				"fnInitComplete": function () {
+					$("#tblDetalleArticulos_length").hide();
+					$("#tblDetalleArticulos_filter").hide();
+				}
+	})
 }
 
 function dataVentasArticulos(json, meta) {

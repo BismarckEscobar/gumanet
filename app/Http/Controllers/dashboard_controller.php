@@ -36,6 +36,11 @@ class dashboard_controller extends Controller {
      $request->session()->put('companyName', $company->nombre);// agregar nombre de compañia a session[], para obtenert el nombre al cargar otras pagina 
    }
 
+    public function getTotalRutaXVentas($mes, $anio){
+    $obj = dashboard_model::getTotalRutaXVentas($mes, $anio);
+    return response()->json($obj);
+  }
+
 	public function getDetalleVentas($tipo, $mes, $anio) {
 		$obj = dashboard_model::getDetalleVentas($tipo, $mes, $anio);
 		return response()->json($obj);

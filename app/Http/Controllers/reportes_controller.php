@@ -19,16 +19,24 @@ class reportes_controller extends Controller
         $clases     = reportes_model::claseTerapeutica();
         $articulos  = reportes_model::articulos();
         $clientes   = reportes_model::clientes();
+        $rutas      = reportes_model::rutas();
         $data = [
             'name' =>  'GUMA@NET',
             'page' => 'Ventas'
         ];
-        return view('pages.reportes', compact('data', 'clases', 'articulos', 'clientes'));
+        return view('pages.reportes', compact('data', 'clases', 'articulos', 'clientes','rutas'));
     }
 
     public function detalleVentas(Request $request) {
         if($request->isMethod('post')) {
-            $obj = reportes_model::returndetalleVentas($request->input('clase'),$request->input('cliente'),$request->input('articulo'),$request->input('mes'),$request->input('anio'));
+            $obj = reportes_model::returndetalleVentas($request->input('clase'),$request->input('cliente'),$request->input('articulo'),$request->input('mes'),$request->input('anio'),$request->input('ruta'));
+            return response()->json($obj);
+        }
+    }
+
+    public function getDetFactVenta(Request $request){
+        if($request->isMethod('post')) {
+           $obj = reportes_model::returnDetFactVenta($request->input('factura'));
             return response()->json($obj);
         }
     }
