@@ -18,19 +18,21 @@ $(document).ready(function() {
     //GUARDO VARIABLES EN COOKIES
     $(".content-graf .graf div").each(function() {
         name_class = $(this).attr('class');
-        ( $.cookie( name_class )=='not_visible' )?($('div.'+name_class).parent().hide()):($('div.'+name_class).parent().show());
+        ( $.cookie( name_class )=='not_visible' || name_class=='container-vb' )?($('div.'+name_class).parent().hide()):($('div.'+name_class).parent().show());
 
         visibility = ( $.cookie( name_class )=='not_visible' )?'':'checked';
 
-        list_dash +=
-        `<li class="">
-          <div class="form-check">
-            <input class="dash-opc form-check-input" type="checkbox" `+visibility+` value="`+name_class+`" id="`+name_class+`">
-            <label class="form-check-label" for="`+name_class+`">
-              `+ ( list_chk[name_class] ) +`
-            </label>
-          </div>
-        </li>`
+        if (name_class!='container-vb') {
+            list_dash +=
+            `<li class="">
+              <div class="form-check">
+                <input class="dash-opc form-check-input" type="checkbox" `+visibility+` value="`+name_class+`" id="`+name_class+`">
+                <label class="form-check-label" for="`+name_class+`">
+                  `+ ( list_chk[name_class] ) +`
+                </label>
+              </div>
+            </li>`
+        }
     });
 
     //AGREGO LA RUTA AL NAVEGADOR
