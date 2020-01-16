@@ -7,6 +7,44 @@ use App\Company;
 use Illuminate\Database\Eloquent\Model;
 
 class dashboard_model extends Model {
+        //Resumen / Grafica venta / Tabla de total ventas por Ruta
+     public static function getTotalRutaXVentas($mes, $anio){
+        $sql_server = new \sql_server();
+        $sql_exec = '';
+        $request = Request();
+        $company_user = Company::where('id',$request->session()->get('company_id'))->first()->id;
+
+        switch ($company_user) {
+            case '1':
+                $sql_exec = "EXEC Ventas_Rutas ".$mes.", ".$anio;
+                break;
+            case '2':
+                $sql_exec = "EXEC Ventas_Rutas_GF ".$mes.", ".$anio;
+                break;
+            case '3':
+                $sql_exec = "";
+                break;            
+            default:                
+                dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
+                break;
+        }
+
+        $query = $sql_server->fetchArray($sql_exec,SQLSRV_FETCH_ASSOC);
+
+        $i = 0;
+        $json = array();
+
+        
+        foreach ($query as $fila) {
+            $json[$i]["RUTA"]       = $fila["Ruta"];
+            $json[$i]["MONTO"]    = number_format($fila["Monto"],2);
+            $i++;
+        }
+
+        $sql_server->close();
+        return $json;
+
+     }
     
     public static function getDetalleVentas($tipo, $mes, $anio) {
         $sql_server = new \sql_server();
@@ -17,10 +55,10 @@ class dashboard_model extends Model {
 
         switch ($company_user) {
             case '1':
-                $sql_exec = "EXEC Umk_VentaLinea_Articulo ".$mes.", ".$anio.", '', '', ''";
+                $sql_exec = "EXEC Umk_VentaLinea_Articulo ".$mes.", ".$anio.", '', '', '', ''";
                 break;
             case '2':
-                $sql_exec = "EXEC Gp_VentaLinea_Articulo ".$mes.", ".$anio.", '', '', ''";
+                $sql_exec = "EXEC Gp_VentaLinea_Articulo ".$mes.", ".$anio.", '', '', '', ''";
                 break;
             case '3':
                 $sql_exec = "";
@@ -159,11 +197,12 @@ class dashboard_model extends Model {
         
         switch ($company_user) {
             case '1':
-                $sql_exec = "EXEC Umk_VentaLinea_Articulo ".$mes.", ".$anio.", '', '', ''";
+                $sql_exec = "EXEC Umk_VentaLinea_Articulo ".$mes.", ".$anio.", '', '', '', ''";
                 $sql_meta = "EXEC UMK_meta_articulos ".$mes.", ".$anio.", '', '', ''";
                 break;
             case '2':
-                $sql_exec = "EXEC Gp_VentaLinea_Articulo ".$mes.", ".$anio.", '', '', '' ";
+                $sql_exec = "EXEC Gp_VentaLinea_Articulo ".$mes.", ".$anio.", '', '', '', ''";
+                $sql_meta = "EXEC Gp_meta_articulos ".$mes.", ".$anio.", '', '', ''";
                 break;
             case '3':
                 $sql_exec = "";
@@ -271,11 +310,12 @@ class dashboard_model extends Model {
         
         switch ($company_user) {
             case '1':
-                $sql_exec = "EXEC Umk_VentaLinea_Articulo ".$mes.", ".$anio.", '', '', ''";
+                $sql_exec = "EXEC Umk_VentaLinea_Articulo ".$mes.", ".$anio.", '', '', '', ''";
                 $sql_meta = "EXEC UMK_meta_articulos ".$mes.", ".$anio.", '', '', ''";
                 break;
             case '2':
-                $sql_exec = "EXEC Gp_VentaLinea_Articulo ".$mes.", ".$anio.", '', '', '' ";
+                $sql_exec = "EXEC Gp_VentaLinea_Articulo ".$mes.", ".$anio.", '', '', '' , ''";
+                $sql_meta = "EXEC Gp_meta_articulos ".$mes.", ".$anio.", '', '', ''";
                 break;
             case '3':
                 $sql_exec = "";

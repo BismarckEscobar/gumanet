@@ -528,6 +528,7 @@ function detalleVentasMes(tipo, title, data) {
         case 'vent':
             $("#cjVentas").show();
             $("#cjRecuperacion").hide();
+            $("#cjRutVentas").show();
             $("#dtVentas").dataTable({
                 responsive: true,
                 "autoWidth":false,
@@ -575,14 +576,46 @@ function detalleVentasMes(tipo, title, data) {
                     $('#MontoReal').text('C$'+ numeral(total).format('0,0.00'));
                 }
             });
+
+            //Tabla Ventas del Mes por Ruta
+            $("#dtTotalXRutaVent").dataTable({
+                responsive: true,
+                "autoWidth":false,
+                "ajax":{
+                    "url": "ruta/"+mes+"/"+anio,
+                    'dataSrc': '',
+                },
+                "destroy" : true,
+                "info":    false,
+                "lengthMenu": [[8,10,20,50,-1], [20,30,50,100,"Todo"]],
+                "language": {
+                    "zeroRecords": "Cargando...",
+                    "paginate": {
+                        "first":      "Primera",
+                        "last":       "Última ",
+                        "next":       "Siguiente",
+                        "previous":   "Anterior"
+                    },
+                    "lengthMenu": "MOSTRAR _MENU_",
+                    "emptyTable": "NO HAY DATOS DISPONIBLES",
+                    "search":     "BUSCAR"
+                },
+                'columns': [
+                    { "title": "Ruta",      "data": "RUTA" },
+                    { "title": "Monto",   "data": "MONTO" },
+                ],
+                
+            });
             $('#txtMontoReal').text('Total real ventas');
 
             //$('#MontoMeta').text('C$ 0.00')
             $('#txtMontoMeta').text('Total meta');
+
         break;
       case 'recu':
         $("#cjRecuperacion").show();
         $("#cjVentas").hide();
+        $("#cjRutVentas").hide();
         $("#dtRecuperacion").dataTable({
             responsive: true,
             "autoWidth":false,
@@ -624,6 +657,7 @@ function detalleVentasMes(tipo, title, data) {
     }
     $("#dtVentas_length, #dtRecuperacion_length").hide();
     $("#dtVentas_filter, #dtRecuperacion_filter").hide();
+    $("#dtTotalXRutaVent_filter, #dtTotalXRutaVent_length").hide();
 }
 
 $('#filterDtTemp').on( 'keyup', function () {
