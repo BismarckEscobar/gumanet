@@ -311,46 +311,101 @@
 		    	$('#btnShowModalExl').show();
             }
 		});
-	}	
-
-
-
-
-
-
-	function exportarDatosExlAModalMetas(){
-		var formData = new FormData($("#export_excel")[0]);
-		var mes = $("#selectMesMeta option:selected").val();
-		var anno = $("#selectAnnoMeta option:selected").val();
-		
-
-		
-
-		formData.append("mes", mes);
-		formData.append("anno", anno);
-		$.ajax({
-			url:"export_meta_from_exl",
-			method:"POST",
-			data:formData,
-			contentType:false,
-            processData: false,
-            success: function(){
-
-            	//ocultar, cambiar texto, y mostrar modal
-            	$('#mesModalExl').text($("#selectMesMeta option:selected").text());
-	            $('#annoModalExl').text(anno);
-            	get_tmp_exl_data();
-            	$('#disabledLoaderBtn').hide();
-		        $('#modalShowModalExl').modal({backdrop: 'static', keyboard: false}); //modal no desaparecera si se le hace clik fuera de el
-		    	$('#modalShowModalExl').modal('show');
-		    	$('#btnShowModalExl').show();
-            	
-            	
-            }
-		});
-
-
 	}
+
+	function exportarDatosExlAModalMetas() {
+        var fileUpload = $("#addExlFileMetas")[0];
+        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx)$/;
+
+
+        if (regex.test(fileUpload.value.toLowerCase())) { 
+			if (typeof (FileReader) != "undefined") {
+				var reader = new FileReader();
+
+                //For Browsers other than IE.
+                if (reader.readAsBinaryString) {
+                    reader.onload = function (e) {
+						var mes = $("#selectMesMeta option:selected").val(); 
+						var anno = $("#selectAnnoMeta option:selected").val();
+                        
+                        objExcel = ProcessExcel(e.target.result);
+
+                        var formData = new FormData();
+
+                        var data = objExcel;
+						formData.append("data", JSON.stringify(data));
+
+						$.ajax({
+							url:"export_meta_from_exl",
+							method:"POST",
+							data:formData,
+							contentType:false,
+				            processData: false,
+				            async: true,
+				            success: function(res) {
+				            	//ocultar, cambiar texto, y mostrar modal
+				            	$('#mesModalExl').text($("#selectMesMeta option:selected").text());
+					            $('#annoModalExl').text(anno);
+				            	get_tmp_exl_data();
+				            	$('#disabledLoaderBtn').hide();
+						        $('#modalShowModalExl').modal({backdrop: 'static', keyboard: false}); //modal no desaparecera si se le hace clik fuera de el
+						    	$('#modalShowModalExl').modal('show');
+						    	$('#btnShowModalExl').show();				            	
+				            }
+						});
+                    };
+                    reader.readAsBinaryString(fileUpload.files[0]);
+                }
+			}else {
+                alert("Este navegador no es compatible con HTML5.");
+            }
+        }else {
+            mensaje("Seleccione un archivo Excel válido", "error");
+        }
+	}
+
+	$("#donwloadExcelPlantilla").click( function() {
+	  document.location = "/gumanet/public/tmp_excel/PLANILLA_EXAMPLE.xlsx";
+	})
+
+    function ProcessExcel(data) {
+    	var Dta = [];
+        var workbook = XLSX.read(data, {
+            type: 'binary'
+        });
+
+        var firstSheet = workbook.SheetNames[0];
+        var excelRows = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[firstSheet]);
+        
+        //FECHA META
+		var mes = $("#selectMesMeta option:selected").val(); 
+		var anno = $("#selectAnnoMeta option:selected").val();
+		//FECHA ACTUAL
+		var date    = new Date();
+		var anioA   = parseInt(date.getFullYear())
+		var mesA    = parseInt(date.getMonth()+1);
+
+
+        fechaActual 	= anioA+`-`+mesA+`-01`;
+        fechaMeta 		= anno+`-`+mes+`-01`;
+
+        for (var i = 0; i < excelRows.length; i++) {
+			obj =   {
+				fechaMeta 		: fechaMeta,
+				ruta 			: excelRows[i].RUTA,
+				codigo 			: excelRows[i].COD,
+				cliente 		: excelRows[i].CLIENTE,
+				articulo 		: excelRows[i].ARTICULO,
+				descripcion 	: excelRows[i].DESCRIPCION,
+				valor 			: excelRows[i].VAL,
+				unidad 			: excelRows[i].UNID,
+				created_at 		: fechaActual,
+				updated_at 		: fechaActual
+			}
+			Dta.push(obj);
+        }        
+        return Dta;
+    }
 
 	function addDatatableDatosMetaRecu(){
 

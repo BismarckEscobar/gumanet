@@ -101,6 +101,8 @@
 <script src="{{ url('js/sweetalert2.all.js') }}"></script>
 <script src="{{ url('js/jquery.cookie.js') }}"></script>
 <script src="{{ url('js/Numeral.js') }}"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/xlsx.full.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/jszip.js"></script>
 @yield('metodosjs');
 </body>
 </html>
