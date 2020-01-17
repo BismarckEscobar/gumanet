@@ -25,14 +25,14 @@ use PHPExcel_IOFactory;
 class metas_controller extends Controller
 {
 
-	public function __construct()
-	 {
-	    $this->middleware('auth');//pagina se carga unicamente cuando se este logeado
+    public function __construct()
+     {
+        $this->middleware('auth');//pagina se carga unicamente cuando se este logeado
         ini_set('memory_limit', '3048M');
         error_reporting(E_ALL);
         ini_set('display_errors', 1);
-	 }
-	 
+     }
+     
     function index(){
         $users = User::all();
         $data = [
