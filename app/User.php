@@ -53,7 +53,7 @@ public $timestamps = true;
     
 
     public function activeRole() {//retorna el role del usuario actual
-        return  $this->id;
+        return  $this->role;
     }
 
     public function gitVersion() {
