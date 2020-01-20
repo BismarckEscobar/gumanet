@@ -129,137 +129,48 @@ class metas_controller extends Controller
         }
     }
 
+    public function addDataRecuToDB(Request $request) {
+        $data = array();
+        $data = $request->all();
+
+        if (isset($data['datas'])) {
 
 
-        public function addDataRecuToDB(Request $request){
-            
-        
+        if (count($data['datas']) > 0) {         
+            $company_id = Company::where('id',$request->session()->get('company_id'))->first()->id;
+            foreach($data['datas'] as $key) {
+                meta_recuperacion_exl::insert(array('idCompanny' => $company_id,'fechaMeta' => $key['anno'].'/'.$key['mes'].'/01','ruta' => $key['ruta'],'vendedor' => $key['vendedor'],'meta' => $key['meta'],'FHGrabacion' => new\DateTime()));
+            }
 
-            $data = array();
-            $data = $request->all();
-
-            if (isset($data['datas'])) {
-              
-
-                if (count($data['datas']) > 0) {
-                 
-                    $company_id = Company::where('id',$request->session()->get('company_id'))->first()->id;
-                    foreach($data['datas'] as $key)  { 
-
-                        meta_recuperacion_exl::insert(array('idCompanny' => $company_id,'fechaMeta' => $key['anno'].'/'.$key['mes'].'/01','ruta' => $key['ruta'],'vendedor' => $key['vendedor'],'meta' => $key['meta'],'FHGrabacion' => new\DateTime()));
-                    
-                    }
-
-                    return 1;
-                }else{
-                    return 0;
-                }
-            
-            }else{
-                return 0;
-              
-            
+            return 1;
+        }else{
+            return 0;
         }
-            }
-
-
-
-
-
-
-
-
-    public function exportMetaFromExl(Request $request){
-        
-        $file_directory = "tmp_excel/";
-
-        if(!empty($_FILES["addExlFileMetas"])){
-            
-            $mes = $request->input('mes');
-            $anno = $request->input('anno');
-            $tipo = $request->input('tipo');
-
-
-
-
-            $file_array = explode(".", $_FILES["addExlFileMetas"]["name"]);
-            $new_file_name = "tmp_excel.". $file_array[1];
-            move_uploaded_file($_FILES["addExlFileMetas"]["tmp_name"], $file_directory . $new_file_name);
-            if($file_array[1]=="xlsx" || $file_array[1]=="xls"){
-                
-
-                $file_type  = PHPExcel_IOFactory::identify("tmp_excel/".$new_file_name);
-                $objReader  = PHPExcel_IOFactory::createReader($file_type);
-                $objPHPExcel = $objReader->load($file_directory . $new_file_name);
-
-                try{
-                        $i = 2;//contador
-                        $param=0;
-                    
-                        $nomRuta = $objPHPExcel->getActiveSheet()->getCell('A1')->getCalculatedValue();
-                        $nomCodigo = $objPHPExcel->getActiveSheet()->getCell('B1')->getCalculatedValue();
-                        $nomClte = $objPHPExcel->getActiveSheet()->getCell('C1')->getCalculatedValue();
-                        $nomArt = $objPHPExcel->getActiveSheet()->getCell('D1')->getCalculatedValue();
-                        $nomDescrip = $objPHPExcel->getActiveSheet()->getCell('E1')->getCalculatedValue();
-                        $nomVal = $objPHPExcel->getActiveSheet()->getCell('F1')->getCalculatedValue();
-                        $nomUnidad = $objPHPExcel->getActiveSheet()->getCell('G1')->getCalculatedValue();
-
-                        if($nomRuta == '' || $nomCodigo == '' || $nomClte == '' || $nomArt == '' || $nomDescrip == '' || $nomVal == '' || $nomUnidad == '' ){
-
-                        }else{
-
-                            while ($param==0) {
-                                
-                                
-
-                                Tmp_meta_exl::insert(array('fechaMeta' => $anno.'/'.$mes.'/01',
-                                    'ruta' => $objPHPExcel->getActiveSheet()->getCell('A'.$i)->getCalculatedValue(),
-                                    'codigo' => $this->addZeros($objPHPExcel->getActiveSheet()->getCell('B'.$i)->getCalculatedValue()),
-                                    'cliente' => $objPHPExcel->getActiveSheet()->getCell('C'.$i)->getCalculatedValue(),
-                                    'articulo' => $objPHPExcel->getActiveSheet()->getCell('D'.$i)->getCalculatedValue(),
-                                    'descripcion' => $objPHPExcel->getActiveSheet()->getCell('E'.$i)->getCalculatedValue(),
-                                    'valor' => $objPHPExcel->getActiveSheet()->getCell('F'.$i)->getCalculatedValue(),
-                                    'unidad' => $objPHPExcel->getActiveSheet()->getCell('G'.$i)->getCalculatedValue(),
-                                    'created_at' => new\DateTime()));
-                                    
-                                $i++;
-                                if($objPHPExcel->getActiveSheet()->getCell('A'.$i)->getCalculatedValue()==NULL){
-                                    $param=1;
-                                }           
-                            }
-                        }
-                        
-                    
-                }catch(Exception $e){
-                    echo "excepción: ".$e;
-                }
-               
-
-                
-
-            }else{
-                echo "Archivo invalido";
-            }
-           
 
         }else{
-            echo "no paso";
+        return 0;
         }
     }
 
+    public function exportMetaFromExl(Request $request) {
+        $obj = json_decode($request->input('data'), true);
 
-
-    public function getTmpExlData(){
-        
-          
-       //return DataTables::of(Tmp_meta_exl::latest()->get())->make(true);
-        $tempTable = Tmp_meta_exl::query();
-        return DataTables::of($tempTable)->make(true);
-      
+        try{
+            foreach (array_chunk($obj,1000) as $t) {
+                Tmp_meta_exl::insert($t);
+            }
+        }catch(Exception $e) {
+            echo "excepción: ".$e;
+        }
     }
 
+    public function getTmpExlData() {          
+        //return DataTables::of(Tmp_meta_exl::latest()->get())->make(true);
+        $tempTable = Tmp_meta_exl::query();
+        return DataTables::of($tempTable)->make(true);      
+    }
 
-     public function getHistorialMeta(Request $request){
+    public function getHistorialMeta(Request $request){
         $idPeriodo = '';
             
         if($request->isMethod('post')){

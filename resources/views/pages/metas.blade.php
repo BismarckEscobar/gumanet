@@ -56,7 +56,7 @@
     			</div>
   	    </div>
         <div class="row justify-content-center">
-          <div class="col-md-6 mb-2">
+          <div class="col-md-5 mb-2">
             <div class="input-group">
               <select class="custom-select" id="selectTipoMeta" name="selectTipoMeta">
                 <option value="00">Tipo meta</option>
@@ -64,6 +64,10 @@
                 <option value="recu">Recuperación</option>
               </select>
             </div>
+            
+          </div>
+          <div class="col-md-1 mt-1">
+            <a href="#!" id="donwloadExcelPlantilla"><i class="material-icons" style="font-size: 30px">get_app</i></a>
           </div>
         </div>
 
@@ -90,12 +94,17 @@
             <div class="col-md-3 mb-2">
                <div class="input-group">
                   <select class="custom-select" id="selectAnnoMeta" name="selectAnnoMeta">
-                  	<option value="00">Año</option>
-                      <option value="2016">2016</option>
-                      <option value="2017">2017</option>
-                      <option value="2018">2018</option>
-                      <option value="2019">2019</option>
-                      <option value="2019">2019</option>
+                  <?php
+                        $year = date("Y");
+                        for ($i= 2018; $i <= $year ; $i++) {
+                          if ($i==$year) {
+                            echo'<option selected value="'.$i.'">'.$i.'</option>';
+                          }else {
+                            echo'<option value="'.$i.'">'.$i.'</option>';
+                          }
+                         
+                        }
+                    ?>
                   </select>
                 </div>
             </div>
@@ -106,7 +115,7 @@
               <div class="input-group">
     					  <div class="custom-file" id="contInputExlFileMetas">
     					    <input type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" value="upload" class="custom-file-input" name="addExlFileMetas" id="addExlFileMetas"/>
-    					    <label class="custom-file-label" id="fileLabelMeta" for="addExlFileMetas" data-label="Buscar">Seleccione un archivo Ecxel
+    					    <label class="custom-file-label" id="fileLabelMeta" for="addExlFileMetas" data-label="Buscar">Seleccione un archivo Excel
     					    </label>
     					  </div>
     					</div>
