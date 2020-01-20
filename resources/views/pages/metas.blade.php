@@ -94,7 +94,7 @@
             <div class="col-md-3 mb-2">
                <div class="input-group">
                   <select class="custom-select" id="selectAnnoMeta" name="selectAnnoMeta">
-                    <?php
+                  <?php
                         $year = date("Y");
                         for ($i= 2018; $i <= $year ; $i++) {
                           if ($i==$year) {

@@ -4,24 +4,15 @@
 	    $("#item-nav-01").after(`<li class="breadcrumb-item active">Metas</li>`);
 	    $('#disabledLoaderBtn').hide();
 	    $("#disabledLoaderBtnProcess").hide();
-
 	    $('#bloqueTblExcVenta').hide(); 
 	    $('#bloqueTblExcRecup').hide();
-
 	    $("#verMetasAgregadasXMes").hide();
-
 	    $("#alertMetas").hide();
-
-
 	    if($("#radioMeta1").is(':checked')){//cambiar texto del boton
-
 	    	$("#btnShowModalExl").text("Agregar");
 	    }else{
 	    	$("#btnShowModalExl").text("Visualizar");
 	    }
-
-
-
 	    $('#tblExcelImportMetaRecu').DataTable({
 			
 	    	'pageLength' : 10,
@@ -50,12 +41,10 @@
     		
 		    
 		});
-
 		$('tblExcelImportMetaRecu_length').hide();//Ocultar select que muestra cantidad de registros por pagina
     	$('tblExcelImportMetaRecu_filter').hide();//Esconde input de filtro de tabla por texto escrito
     
 	});
-
 	$('.custom-file-input').on('change',function(){//Mostrar nombrede archivo al seleccionarlo
     	
     	if ($(this).val()=='') {
@@ -64,22 +53,14 @@
     		$('#fileLabelMeta').text($(this).val());
     	}
 	});
-
-
 	/*$('#selectTipoMeta').on('change', function(){
 		
-
 	});*/
-
 	//Boton muestra modal de datos de metas a agregar o muestra datos de metas segun la fecha en de pendencia de que ratio Button este selecionado
 	$("#btnShowModalExl").on('click', function(){
-
 		if (validarCamposMeta()) {//Validar mes y año que no esten vacios
-
 			$("#alertMetas").hide();
-
 			if($("#radioMeta1").is(':checked')){
-
 				if ($("#selectTipoMeta option:selected").val() == 'recu'){
 					if(!existeFechaMetaRecu()){
 						$('#btnShowModalExl').hide();
@@ -93,22 +74,18 @@
 						$("#alertMetas").text("Ya existe meta con la fecha seleccioanda");
 					}
 				}else{
-
 					if(!existeFechaMeta()){// si no existe mes y año seleciionados en datos de metas muestra el modal
-
 						$('#btnShowModalExl').hide();
 						$('#disabledLoaderBtn').show();
 						$('#bloqueTblExcRecup').hide();
 						$('#bloqueTblExcVenta').show();
 						truncate_tmp_exl_tbl();//Borrar registro de tabla temporal en phpMyAdmin
 						exportarDatosExlAModalMetas();//Funcion para exportar datos de excel a la tabla temporal
-
 					}else{// existe mes y a{ño uestra un alerta de bootstrap 
 						$("#alertMetas").show();
 						$("#alertMetas").css({"color":"red","font-weight":"bold"});
 						$("#alertMetas").text("Ya existe meta con la fecha seleccioanda");
 					}
-
 			    }
 			}else{
 			    	
@@ -116,7 +93,6 @@
 			    		
 			    		$('#bloqueTblVerMetasAgregadas').hide();
 			    		$('#bloqueTblExcelVerMetaRecu').show();
-
 			    		getHistoriaMetaRecu();
 			    	}else{
 			    		
@@ -126,30 +102,21 @@
 			    		
 			    }
 			    
-
 			    	$('#verMetasAgregadasXMes').show();
 		    	}
 		}else{
-
 			$("#alertMetas").css({"color":"red","font-weight":"bold"});
-
 			if($("#radioMeta1").is(':checked')){
-
 				$("#alertMetas").text("*Seleccione un valor valido para cada campo*");
-
 			}else{
-
 				$("#alertMetas").text("*Seleccione un valor valido para cada campo*");
-
 			}
 			
 			$("#alertMetas").show();
 			
-
 		}
 		
 	});
-
 	$('#procesarModalMetaExl').on('click', function(){
 		
 		$("#procesarModalMetaExl").hide();
@@ -161,36 +128,26 @@
 			addDatatableDatosMeta();
 		}
 		
-
 	});
-
-
 	$("#radioMeta1").on('click', function(){
 		$("#btnShowModalExl").text("Agregar");
 	    $("#contInputExlFileMetas").show();
 	    $("#verMetasAgregadasXMes").hide();
 	    $("#alertMetas").hide();
 	});
-
-
 	$("#radioMeta2").on('click', function(){
 		$("#btnShowModalExl").text("Visualizar");
 	    $("#contInputExlFileMetas").hide();
 	    $("#verMetasAgregadasXMes").hide();
 	    $("#alertMetas").hide();
 	});
-
 	$('#selectTipoMeta').on('change',function(){
 		$("#verMetasAgregadasXMes").hide();
 	    $("#alertMetas").hide();
 	})
-
-
 	function getHistorialMeta(){
-
 		var columnDefs = new Array();
 		var columns= new Array();
-
 		columnDefs=[//tamaños de cplumans del datatable
 				{ "width": "3%", "targets": [ 0 ],"className": "dt-center" },
 	            { "width": "3%", "targets": [ 1 ],"className": "dt-center" },
@@ -206,14 +163,11 @@
 		        {data:'Meta', name:'Meta'},
 		        {data:'val', name:'val'}
 		        ];
-
 		inicialDataTablesMetas('#tblVerMetasAgregadas','get_historial_meta',columns,columnDefs);	// funcion que recibe el id del datatable a mostrar el url de la ruta y las vasriables para los datos de las columnas
 	}
-
 	function getHistoriaMetaRecu(){
 		var columnDefs = new Array();
 		var columns= new Array();
-
 		columnDefs=[//tamaños de cplumans del datatable
 				{ "width": "10%", "targets": [ 0 ],"className": "dt-center" },
 	            { "width": "70%", "targets": [ 1 ] },
@@ -225,16 +179,12 @@
 	    		{data:'vendedor', name:'vendedor'},
 		        {data:'meta', name:'meta'}
 		        ];
-
 		inicialDataTablesMetas('#tblExcelVerMetaRecu','getHistoriaMetaRecu',columns,columnDefs);	// funcion que recibe el id del datatable a mostrar el url de la ruta y las vasriables para los datos de las columnas
 	}
-
 	function get_tmp_exl_data(){
-
 		var columnDefs = new Array();
 		var columns= new Array();
 		
-
 		columnDefs=[//tamaños de cplumans del datatable
 			{ "width": "3%", "targets": [ 0 ], "className": "dt-center" },
             { "width": "3%", "targets": [ 1 ], "className": "dt-center" },
@@ -254,11 +204,8 @@
 	        {data:'valor', name: 'valor'},
 		    {data:'unidad', name:'unidad'}
 	        ];
-
 		inicialDataTablesMetas('#tblExcelImportMeta','get_tmp_exl_data',columns,columnDefs);// funcion que recibe el id del datatable a mostrar el url de la ruta y las vasriables para los datos de las columnas
-
     	
-
 		
 	}
 	
@@ -267,9 +214,6 @@
 			url:"truncate_tmp_exl_tbl"
 		});
 	}
-
-
-
 	function exportarDatosExlAModalMetasRecu(){
 	
 		$('#tblExcelImportMetaRecu').DataTable().clear().draw();
@@ -280,9 +224,7 @@
 		 $('tblExcelImportMetaRecu_length').hide();//esconder select que muestra cantidad de registros por pagina
     			$('tblExcelImportMetaRecu_filter').hide();//Esconde input de filtro de tabla por texto escrito
 		
-
 		
-
 		formData.append("mes", mes);
 		formData.append("anno", anno);
 		$.ajax({
@@ -407,12 +349,11 @@
         return Dta;
     }
 
+	}	
+	
 	function addDatatableDatosMetaRecu(){
-
 		var datas = getDataFromTableMetaRecu();
 		
-
-
 		$.ajax({
 			url:"addDataRecuToDB",
 			method:"POST",
@@ -439,10 +380,8 @@
 				}
 			}
 		});
-
         
 	}
-
 	function getDataFromTableMetaRecu(){
 		var mes = $("#selectMesMeta option:selected").val();
 		var anno = $("#selectAnnoMeta option:selected").val();
@@ -454,13 +393,8 @@
             
         	cells.push({'mes':mes,'anno':anno,'ruta':$(rows[i]).find("td:eq(0)").html(),'vendedor':$(rows[i]).find("td:eq(1)").html(),'meta':$(rows[i]).find("td:eq(2)").html()});
         }
-
-
         return cells;
-
 	}
-
-
 	function addDatatableDatosMeta(){
     	
 		$.ajax({
@@ -498,15 +432,9 @@
 			success: function(data){
 				
 			}
-
 		});*/
-
-
 	}
-
 	
-
-
 	function inicialDataTablesMetas(dtName,dataUrl,columns,columnDefs){
 		//$(dtName).DataTable().clear().draw();
 		
@@ -547,22 +475,16 @@
 	    	'columns': columns
 		    
 		});
-
 		$(dtName+'_length').hide();//Ocultar select que muestra cantidad de registros por pagina
     	$(dtName+'_filter').hide();//Esconde input de filtro de tabla por texto escrito
 		$('#mesHistorialMeta').text($('#selectMesMeta option:selected').text());
         $('#annoHistorialMeta').text($('#selectAnnoMeta option:selected').text());
-
 	}
-
 	
 		
 		
-
 		
 		
-
-
 	function validarCamposMeta(){
 		if($("#radioMeta1").is(':checked')){
 			if($('#selectTipoMeta').val() !='00' && $("#selectMesMeta").val() != "00" && $("#selectAnnoMeta").val() != "00" && $("#addExlFileMetas").val().length != 0){
@@ -571,7 +493,6 @@
 				return false;
 			}
 	    }else{
-
 	    	if($('#selectTipoMeta').val() !='00' && $("#selectMesMeta").val() != "00" && $("#selectAnnoMeta").val() != "00"){
 				return true;
 			}else{
@@ -581,13 +502,10 @@
     	}
 		
 	}
-
 	function existeFechaMetaRecu(){
-
 		var mes = $("#selectMesMeta option:selected").val();
 		var anno = $("#selectAnnoMeta option:selected").val();
 		var resultado;
-
 		$.ajax({
 			url:'existe_Fecha_Meta_venta',
     		type: 'POST',
@@ -605,16 +523,12 @@
             	}
             }
 		});
-
 		return resultado;
 	}
-
 	function existeFechaMeta(){
-
 		var mes = $("#selectMesMeta option:selected").val();
 		var anno = $("#selectAnnoMeta option:selected").val();
 		var resultado;
-
 		$.ajax({
 			url:'existe_Fecha_Meta',
     		type: 'POST',
@@ -632,9 +546,7 @@
             	}
             }
 		});
-
 		return resultado;
 	}
 	
-
 </script>
