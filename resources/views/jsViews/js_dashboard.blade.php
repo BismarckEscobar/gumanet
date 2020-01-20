@@ -4,7 +4,7 @@ $(document).ready(function() {
     var anio    = parseInt(date.getFullYear())
     var mes     = parseInt(date.getMonth()+1);
 
-    actualizandoGraficasDashboard(mes, anio)
+    
 
     var list_chk = {
                     'container-vm' : 'Ventas del mes',
@@ -18,19 +18,21 @@ $(document).ready(function() {
     //GUARDO VARIABLES EN COOKIES
     $(".content-graf .graf div").each(function() {
         name_class = $(this).attr('class');
-        ( $.cookie( name_class )=='not_visible' )?($('div.'+name_class).parent().hide()):($('div.'+name_class).parent().show());
+        ( $.cookie( name_class )=='not_visible' || name_class=='container-vb' )?($('div.'+name_class).parent().hide()):($('div.'+name_class).parent().show());
 
         visibility = ( $.cookie( name_class )=='not_visible' )?'':'checked';
 
-        list_dash +=
-        `<li class="">
-          <div class="form-check">
-            <input class="dash-opc form-check-input" type="checkbox" `+visibility+` value="`+name_class+`" id="`+name_class+`">
-            <label class="form-check-label" for="`+name_class+`">
-              `+ ( list_chk[name_class] ) +`
-            </label>
-          </div>
-        </li>`
+        if (name_class!='container-vb') {
+            list_dash +=
+            `<li class="">
+              <div class="form-check">
+                <input class="dash-opc form-check-input" type="checkbox" `+visibility+` value="`+name_class+`" id="`+name_class+`">
+                <label class="form-check-label" for="`+name_class+`">
+                  `+ ( list_chk[name_class] ) +`
+                </label>
+              </div>
+            </li>`
+        }
     });
 
     //AGREGO LA RUTA AL NAVEGADOR
@@ -43,20 +45,20 @@ $(document).ready(function() {
       </ul>`);
 
 	reordenandoPantalla();
-
+    actualizandoGraficasDashboard(mes, anio)
+    
     Highcharts.setOptions({
         lang: {
             numericSymbols: [ 'k' , 'M' , 'B' , 'T' , 'P' , 'E'],
-          decimalPoint: '.',
-          thousandsSep: ','
+            decimalPoint: '.',
+            thousandsSep: ','
         }
     });
 
-    Highcharts.chart('chart01', {
-
+    ventas = {
         chart: {
             type: 'column',
-              
+            renderTo: 'grafVentas'
         },
         title: {
             text: 'Ventas del mes'
@@ -70,14 +72,12 @@ $(document).ready(function() {
             }
 
         },
-
         legend: {
             enabled: false
         },
         plotOptions: {
             series: {
                 allowPointSelect: true,
-                cursor: 'pointer',
                 borderWidth: 0,
                 dataLabels: {
                     enabled: true,
@@ -92,50 +92,28 @@ $(document).ready(function() {
             }
         },
         tooltip: {
-            headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+            headerFormat: '<span style="font-size:11px">Ventas</span><br>',
             pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>C${point.y:,.2f}</b>',
-             shared: true,
+            shared: true,
             useHTML: true
         },
-        series: [{
-
-            states: {
-                select: {
-                    color: null
-                }
-            },
+        series:[{
+            colorByPoint: true,
+            data: [],
+            showInLegend: false,
             cursor: 'pointer',
             point: {
                 events: {
-
-                    click: function(event) {
-
-                                                    
-                         
-                        detalleVentasMes('vent', 'Ventas del Mes');
+                    click: function(e) {
+                        detalleVentasMes('vent', 'Ventas del Mes', 'data');
                     }
                 }
             },
-                name: "Ventas",
-                colorByPoint: true,
-                data: [
-                    {
-                        name: "Real",
-                        y: 2262432.74,
-                        drilldown: "Real"
-                    },
-                    {
-                        name: "Meta",
-                        y: 315321.57,
-                        drilldown: "Meta"
-                    },
-                    
-                ]
-            }
-        ]
-        
-    });
+        }]    
+    };
 
+//Recuperacion del mes
+/*
     Highcharts.chart('chart02', {
 
         chart: {
@@ -151,9 +129,7 @@ $(document).ready(function() {
             title: {
                 text: ''
             }
-
         },
-
         legend: {
             enabled: false
         },
@@ -212,7 +188,67 @@ $(document).ready(function() {
             }
         ]
         
-    });
+    });*/
+
+    recuperacionMes = {
+
+       chart: {
+            type: 'column',
+            renderTo: 'grafRecupera'
+        },
+        title: {
+            text: 'Recuperación del mes'
+        },
+        xAxis: {
+            type: 'category'
+        },
+        yAxis: {
+            title: {
+                text: ''
+            }
+
+        },
+        legend: {
+            enabled: false
+        },
+        plotOptions: {
+            series: {
+                allowPointSelect: true,
+                borderWidth: 0,
+                dataLabels: {
+                    enabled: true,
+                  formatter: function() {
+                    if (this.y > 1000) {
+                      return Highcharts.numberFormat(this.y / 1000, 1) + "K";
+                    } else {
+                      return this.y
+                    }
+                  }
+                }
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:11px">Ventas</span><br>',
+            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>C${point.y:,.2f}</b>',
+            shared: true,
+            useHTML: true
+        },
+        series:[{
+            colorByPoint: true,
+            data: [],
+            showInLegend: false,
+            cursor: 'pointer',
+            point: {
+                events: {
+                    click: function(e) {
+                        detalleVentasMes('recu', 'Recuperacion del Mes');
+                    }
+                }
+            },
+        }]
+    };
+
+ 
 
     //GRAFICA: VALORIZACION DE INVENTARIO
     val_bodega = {
@@ -256,10 +292,10 @@ $(document).ready(function() {
             pointFormat: '<span style="color:black"><b>C$ {point.y}</b></span>'
         },
         series:[{
-                colorByPoint: true,
-                data: [],
-                showInLegend: false
-            }]    
+            colorByPoint: true,
+            data: [],
+            showInLegend: false
+        }]    
     };
 
     //GRAFICA: TOP 10 CLIENTES
@@ -301,13 +337,13 @@ $(document).ready(function() {
             }
         },
         tooltip: {
-            pointFormat: '<span style="color:black"><b>C$ {point.y}</b></span>'
+            pointFormat: '<span style="color:{point.color}"><b>C${point.y:,.2f}</b>',
         },
         series:[{
-                colorByPoint: true,
-                data: [],
-                showInLegend: false
-            }]        
+            colorByPoint: true,
+            data: [],
+            showInLegend: false
+        }]        
     }
 
     //GRAFICA: TOP 10 PRODUCTOS
@@ -318,9 +354,6 @@ $(document).ready(function() {
         },
         title: {
             text: 'Top 10 Productos mas vendidos'
-        },
-        subtitle: {
-            text: 'The point value at {point.x} is {point.y}'
         },
         xAxis: {
             type: 'category'
@@ -372,15 +405,26 @@ $("#filterM_A").click( function(e) {
 
 var val_bodega = {};
 var clientes = {};
+var ventas = {};
+var recuperacionMes = {};
 function actualizandoGraficasDashboard(mes, anio) {
-    $.getJSON("dataGraf/"+mes+"/"+anio, function(json) {
-        
+
+    $("#grafClientes, #grafProductos, #grafVentas, #grafBodega, #grafRecupera")
+    .empty()
+    .append(`<div style="height:400px; background:#ffff; padding:20px">
+                <div class="d-flex align-items-center">
+                  <strong>Cargando...</strong>
+                  <div class="spinner-border ml-auto text-primary" role="status" aria-hidden="true"></div>
+                </div>
+            </div>`);
+
+    $.getJSON("dataGraf/"+mes+"/"+anio, function(json) {        
         var dta = [];
         var title = [];
 
         $.each(json, function (i, item) {
 
-            switch (item['tipo']) { 
+            switch (item['tipo']) {
                 case 'dtaBodega':
                     dta = [];
                     title = [];
@@ -433,25 +477,63 @@ function actualizandoGraficasDashboard(mes, anio) {
                     productos.series[0].data = dta;
                     chart = new Highcharts.Chart(productos);
                 break;
+                case 'dtaVentasMes':
+                    dta = [];
+                    title = [];
+                    $.each(item['data'], function(i, x) {
+                        dta.push({
+                            name  : x['name'],
+                            y     : x['data']
+                        })
+
+                        title.push(x['name'])
+                    });
+                    
+                    ventas.xAxis.categories = title;
+                    ventas.series[0].data = dta;
+                    chart = new Highcharts.Chart(ventas);
+                    $("#MontoMeta").text('C$ ' + numeral(json[3].data[1].data).format('0,0.00') )
+                break;
+                case 'dtaRecupera':
+                    dta = [];
+                    title = [];
+                    $.each(item['data'], function(i, x) {
+                        dta.push({
+                            name  : x['name'],
+                            y     : x['data']
+                        })
+
+                        title.push(x['name'])
+                    });
+                    
+                    recuperacionMes.xAxis.categories = title;
+                    recuperacionMes.series[0].data = dta;
+                    chart = new Highcharts.Chart(recuperacionMes);
+                    $("#MontoMeta").text('C$ ' + numeral(json[3].data[1].data).format('0,0.00') )
+                break;
                 default:
                 alert('Ups... parece que ocurrio un error :(');
             }
-        });        
-
+        });
     });
 }
 
-function detalleVentasMes(tipo, title) {
+function detalleVentasMes(tipo, title, data) {
     $('#title-page-tem').text(title);
     $("#page-details").toggleClass('active');
+    mes = $("#opcMes option:selected").val();
+    anio = $("#opcAnio option:selected").val();
 
-    switch(tipo) {
+    switch(tipo) {        
         case 'vent':
-            $("#dtTemporal").dataTable({
+            $("#cjVentas").show();
+            $("#cjRecuperacion").hide();
+            $("#cjRutVentas").show();
+            $("#dtVentas").dataTable({
                 responsive: true,
                 "autoWidth":false,
                 "ajax":{
-                    "url": "detalles/"+tipo,
+                    "url": "detalles/"+tipo+"/"+mes+"/"+anio,
                     'dataSrc': '',
                 },
                 "destroy" : true,
@@ -472,23 +554,73 @@ function detalleVentasMes(tipo, title) {
                 'columns': [
                     { "title": "Articulo",      "data": "ARTICULO" },
                     { "title": "Descripcion",   "data": "DESCRIPCION" },
-                    { "title": "U/M",      "data": "U_MEDIDA" },
+                    { "title": "U/M",           "data": "U_MEDIDA" },
                     { "title": "Cantidad",      "data": "CANTIDAD" },
+                    { "title": "Precio x ud.",  "data": "PRECIOUND" },
                     { "title": "Monto",         "data": "MONTO" }
-                ]
+                ],
+                "footerCallback": function ( row, data, start, end, display ) {
+                    var api = this.api(), data;
+                    var intVal = function ( i ) {
+                        return typeof i === 'string' ?
+                            i.replace(/[\$,]/g, '')*1 :
+                            typeof i === 'number' ?
+                                i : 0;
+                    };
+                    total = api
+                        .column( 5 )
+                        .data()
+                        .reduce( function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0 );
+                    $('#MontoReal').text('C$'+ numeral(total).format('0,0.00'));
+                }
             });
-            $('#MontoReal').text('C$ 5,000.00');
-            $('#txtMontoReal').text('Total real venta');
 
-            $('#MontoMeta').text('C$ 10,000.00')
+            //Tabla Ventas del Mes por Ruta
+            $("#dtTotalXRutaVent").dataTable({
+                responsive: true,
+                "autoWidth":false,
+                "ajax":{
+                    "url": "ruta/"+mes+"/"+anio,
+                    'dataSrc': '',
+                },
+                "destroy" : true,
+                "info":    false,
+                "lengthMenu": [[8,10,20,50,-1], [20,30,50,100,"Todo"]],
+                "language": {
+                    "zeroRecords": "Cargando...",
+                    "paginate": {
+                        "first":      "Primera",
+                        "last":       "Última ",
+                        "next":       "Siguiente",
+                        "previous":   "Anterior"
+                    },
+                    "lengthMenu": "MOSTRAR _MENU_",
+                    "emptyTable": "NO HAY DATOS DISPONIBLES",
+                    "search":     "BUSCAR"
+                },
+                'columns': [
+                    { "title": "Ruta",      "data": "RUTA" },
+                    { "title": "Monto",   "data": "MONTO" },
+                ],
+                
+            });
+            $('#txtMontoReal').text('Total real ventas');
+
+            //$('#MontoMeta').text('C$ 0.00')
             $('#txtMontoMeta').text('Total meta');
+
         break;
       case 'recu':
-        $("#dtTemporal").dataTable({
+        $("#cjRecuperacion").show();
+        $("#cjVentas").hide();
+        $("#cjRutVentas").hide();
+        $("#dtRecuperacion").dataTable({
             responsive: true,
             "autoWidth":false,
             "ajax":{
-                "url": "detalles/"+tipo,
+                "url": "detalles/"+tipo+"/"+mes+"/"+anio,
                 'dataSrc': '',
             },
             "info":    false,
@@ -513,22 +645,23 @@ function detalleVentasMes(tipo, title) {
                 { "title": "Meta",          "data": "META" },
                 { "title": "Efectividad",   "data": "EFEC" }
             ]
-        });
+        })
         $('#MontoReal').text('C$ 5,000.00');
         $('#txtMontoReal').text('Total real recuperado');
 
-        $('#MontoMeta').text('C$ 10,000.00')
+        $('#MontoMeta').text('C$ 0,000.00')
         $('#txtMontoMeta').text('Total meta');
         break;
       default:
         mensaje("Ups... algo ha salido mal")
     }
-    $("#dtTemporal_length").hide();
-    $("#dtTemporal_filter").hide();
+    $("#dtVentas_length, #dtRecuperacion_length").hide();
+    $("#dtVentas_filter, #dtRecuperacion_filter").hide();
+    $("#dtTotalXRutaVent_filter, #dtTotalXRutaVent_length").hide();
 }
 
 $('#filterDtTemp').on( 'keyup', function () {
-    var table = $('#dtTemporal').DataTable();
+    var table = $('.table').DataTable();
     table.search(this.value).draw();
 });
 

@@ -100,6 +100,7 @@
 <script src="{{ url('js/js_general.js') }}"></script>
 <script src="{{ url('js/sweetalert2.all.js') }}"></script>
 <script src="{{ url('js/jquery.cookie.js') }}"></script>
+<script src="{{ url('js/Numeral.js') }}"></script>
 @yield('metodosjs');
 </body>
 </html>
