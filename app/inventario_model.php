@@ -96,11 +96,9 @@ class inventario_model extends Model {
     public static function getPreciosArticulos($articulo) {
         
         $sql_server     = new \sql_server();
-        
         $sql_exec       = '';
         $request        = Request();
         $company_user   = Company::where('id',$request->session()->get('company_id'))->first()->id;
-
         switch ($company_user) {
             case '1':
                 $sql_exec = 'EXEC sp_iweb_precios '."'".$articulo."'".' ';
