@@ -44,7 +44,7 @@ $(document).ready(function() {
         `+list_dash+`
       </ul>`);
 
-	reordenandoPantalla();
+    reordenandoPantalla();
     actualizandoGraficasDashboard(mes, anio)
     
     Highcharts.setOptions({
@@ -63,17 +63,20 @@ $(document).ready(function() {
         title: {
             text: 'Ventas del mes'
         },
+        subtitle: {},
         xAxis: {
             type: 'category'
         },
         yAxis: {
             title: {
                 text: ''
+            },
+             stackLabels: {
+            enabled: true
             }
-
         },
         legend: {
-            enabled: false
+            enabled: true
         },
         plotOptions: {
             series: {
@@ -83,7 +86,8 @@ $(document).ready(function() {
                     enabled: true,
                   formatter: function() {
                     if (this.y > 1000) {
-                      return Highcharts.numberFormat(this.y / 1000, 1) + "K";
+                      //return Highcharts.numberFormat(this.y / 1000, 1) + "K";
+                      return Highcharts.numberFormat(this.y);
                     } else {
                       return this.y
                     }
@@ -92,13 +96,17 @@ $(document).ready(function() {
             }
         },
         tooltip: {
-            headerFormat: '<span style="font-size:11px">Ventas</span><br>',
-            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>C${point.y:,.2f}</b>',
+            headerFormat: '<span style="font-size:11px">Ventas</span>',
+            pointFormat: '<br><span style="color:{point.color}">{point.name}</span>: <b>C${point.y:,.2f}</b>',
             shared: true,
             useHTML: true
         },
         series:[{
             colorByPoint: true,
+            colors: [
+                '#90ed7d', 
+                '#7cb5ec'
+                ],
             data: [],
             showInLegend: false,
             cursor: 'pointer',
@@ -488,9 +496,60 @@ function actualizandoGraficasDashboard(mes, anio) {
 
                         title.push(x['name'])
                     });
+
+                    var real_ = dta[0]['y'];
+                    var meta_ = json[3].data[1].data;
+                    var remanente = 0;
+
+                    var porcentaje = (meta_!=0)? (real_/meta_) * 100 :0;
+                    remanente = (real_>meta_)? real_- meta_ :0;
+                    porcentaje = numeral(porcentaje).format('0,0.00')+`% de 100%`;
                     
                     ventas.xAxis.categories = title;
-                    ventas.series[0].data = dta;
+                    if (remanente==0) {
+                        
+                        ventas.series.length = 1;
+                        ventas.series[0].colors[0]="#90ed7d";
+                        
+                        ventas.series[0].data = dta;
+                        
+                    }else{
+
+                        ventas.plotOptions.pointFormat= '<br><span style="color:{point.color}">{point.name}</span>: <b>C${point.y:,.2f}</b>'
+                        
+                        ventas.plotOptions.column = {
+                                stacking: 'normal',
+                                dataLabels: {
+                                    enabled: false
+                                }
+                            };
+                            ventas.series.push({
+                                colorByPoint: true,
+                                colors: [
+                                    '#04B431', 
+                                    '#7cb5ec'
+                                    ],
+                                data: [],
+                                showInLegend: false,
+                                cursor: 'pointer',
+                                point: {
+                                    events: {
+                                        click: function(e) {
+                                            detalleVentasMes('vent', 'Ventas del Mes', 'data');
+                                        }
+                                    }
+                                },
+                            });
+                                            
+                            dta[0]['y'] = dta[0]['y']-remanente;
+                        ventas.series[1].data = dta;
+                        ventas.series[0].colors[0]="#04B431";
+                        ventas.series[1].colors[0]="#90ed7d";
+                        ventas.series[0].data= [remanente,0];
+                        
+                    }
+                    
+                    ventas.subtitle = {text: porcentaje};
                     chart = new Highcharts.Chart(ventas);
                     $("#MontoMeta").text('C$ ' + numeral(json[3].data[1].data).format('0,0.00') )
                 break;
@@ -661,7 +720,7 @@ function detalleVentasMes(tipo, title, data) {
 }
 
 $('#filterDtTemp').on( 'keyup', function () {
-    var table = $('.table').DataTable();
+    var table = $('#dtVentas').DataTable();
     table.search(this.value).draw();
 });
 
