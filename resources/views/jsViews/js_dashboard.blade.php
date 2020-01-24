@@ -514,7 +514,6 @@ function actualizandoGraficasDashboard(mes, anio) {
                         ventas.series[0].data = dta;
                         
                     }else{
-
                         ventas.plotOptions.pointFormat= '<br><span style="color:{point.color}">{point.name}</span>: <b>C${point.y:,.2f}</b>'
                         
                         ventas.plotOptions.column = {
