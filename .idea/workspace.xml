@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d01ebb05-ecd1-4a91-b4c3-05d4a96def76" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/inventario_model.php" afterPath="$PROJECT_DIR$/app/inventario_model.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -17,19 +18,19 @@
       <file leaf-file-name="inventario_model.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/inventario_model.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="104" column="21" lean-forward="false" selection-start-line="104" selection-start-column="21" selection-end-line="104" selection-end-column="21" />
+            <state relative-caret-position="255">
+              <caret line="100" column="99" lean-forward="false" selection-start-line="100" selection-start-column="99" selection-end-line="100" selection-end-column="99" />
               <folding>
-                <marker date="1573741222861" expanded="true" signature="487:522" ph="SELECT TOP 5... iweb_articulos" />
-                <marker date="1573741222861" expanded="true" signature="599:637" ph="SELECT TOP 5... gp_iweb_articulos" />
-                <marker date="1573741222861" expanded="true" signature="2298:2364" ph="SELECT * FRO... iweb_bodegas" />
-                <marker date="1573741222861" expanded="true" signature="2440:2509" ph="SELECT * FRO... gp_iweb_bodegas" />
-                <marker date="1573741222861" expanded="true" signature="5095:5168" ph="SELECT REGLA... GMV_mstr_articulos" />
-                <marker date="1573741222861" expanded="true" signature="5249:5325" ph="SELECT REGLA... GP_GMV_mstr_articulos" />
-                <marker date="1573741222861" expanded="true" signature="6678:6854" ph="SELECT * FRO... iweb_transacciones" />
-                <marker date="1573741222861" expanded="true" signature="6931:7110" ph="SELECT * FRO... GP_iweb_transacciones" />
-                <marker date="1573741222861" expanded="true" signature="8322:8415" ph="SELECT * FRO... iweb_lotes" />
-                <marker date="1573741222861" expanded="true" signature="8496:8592" ph="SELECT * FRO... gp_iweb_lotes" />
+                <marker date="1579882104741" expanded="true" signature="487:522" ph="SELECT TOP 5... iweb_articulos" />
+                <marker date="1579882104741" expanded="true" signature="599:637" ph="SELECT TOP 5... gp_iweb_articulos" />
+                <marker date="1579882104741" expanded="true" signature="2298:2364" ph="SELECT * FRO... iweb_bodegas" />
+                <marker date="1579882104741" expanded="true" signature="2440:2509" ph="SELECT * FRO... gp_iweb_bodegas" />
+                <marker date="1579882104741" expanded="true" signature="5085:5158" ph="SELECT REGLA... GMV_mstr_articulos" />
+                <marker date="1579882104741" expanded="true" signature="5239:5315" ph="SELECT REGLA... GP_GMV_mstr_articulos" />
+                <marker date="1579882104741" expanded="true" signature="6668:6844" ph="SELECT * FRO... iweb_transacciones" />
+                <marker date="1579882104741" expanded="true" signature="6921:7100" ph="SELECT * FRO... GP_iweb_transacciones" />
+                <marker date="1579882104741" expanded="true" signature="8312:8405" ph="SELECT * FRO... iweb_lotes" />
+                <marker date="1579882104741" expanded="true" signature="8486:8582" ph="SELECT * FRO... gp_iweb_lotes" />
               </folding>
             </state>
           </provider>
@@ -264,6 +265,7 @@
       <workItem from="1573741309871" duration="833000" />
       <workItem from="1579530321437" duration="568000" />
       <workItem from="1579550324682" duration="600000" />
+      <workItem from="1579881936166" duration="169000" />
     </task>
     <task id="LOCAL-00001" summary="- 26/09/2019">
       <created>1569507606690</created>
@@ -297,16 +299,17 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="53462000" />
+    <option name="totallyTimeSpent" value="53631000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="754" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.301059" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23510467" sideWeight="0.5030257" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32850242" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32850242" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -666,19 +669,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/inventario_model.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="104" column="21" lean-forward="false" selection-start-line="104" selection-start-column="21" selection-end-line="104" selection-end-column="21" />
+        <state relative-caret-position="255">
+          <caret line="100" column="99" lean-forward="false" selection-start-line="100" selection-start-column="99" selection-end-line="100" selection-end-column="99" />
           <folding>
-            <marker date="1573741222861" expanded="true" signature="487:522" ph="SELECT TOP 5... iweb_articulos" />
-            <marker date="1573741222861" expanded="true" signature="599:637" ph="SELECT TOP 5... gp_iweb_articulos" />
-            <marker date="1573741222861" expanded="true" signature="2298:2364" ph="SELECT * FRO... iweb_bodegas" />
-            <marker date="1573741222861" expanded="true" signature="2440:2509" ph="SELECT * FRO... gp_iweb_bodegas" />
-            <marker date="1573741222861" expanded="true" signature="5095:5168" ph="SELECT REGLA... GMV_mstr_articulos" />
-            <marker date="1573741222861" expanded="true" signature="5249:5325" ph="SELECT REGLA... GP_GMV_mstr_articulos" />
-            <marker date="1573741222861" expanded="true" signature="6678:6854" ph="SELECT * FRO... iweb_transacciones" />
-            <marker date="1573741222861" expanded="true" signature="6931:7110" ph="SELECT * FRO... GP_iweb_transacciones" />
-            <marker date="1573741222861" expanded="true" signature="8322:8415" ph="SELECT * FRO... iweb_lotes" />
-            <marker date="1573741222861" expanded="true" signature="8496:8592" ph="SELECT * FRO... gp_iweb_lotes" />
+            <marker date="1579882104741" expanded="true" signature="487:522" ph="SELECT TOP 5... iweb_articulos" />
+            <marker date="1579882104741" expanded="true" signature="599:637" ph="SELECT TOP 5... gp_iweb_articulos" />
+            <marker date="1579882104741" expanded="true" signature="2298:2364" ph="SELECT * FRO... iweb_bodegas" />
+            <marker date="1579882104741" expanded="true" signature="2440:2509" ph="SELECT * FRO... gp_iweb_bodegas" />
+            <marker date="1579882104741" expanded="true" signature="5085:5158" ph="SELECT REGLA... GMV_mstr_articulos" />
+            <marker date="1579882104741" expanded="true" signature="5239:5315" ph="SELECT REGLA... GP_GMV_mstr_articulos" />
+            <marker date="1579882104741" expanded="true" signature="6668:6844" ph="SELECT * FRO... iweb_transacciones" />
+            <marker date="1579882104741" expanded="true" signature="6921:7100" ph="SELECT * FRO... GP_iweb_transacciones" />
+            <marker date="1579882104741" expanded="true" signature="8312:8405" ph="SELECT * FRO... iweb_lotes" />
+            <marker date="1579882104741" expanded="true" signature="8486:8582" ph="SELECT * FRO... gp_iweb_lotes" />
           </folding>
         </state>
       </provider>
