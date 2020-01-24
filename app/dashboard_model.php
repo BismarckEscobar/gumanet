@@ -46,19 +46,22 @@ class dashboard_model extends Model {
 
      }
     
-    public static function getDetalleVentas($tipo, $mes, $anio) {
+    public static function getDetalleVentas($tipo, $mes, $anio, $cliente, $articulo) {
         $sql_server = new \sql_server();
 
         $sql_exec = '';
         $request = Request();
         $company_user = Company::where('id',$request->session()->get('company_id'))->first()->id;
 
+        $cliente = ($cliente=='ND')?'':$cliente;
+        $articulo = ($articulo=='ND')?'':$articulo;
+
         switch ($company_user) {
             case '1':
-                $sql_exec = "EXEC Umk_VentaLinea_Articulo ".$mes.", ".$anio.", '', '', '', ''";
+                $sql_exec = "EXEC Umk_VentaLinea_Articulo ".$mes.", ".$anio.", '', '".$cliente."', '".$articulo."', ''";
                 break;
             case '2':
-                $sql_exec = "EXEC Gp_VentaLinea_Articulo ".$mes.", ".$anio.", '', '', '', ''";
+                $sql_exec = "EXEC Gp_VentaLinea_Articulo ".$mes.", ".$anio.", '', '".$cliente."', '".$articulo."', ''";
                 break;
             case '3':
                 $sql_exec = "";
@@ -93,7 +96,25 @@ class dashboard_model extends Model {
 		            $json[$i]["EFEC"] 		= '10%';
 		            $i++;
 		        }
-        		break;        	
+        		break;
+            case 'clien':
+                foreach ($query as $fila) {
+                    $json[$i]["ARTICULO"]       = $fila["articulo"];
+                    $json[$i]["DESCRIPCION"]    = $fila["descripcion"];
+                    $json[$i]["CANTIDAD"]       = number_format($fila["Cantidad"], 2);
+                    $json[$i]["TOTAL"]          = number_format($fila["total"], 2);
+                    $i++;
+                }
+                break;
+            case 'artic':
+                foreach ($query as $fila) {
+                    $json[$i]["CLIENTE"]       = $fila["cliente"];
+                    $json[$i]["NOMBRE"]    = $fila["nombre"];
+                    $json[$i]["CANTIDAD"]       = number_format($fila["Cantidad"], 2);
+                    $json[$i]["TOTAL"]          = number_format($fila["total"], 2);
+                    $i++;
+                }
+                break; 
         	default:
         		return false;
         		break;

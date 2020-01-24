@@ -41,8 +41,8 @@ class dashboard_controller extends Controller {
     return response()->json($obj);
   }
 
-	public function getDetalleVentas($tipo, $mes, $anio) {
-		$obj = dashboard_model::getDetalleVentas($tipo, $mes, $anio);
+	public function getDetalleVentas($tipo, $mes, $anio, $cliente, $articulo) {
+		$obj = dashboard_model::getDetalleVentas($tipo, $mes, $anio, $cliente, $articulo);
 		return response()->json($obj);
 	}
 

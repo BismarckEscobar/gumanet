@@ -55,6 +55,14 @@
   text-align: center;
 }
 
+.dt-right {
+  text-align: right;
+}
+
+.dt-left {
+  text-align: left;
+}
+
 .detail_AR {
   text-align: center; 
 }

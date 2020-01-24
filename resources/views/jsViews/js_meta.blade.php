@@ -348,8 +348,6 @@
         }        
         return Dta;
     }
-
-	}	
 	
 	function addDatatableDatosMetaRecu(){
 		var datas = getDataFromTableMetaRecu();
