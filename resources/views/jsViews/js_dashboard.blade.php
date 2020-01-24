@@ -474,7 +474,7 @@ function actualizandoGraficasDashboard(mes, anio) {
                    var porcentaje = (meta_!=0)? (real_/meta_) * 100 :0;
                     porcentaje = numeral(porcentaje).format('0,0.00')+`% de 100%`;
                     
-                    ventas.xAxis.categories = title;
+                    ventas.xAxis.categories = title; 
                     ventas.series[0].data = dta;
                     ventas.title = { text: "Ventas del mes"};
                     ventas.subtitle = {text: porcentaje};
