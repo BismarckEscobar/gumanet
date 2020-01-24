@@ -13,9 +13,11 @@
 				<div class="col-sm-3 p-1">
 					<select class="selectpicker form-control form-control-sm" id="cmbClase" data-show-subtext="true" data-live-search="true">
 						<option value="">CLASE TERAPEUTICA - TODOS</option>
-                    @foreach($clases as $key)
-						<option value="{{ $key['clase'] }}">{{ $key['clase'] }}</option>
-                    @endforeach
+	                    @foreach($clases as $key)
+							@if($key['clase'] != '')
+								<option value="{{ $key['clase'] }}">{{ strtoupper($key['clase']) }}</option>							
+							@endif				
+	                    @endforeach
 					</select>
 				</div>
 				<div class="col-sm-2 p-1">
