@@ -75,6 +75,7 @@
                 <div class="card mt-3">
                   <div class="card-body">
                     <h5 class="card-title" id="title-page-tem"></h5>
+                    <p class="text-muted" id="fechaFiltrada"></p>
                     <div class="row">
                         <div class="col-sm-11">
                            <div class="input-group">
@@ -113,7 +114,19 @@
             </div>
             <div class="col-12">
                 <div id="cjRecuperacion"><table class="table table-bordered table-sm" width="100%" id="dtRecuperacion"></table></div>    
-            </div>  
+            </div>
+            <div class="col-12">
+                <div id="cjCliente">
+                    <p class="font-weight-bold text-center">ARTICULOS FACTURADOS</p>
+                    <table class="table table-bordered table-sm" width="100%" id="dtCliente"></table>
+                </div>
+            </div>
+            <div class="col-12">
+                <div id="cjArticulo">
+                    <p class="font-weight-bold text-center">CLIENTES</p>
+                    <table class="table table-bordered table-sm" width="100%" id="dtArticulo"></table>
+                </div>
+            </div>
         </div>
         <div class="row">
             <div class="col-sm-3">
@@ -124,7 +137,7 @@
                   </div>
                 </div>
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-3" id="montoMetaContent">
                 <div class="card text-center">
                   <div class="card-body">
                     <h5 class="card-title" id="MontoMeta"></h5>
