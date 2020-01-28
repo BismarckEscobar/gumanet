@@ -761,6 +761,6 @@ function reordenandoPantalla() {
         x=0;
 
     });
-}
+} 
 
 </script>
