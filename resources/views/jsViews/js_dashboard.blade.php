@@ -947,7 +947,7 @@ function reordenandoPantalla() {
         x=0;
 
     });
-}
+} 
 
 function FormatPretty(number) {
     var numberString;
