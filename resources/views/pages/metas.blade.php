@@ -198,7 +198,13 @@
       </div>
       <div class="modal-body" id="bodyModalMetasExldata">
         <div class="table-responsive mt-3 mb-5" id="bloqueTblExcVenta">
-	        <table class="table table-bordered table-sm" width="100%" id="tblExcelImportMeta">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon1"><i data-feather="search"></i></span>
+            </div>
+            <input type="text" id="btnSearchMetas" class="form-control" placeholder="Buscar">
+          </div>          
+	        <table class="table table-bordered table-sm mt-3" width="100%" id="tblExcelImportMeta">
 	        	<thead class="text-center">
 	                <tr>
 	                    <th>RUTA</th>

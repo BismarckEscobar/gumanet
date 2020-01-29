@@ -71,7 +71,7 @@
 					}else{
 						$("#alertMetas").show();
 						$("#alertMetas").css({"color":"red","font-weight":"bold"});
-						$("#alertMetas").text("Ya existe meta con la fecha seleccioanda");
+						$("#alertMetas").text("Ya existe meta con la fecha seleccionada");
 					}
 				}else{
 					if(!existeFechaMeta()){// si no existe mes y año seleciionados en datos de metas muestra el modal
@@ -81,10 +81,31 @@
 						$('#bloqueTblExcVenta').show();
 						truncate_tmp_exl_tbl();//Borrar registro de tabla temporal en phpMyAdmin
 						exportarDatosExlAModalMetas();//Funcion para exportar datos de excel a la tabla temporal
-					}else{// existe mes y a{ño uestra un alerta de bootstrap 
-						$("#alertMetas").show();
-						$("#alertMetas").css({"color":"red","font-weight":"bold"});
-						$("#alertMetas").text("Ya existe meta con la fecha seleccioanda");
+					}else{// existe mes y a{ño uestra un alerta de bootstrap
+
+						swal({
+						  html: `<p class="font-weight-bold">¡Ya existe un registo con esta fecha!</p>
+						  		<p class="font-weight-normal">¿Quiere sobreescribir estos registros?</p>`,
+						  text: "¿Deseas sobreescribir estos registros?",
+						  icon: 'warning',
+						  showCancelButton: true,
+						  confirmButtonColor: '#3085d6',
+						  cancelButtonColor: '#d33',
+						  confirmButtonText: 'Sí, sobreescribir'
+						}).then((result) => {
+						  if (result.value) {
+							$('#btnShowModalExl').hide();
+							$('#disabledLoaderBtn').show();
+							$('#bloqueTblExcRecup').hide();
+							$('#bloqueTblExcVenta').show();
+						  	truncate_tmp_exl_tbl();
+						  	exportarDatosExlAModalMetas();
+						  }
+						})
+
+						//$("#alertMetas").show();
+						//$("#alertMetas").css({"color":"red","font-weight":"bold"});
+						//$("#alertMetas").text("Ya existe meta con la fecha seleccionada");
 					}
 			    }
 			}else{
@@ -307,7 +328,14 @@
 	}
 
 	$("#donwloadExcelPlantilla").click( function() {
-	  document.location = "/gumanet/public/tmp_excel/PLANILLA_EXAMPLE.xlsx";
+		if ($("#selectTipoMeta option:selected").val() == 'recu'){ 
+			document.location = "/gumanet/public/tmp_excel/META_RECUPERACION.xlsx";
+		}else if($("#selectTipoMeta option:selected").val() == 'vent') {
+			document.location = "/gumanet/public/tmp_excel/META_VENTAS.xlsx";
+		}else if($("#selectTipoMeta option:selected").val() == '00') {
+			mensaje("Seleccione una categoria para descargar el archivo", "error")
+		}
+	  
 	})
 
     function ProcessExcel(data) {
@@ -332,11 +360,12 @@
         fechaMeta 		= anno+`-`+mes+`-01`;
 
         for (var i = 0; i < excelRows.length; i++) {
+
 			obj =   {
 				fechaMeta 		: fechaMeta,
 				ruta 			: excelRows[i].RUTA,
-				codigo 			: excelRows[i].COD,
-				cliente 		: excelRows[i].CLIENTE,
+				codigo 			: (excelRows[i].COD==undefined)?'99999':excelRows[i].COD,
+				cliente 		: (excelRows[i].CLIENTE==undefined)?'ND':excelRows[i].CLIENTE,
 				articulo 		: excelRows[i].ARTICULO,
 				descripcion 	: excelRows[i].DESCRIPCION,
 				valor 			: excelRows[i].VAL,
@@ -478,6 +507,12 @@
 		$('#mesHistorialMeta').text($('#selectMesMeta option:selected').text());
         $('#annoHistorialMeta').text($('#selectAnnoMeta option:selected').text());
 	}
+
+	btnSearchMetas
+	$('#btnSearchMetas').on('keyup', function() {
+	    var table = $('#tblExcelImportMeta').DataTable();
+	    table.search(this.value).draw();
+	});
 	
 		
 		

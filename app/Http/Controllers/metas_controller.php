@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App;
 use App\metas_model;
 use App\Models;
@@ -12,13 +10,8 @@ use App\meta_recuperacion_exl;
 use App\Company;
 use DataTables;
 use DB;
-
 use Illuminate\Http\Request;
-
 use App\Http\Controllers\Controller;
-
-
-
 use PHPExcel;
 use PHPExcel_IOFactory;
 
@@ -37,17 +30,11 @@ class metas_controller extends Controller
         $users = User::all();
         $data = [
             'page' => 'Metas',
-            'name' =>  'GUMA@NET'
+            'name' => 'GUMA@NET'
         ];
         
         return view('pages.metas',compact('data','users'));
     }
-
-
-
-
-
-
 
     public function exportMetaFromExlVenta(Request $request){
         
@@ -256,7 +243,7 @@ class metas_controller extends Controller
     }
 
 
-    public function truncate_tmp_exl_tbl(){
+    public function truncate_tmp_exl_tbl() {
         Tmp_meta_exl::truncate();
     }
 
@@ -270,27 +257,44 @@ class metas_controller extends Controller
             return 0;
         }else{
             $fecha = date('Y-m-d', strtotime(substr($data[0]['fechaMeta'],0,10))); //devuelve los primeros 10 digitos de la cadena
-            $fechaDesc = date('d-m-Y', strtotime(substr($data[0]['fechaMeta'],0,10))); //devuelve los primeros 10 digitos de la cadena
             $company_user = Company::where('id',$request->session()->get('company_id'))->first()->id;
-            $this->cambiarEstadoMeta();
-            ///////AGREGA ENCABEZADO DE META
-            $idPeriodo = DB::connection('sqlsrv')->table('metacuota_GumaNet')->insertGetId(['Tipo'=>'CUOTA', 'Descripcion' => 'COUTA-'.$fechaDesc, 'Estado' => 1,'Fecha' => $fecha,'IdCompany' => $company_user]);//inserta registro y retorna su ID, debe ser autoincremento
+            
+            //VALIDA SI EXISTE LA META SEGUN LA FECHA
+            $ex = $this->validateDate($fecha, $company_user, $request);
+
+            if ($ex==false) {
+                $fechaDesc = date('d-m-Y', strtotime(substr($data[0]['fechaMeta'],0,10))); //devuelve los primeros 10 digitos de la cadena
+                $this->cambiarEstadoMeta();
+
+                ///////AGREGA ENCABEZADO DE META
+                $idPeriodo = DB::connection('sqlsrv')->table('metacuota_GumaNet')->insertGetId(['Tipo'=>'CUOTA', 'Descripcion' => 'COUTA-'.$fechaDesc, 'Estado' => 1,'Fecha' => $fecha,'IdCompany' => $company_user]);//inserta registro y retorna su ID, debe ser autoincremento
+            }else {
+                $idPeriodo = $ex;
+                DB::connection('sqlsrv')->table('gn_cuota_x_productos')->where('IdPeriodo', $idPeriodo)->delete();
+                
+            }
+
             //$this->addDataFromTmpToDataMeta($data,$idPeriodo);
-            $metaXProducto = $this->calcAddUnidadMeta();
-            $this->addDataFromTmpToCoutaXProd($metaXProducto,$idPeriodo);
+            $metaXPXPrroducto = $this->calcAddUnidadMeta();
+            $this->addDataFromTmpToCoutaXProd($metaXPXPrroducto, $idPeriodo);
             return 1;
         }
     }
 
-
-
-
+    public function validateDate($fecha, $company_id, $request) {
+        $res = DB::connection('sqlsrv')->table('metacuota_GumaNet')->where('Fecha', $fecha)->where('idCompany', $company_id)->get();
+            
+        if (empty($res[0])){
+            return false;
+        }else{
+            return DB::connection('sqlsrv')->table('metacuota_GumaNet')->where('Fecha', $fecha)->where('idCompany', $company_id)->first()->IdPeriodo;
+        }
+    }
 
     private function calcAddUnidadMeta(){
        $coleccion = Tmp_meta_exl::select('fechaMeta', 'ruta', 'articulo', 'descripcion',\DB::raw('sum(valor) as valor, sum(unidad) as unidad'))->groupBy('ruta','articulo','descripcion','fechaMeta')->get();
        return $coleccion;
     }
-
 
     private function addDataFromTmpToCoutaXProd($metaXProducto, $idPeriodo){//Agregar datos Calculados
        
@@ -299,7 +303,6 @@ class metas_controller extends Controller
         }
         
     }
-
 
     /*private function addDataFromTmpToCoutaXProd($data, $idPeriodo){
         
