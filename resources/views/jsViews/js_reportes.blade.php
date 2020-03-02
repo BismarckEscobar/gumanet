@@ -127,10 +127,10 @@ function dataVentasClientes(json) {
 		],
 
 		"columnDefs": [
-			{"className": "text-right", "targets": [ 4 ]},
-			{"className": "text-center", "targets": [ 0, 2, 3 ]},
+			{"className": "text-right", "targets": [ 5 ]},
+			{"className": "text-center", "targets": [ 0, 2, 3, 4 ]},
 			{ "width": "30%", "targets": [ 1 ] },
-			{ "width": "5%", "targets": [ 0, 2, 3, 4 ] }
+			/*{ "width": "5%", "targets": [ 0, 2, 3, 4 ] }*/
 		],
         "footerCallback": function ( row, data, start, end, display ) {
             var api = this.api(), data;
@@ -222,14 +222,14 @@ function llenarDtDetalleFactura(json){
 					{ "data": "PRECIO_TOTAL", render: $.fn.dataTable.render.number( ',', '.', 2 ) }
 				],
 				"columnDefs": [
-					{"className": "text-right", "targets": [ 2, 3, 4 ]},
-					{"className": "text-center", "targets": [ 0 ]},
+					{"className": "text-right", "targets": [ 3, 4 ]},
+					{"className": "text-center", "targets": [ 0, 2 ]},
 					{ "width": "30%", "targets": [ 1 ] },
 					{ "width": "5%", "targets": [ 0, 2, 3, 4 ] }
 				],
 				"fnInitComplete": function () {
-					$("#tblDetalleArticulos_length").hide();
-					$("#tblDetalleArticulos_filter").hide();
+					$("#tblDetalleFacturaVenta_length").hide();
+					$("#tblDetalleFacturaVenta_filter").hide();
 				}
 	})
 }

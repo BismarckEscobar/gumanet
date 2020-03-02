@@ -7,7 +7,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 use App\Role;
-
+use App\Company;
 
 class User extends Authenticatable
 {
@@ -30,7 +30,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-public $timestamps = true;
+    
+    public $timestamps = true;
     /**
      * The attributes that should be cast to native types.
      *
@@ -54,6 +55,10 @@ public $timestamps = true;
 
     public function activeRole() {//retorna el role del usuario actual
         return  $this->role;
+    }
+
+    public function activeCompany() {//retorna la compania
+        return  $this->company;
     }
 
     public function gitVersion() {

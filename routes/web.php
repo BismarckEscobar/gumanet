@@ -66,6 +66,7 @@ Route::get('/ruta/{mes}/{anio}','dashboard_controller@getTotalRutaXVentas');
 
 //RUTAS GRAFICAS DASHBOARDS
 Route::get('/dataGraf/{mes}/{anio}','dashboard_controller@getDataGraficas');
+Route::get('/dataVentasMens','dashboard_controller@getVentasMensuales');
 Route::get('/top10Cls','dashboard_controller@getTop10Clientes');
 Route::get('/valBodegas','dashboard_controller@getValBodegas');
 

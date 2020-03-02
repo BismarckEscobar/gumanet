@@ -162,3 +162,15 @@
   color: #e2e2e2!important;
 }
 /*DATATBLES FIN*/
+@media screen and (max-width:640px) {
+  #page-details {
+    width: 100%;
+    right: -100%;
+  }
+
+  .breadcrumb-item {
+    display: none
+  }
+
+
+}

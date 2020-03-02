@@ -25,7 +25,7 @@
                         <option value="20">20</option>
                         <option value="50">50</option>
                         <option value="100">100</option>
-                        <option value="Todo">Todo</option>
+                        <option value="-1">Todo</option>
                     </select>
                 </div>
             </div>

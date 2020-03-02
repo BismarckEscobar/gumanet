@@ -60,4 +60,9 @@ class dashboard_controller extends Controller {
     $obj = dashboard_model::getDataGraficas($mes, $anio);
     return response()->json($obj);
   }
+
+  public function getVentasMensuales() {
+    $obj = dashboard_model::getVentasMensuales();
+    return response()->json($obj);
+  }
 }
