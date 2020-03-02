@@ -43,8 +43,10 @@
         <div class="col-sm-10 p-0">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li  class="breadcrumb-item" id="item-nav-01"><a href="Dashboard">Dashboard</a></li>                    
-                    <li class="ml-auto"><a href="#!" class="active-menu"><i class="active-menu material-icons" style="font-size: 20px">menu</i></a></li>
+                    @if(Auth::User()->activeRole()!=3)
+                      <li  class="breadcrumb-item" id="item-nav-01"><a href="Dashboard">Dashboard</a></li>
+                    @endif                                        
+                    <li class="ml-auto"><a href="#!" class="active-menu"><i class="active-menu material-icons" style="font-size: 20px">settings</i></a></li>
                 </ol>
             </nav>
             <div class="p-3">
@@ -103,6 +105,7 @@
 <script src="{{ url('js/Numeral.js') }}"></script>
 <script src="{{ url('js/xlsx.full.min.js') }}"></script>
 <script src="{{ url('js/jszip.js') }}"></script>
-@yield('metodosjs');
+<script src="{{ url('js/no-data-to-display.js') }}"></script>
+@yield('metodosjs')
 </body>
 </html>

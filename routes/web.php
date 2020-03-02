@@ -62,10 +62,13 @@ Route::post('/getHistoriaMetaRecu','metas_controller@getHistoriaMetaRecu');
 
 //RUTAS DETALLE DE VENTAS
 Route::get('/detalles/{tipo}/{mes}/{anio}/{cliente}/{articulo}','dashboard_controller@getDetalleVentas');
-Route::get('/ruta/{mes}/{anio}','dashboard_controller@getTotalRutaXVentas');
+//Route::get('/ruta/{mes}/{anio}','dashboard_controller@getTotalRutaXVentas');
+Route::get('/unidadxProd/{mes}/{anio}','dashboard_controller@getTotalUnidadesXRutaXVentas');
+
 
 //RUTAS GRAFICAS DASHBOARDS
 Route::get('/dataGraf/{mes}/{anio}','dashboard_controller@getDataGraficas');
+Route::get('/dataVentasMens','dashboard_controller@getVentasMensuales');
 Route::get('/top10Cls','dashboard_controller@getTop10Clientes');
 Route::get('/valBodegas','dashboard_controller@getValBodegas');
 

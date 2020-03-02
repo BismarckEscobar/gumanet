@@ -18,10 +18,10 @@ class inventario_model extends Model {
         
         switch ($company_user) {
             case '1':
-                $sql_exec = "SELECT TOP 50 * FROM iweb_articulos";
+                $sql_exec = "SELECT * FROM iweb_articulos";
                 break;
             case '2':
-                $sql_exec = "SELECT TOP 50 * FROM gp_iweb_articulos";
+                $sql_exec = "SELECT * FROM gp_iweb_articulos";
                 break;
             case '3':
                 $sql_exec = "";

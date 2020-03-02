@@ -11,7 +11,7 @@ $(document).ready(function() {
     	"info":    false,
     	"lengthMenu": [[10,30,50,100,-1], [20,30,50,100,"Todo"]],
     	"language": {
-    	    "zeroRecords": "Cargando...",
+    	    "zeroRecords": "No hay coincidencias",
     	    "paginate": {
     	        "first":      "Primera",
     	        "last":       "Última ",

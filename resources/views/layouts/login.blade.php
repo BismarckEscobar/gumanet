@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="{{ url('images/gumanet-icon.png') }}" />
-        <title>{{-- @yield('title') --}}</title>
+        <title>@yield('title')</title>
 
         <link rel="stylesheet" href="{{ url('css/bootstrap.min.css') }}">
 
@@ -32,4 +32,7 @@
             @yield('content')
         </div>
     </body>
+    <footer id="_footer">
+        <p>@yield('version')</p>
+    </footer>
 </html>

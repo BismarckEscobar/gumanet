@@ -38,6 +38,11 @@ class dashboard_controller extends Controller {
 
     public function getTotalRutaXVentas($mes, $anio){
     $obj = dashboard_model::getTotalRutaXVentas($mes, $anio);
+    return (response()->json($obj));
+  }
+
+  public function getTotalUnidadesXRutaXVentas($mes, $anio){
+    $obj = dashboard_model::getTotalUnidadesXRutaXVentas($mes, $anio);
     return response()->json($obj);
   }
 
@@ -58,6 +63,11 @@ class dashboard_controller extends Controller {
 
   public function getDataGraficas($mes, $anio) {
     $obj = dashboard_model::getDataGraficas($mes, $anio);
+    return response()->json($obj);
+  }
+
+  public function getVentasMensuales() {
+    $obj = dashboard_model::getVentasMensuales();
     return response()->json($obj);
   }
 }

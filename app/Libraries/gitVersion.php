@@ -14,6 +14,6 @@ class git_version
     public static  function get()
     {
         $commitHash = trim(exec('git rev-list --all --count'));
-        return sprintf('© %s %s. v%s.%s.%s', date('Y'),"Copyright",self::MAJOR, self::MINOR,  $commitHash);
+        return sprintf('UNIMARK S.A © %s V%s.%s.%s', date('Y'),self::MAJOR, self::MINOR,  $commitHash);
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
+use Auth;
 use App\usuario_model;
 use App\Models;
 use Illuminate\Http\Request;
@@ -29,7 +30,29 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/Dashboard';
+    
+    //protected $redirectTo = '/Dashboard';
+    public function redirectTo() {
+        
+        // User role
+        $role = Auth::User()->activeRole(); 
+    
+        // Check user role
+        switch ($role) {
+            case '1':
+                    return '/Dashboard';
+                break;
+            case '2':
+                    return '/Dashboard';
+                break;
+            case '3':
+                    return '/Metas';
+                break; 
+            default:
+                    return '/login'; 
+                break;
+        }
+}
 
     /**
      * Create a new controller instance.
@@ -44,9 +67,14 @@ class LoginController extends Controller
 
     public function showLoginForm()//para no afectar al metodo showLoginForm del trait AuthenticatesUsers, el metodo debe de sobre escribirse en el controlador
     {
+        $ApplicationVersion = new \git_version();
+        $data = [
+            'name' =>  'GUMA@NET',
+            'version' =>  $ApplicationVersion::get()
+        ];
         $companies =  Company::all();//$this->getCompanies();//obtiene los registros de la tabla companies
         //dd($companies);//dump down, se ejecuta y se muestran los dato y detiene el proceso
-        return view('auth.login',compact('companies'));// envia variable al MOD
+        return view('auth.login',$data,compact('companies'));// envia variable al MOD
     }
 
 

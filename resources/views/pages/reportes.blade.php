@@ -87,7 +87,7 @@
     	</div>
     </div>
     <div class="row mt-3">
-    	<div class="col-sm-8">
+    	<div class="col-sm-12">
     		<div class="card">
     			<div class="card-body">
     				<h5 class="card-title">Clientes</h5>
@@ -125,7 +125,7 @@
     			</div>
     		</div>
     	</div>
-		<div class="col-sm-4">
+		<div class="col-sm-4" style="display:none">
 			<div class="card">
 				<div class="card-body">
 					<div id="container01"></div>
@@ -192,7 +192,7 @@
             <div class="col-sm-12">
                 <div class="card mt-3">
                     <div class="card-body">
-	                    <h5 class="card-title" id="title-page-tem">DETALLE DE FACTURA</h5>
+	                    <h5 class="card-title" id="title-page-tem">DETALLE DE FACTURA: <span id="txtNFactDF"> $0.00</span></h5>
 	                    <hr>
 	                    <div class="row">
 	                        <div class="col-2">
@@ -211,20 +211,12 @@
 	                        		<span id="txtNomDF"> $0.00</span>
 	                        	</div>
 	                        </div>
-	                        <div class="col-1">
+	                        <div class="col-2">
 	                        	<div class="col-12">
 	                        		<h6>RUTA</h6>
 	                        	</div>
 	                        	<div class="col-12">
 	                        		<span id="txtRutaDF">$0.00</span>
-	                        	</div>
-	                        </div>
-	                        <div class="col-2">
-	                        	<div class="col-12">
-	                        		<h6>FACTURA</h6>
-	                        	</div>
-	                        	<div class="col-12">
-	                        		<span id="txtNFactDF"> $0.00</span>
 	                        	</div>
 	                        </div>
 	                        <div class="col-2">
@@ -253,8 +245,8 @@
 											<tr>
 												<th>Articulo</th>
 												<th>Nombre</th>
-												<th>Cantidad</th>
-												<th>Precio x ud.</th>
+												<th class="text-center">Cantidad</th>
+												<th>P. Unit</th>
 												<th>Total</th>
 											</tr>
 										</thead>
