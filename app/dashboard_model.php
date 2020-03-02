@@ -3,8 +3,11 @@
 namespace App;
 use App\User;
 use App\Company;
+<<<<<<< HEAD
 Use App\Gn_couta_x_producto;
 Use App\Metacuota_gumanet;
+=======
+>>>>>>> d7576237ee446d2805f18dc7302397f5e19c3cd5
 use DB;
 use DateTime;
 
@@ -613,6 +616,7 @@ class dashboard_model extends Model {
             }else {
                 $total = floatval($query[0]['M_REC']);
             }
+<<<<<<< HEAD
 
             $json[0]['name'] = 'Real';
             $json[0]['data'] =  $total;
@@ -627,6 +631,22 @@ class dashboard_model extends Model {
             $json[1]['data'] = floatval($meta);
         }        
 
+=======
+
+            $json[0]['name'] = 'Real';
+            $json[0]['data'] =  $total;
+        }
+        
+        foreach($query2 as $t){
+            $meta = $t->meta;
+        }
+
+        if (count($query)>0 || $meta!=null) {
+            $json[1]['name'] = 'Meta';
+            $json[1]['data'] = floatval($meta);
+        }        
+
+>>>>>>> d7576237ee446d2805f18dc7302397f5e19c3cd5
         return $json;
         $sql_server->close();
     }
@@ -665,9 +685,15 @@ class dashboard_model extends Model {
 
         foreach ($meses as $key => $mes) {
             $x1 = array_column(array_filter($query, function($item) use($anioActual, $mes) { return $item['anio'] == $anioActual and $item['mes']==$mes; } ), 'montoVenta');
+<<<<<<< HEAD
 
             $y1 = array_column(array_filter($query, function($item) use($anioPasado, $mes) { return $item['anio'] == $anioPasado and $item['mes']==$mes; } ), 'montoVenta');
 
+=======
+
+            $y1 = array_column(array_filter($query, function($item) use($anioPasado, $mes) { return $item['anio'] == $anioPasado and $item['mes']==$mes; } ), 'montoVenta');
+
+>>>>>>> d7576237ee446d2805f18dc7302397f5e19c3cd5
             (count($x1)>0)?(array_push($val1__,$x1[0])):(false);
             (count($y1)>0)?(array_push($val2__,$y1[0])):(array_push($val2__,0));
         }

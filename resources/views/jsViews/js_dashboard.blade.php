@@ -880,12 +880,17 @@ function detalleVentasMes(tipo, title, cliente, articulo) {
                     { "title": "Monto",   "data": "MONTO" },
                 ],
                 "columnDefs": [
+<<<<<<< HEAD
                     {"className": "dt-center", "targets": [ 0, 1 , 2, 3]}
+=======
+                    {"className": "dt-center", "targets": [ 0, 1 ]}
+>>>>>>> d7576237ee446d2805f18dc7302397f5e19c3cd5
                 ],
                 
             });
             $('#txtMontoReal').text('Total real ventas');
             $('#txtMontoMeta').text('Total meta venta');
+<<<<<<< HEAD
 
             */
 
@@ -925,6 +930,8 @@ function detalleVentasMes(tipo, title, cliente, articulo) {
             });
             $('#txtMontoReal').text('Total real ventas');
             $('#txtMontoMeta').text('Total meta venta');
+=======
+>>>>>>> d7576237ee446d2805f18dc7302397f5e19c3cd5
 
         break;
       case 'recu':
