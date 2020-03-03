@@ -38,6 +38,11 @@ class dashboard_controller extends Controller {
 
     public function getTotalRutaXVentas($mes, $anio){
     $obj = dashboard_model::getTotalRutaXVentas($mes, $anio);
+    return (response()->json($obj));
+  }
+
+  public function getTotalUnidadesXRutaXVentas($mes, $anio){
+    $obj = dashboard_model::getTotalUnidadesXRutaXVentas($mes, $anio);
     return response()->json($obj);
   }
 

@@ -3,6 +3,11 @@
 namespace App;
 use App\User;
 use App\Company;
+<<<<<<< HEAD
+Use App\Gn_couta_x_producto;
+Use App\Metacuota_gumanet;
+=======
+>>>>>>> d7576237ee446d2805f18dc7302397f5e19c3cd5
 use DB;
 use DateTime;
 
@@ -47,6 +52,52 @@ class dashboard_model extends Model {
         $sql_server->close();
 
      }
+
+    public static function getTotalUnidadesXRutaXVentas($mes, $anio){
+        $sql_server = new \sql_server();
+         $fecha = new DateTime($anio.'-'.$mes.'-01');
+        $sql_exec = '';
+        $request = Request();
+        $idPeriodo = '';
+        $company_user = Company::where('id',$request->session()->get('company_id'))->first()->id;
+        $idPeriodo = Metacuota_gumanet::where(['Fecha' => $fecha,'IdCompany'=> $company_user])->pluck('IdPeriodo');
+
+        switch ($company_user) {
+            case '1':
+               
+                $sql_exec = "EXEC Ventas_Rutas ".$mes.", ".$anio;
+                
+                break;
+            case '2':
+                 
+                $sql_exec = "EXEC Ventas_Rutas_GF ".$mes.", ".$anio;
+                break;
+            case '3':
+                $sql_exec = "";
+                break;            
+            default:                
+                dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
+                break;
+        }
+
+
+        $query = $sql_server->fetchArray($sql_exec,SQLSRV_FETCH_ASSOC);
+
+        $i = 0;
+        $json = array();
+
+        foreach ($query as $fila) {
+            $json[$i]["RUTA"] = $fila["Ruta"];
+            $json[$i]["REAL"] = number_format($fila["Cantidad"],2);
+            $meta =  Gn_couta_x_producto::where(['IdPeriodo'=> $idPeriodo, 'CodVendedor' => $fila["Ruta"]])->sum('Meta');
+            $json[$i]["META"] = number_format($meta,2);
+            $json[$i]["DIF"] = number_format(((floatval($fila["Cantidad"])/floatval($meta))*100),2)."%";
+            $i++;
+        }
+        return $json;
+
+        $sql_server->close();
+    }
     
     public static function getDetalleVentas($tipo, $mes, $anio, $cliente, $articulo) {
         $sql_server = new \sql_server();
@@ -565,6 +616,7 @@ class dashboard_model extends Model {
             }else {
                 $total = floatval($query[0]['M_REC']);
             }
+<<<<<<< HEAD
 
             $json[0]['name'] = 'Real';
             $json[0]['data'] =  $total;
@@ -579,6 +631,22 @@ class dashboard_model extends Model {
             $json[1]['data'] = floatval($meta);
         }        
 
+=======
+
+            $json[0]['name'] = 'Real';
+            $json[0]['data'] =  $total;
+        }
+        
+        foreach($query2 as $t){
+            $meta = $t->meta;
+        }
+
+        if (count($query)>0 || $meta!=null) {
+            $json[1]['name'] = 'Meta';
+            $json[1]['data'] = floatval($meta);
+        }        
+
+>>>>>>> d7576237ee446d2805f18dc7302397f5e19c3cd5
         return $json;
         $sql_server->close();
     }
@@ -617,9 +685,15 @@ class dashboard_model extends Model {
 
         foreach ($meses as $key => $mes) {
             $x1 = array_column(array_filter($query, function($item) use($anioActual, $mes) { return $item['anio'] == $anioActual and $item['mes']==$mes; } ), 'montoVenta');
+<<<<<<< HEAD
 
             $y1 = array_column(array_filter($query, function($item) use($anioPasado, $mes) { return $item['anio'] == $anioPasado and $item['mes']==$mes; } ), 'montoVenta');
 
+=======
+
+            $y1 = array_column(array_filter($query, function($item) use($anioPasado, $mes) { return $item['anio'] == $anioPasado and $item['mes']==$mes; } ), 'montoVenta');
+
+>>>>>>> d7576237ee446d2805f18dc7302397f5e19c3cd5
             (count($x1)>0)?(array_push($val1__,$x1[0])):(false);
             (count($y1)>0)?(array_push($val2__,$y1[0])):(array_push($val2__,0));
         }

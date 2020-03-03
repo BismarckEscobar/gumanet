@@ -851,6 +851,7 @@ function detalleVentasMes(tipo, title, cliente, articulo) {
                 }
             });
 
+            /*
             //Tabla Ventas del Mes por Ruta
             $("#dtTotalXRutaVent").dataTable({
                 responsive: true,
@@ -879,12 +880,58 @@ function detalleVentasMes(tipo, title, cliente, articulo) {
                     { "title": "Monto",   "data": "MONTO" },
                 ],
                 "columnDefs": [
+<<<<<<< HEAD
+                    {"className": "dt-center", "targets": [ 0, 1 , 2, 3]}
+=======
                     {"className": "dt-center", "targets": [ 0, 1 ]}
+>>>>>>> d7576237ee446d2805f18dc7302397f5e19c3cd5
                 ],
                 
             });
             $('#txtMontoReal').text('Total real ventas');
             $('#txtMontoMeta').text('Total meta venta');
+<<<<<<< HEAD
+
+            */
+
+            //Tabla Ventas de Unidades de productos por productos por Mes por Ruta
+            $("#dtTotalXRutaVent").dataTable({
+                responsive: true,
+                "autoWidth":false,
+                "ajax":{
+                    "url": "unidadxProd/"+mes+"/"+anio,
+                    'dataSrc': '',
+                },
+                "destroy" : true,
+                "info":    false,
+                "lengthMenu": [[8,10,20,50,-1], [20,30,50,100,"Todo"]],
+                "language": {
+                    "zeroRecords": "Cargando...",
+                    "paginate": {
+                        "first":      "Primera",
+                        "last":       "Última ",
+                        "next":       "Siguiente",
+                        "previous":   "Anterior"
+                    },
+                    "lengthMenu": "MOSTRAR _MENU_",
+                    "emptyTable": "NO HAY DATOS DISPONIBLES",
+                    "search":     "BUSCAR"
+                },
+                'columns': [
+                    { "title": "Ruta",      "data": "RUTA" },
+                    { "title": "Meta",      "data": "META" },
+                    { "title": "Recuperado",      "data": "REAL" },
+                    { "title": "Cumplimiento","data": "DIF" },
+                ],
+                "columnDefs": [
+                    {"className": "dt-center", "targets": [ 0, 1 , 2, 3]}
+                ],
+                
+            });
+            $('#txtMontoReal').text('Total real ventas');
+            $('#txtMontoMeta').text('Total meta venta');
+=======
+>>>>>>> d7576237ee446d2805f18dc7302397f5e19c3cd5
 
         break;
       case 'recu':
