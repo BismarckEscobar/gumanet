@@ -3,11 +3,10 @@
 namespace App;
 use App\User;
 use App\Company;
-<<<<<<< HEAD
+
 Use App\Gn_couta_x_producto;
 Use App\Metacuota_gumanet;
-=======
->>>>>>> d7576237ee446d2805f18dc7302397f5e19c3cd5
+
 use DB;
 use DateTime;
 
@@ -53,6 +52,8 @@ class dashboard_model extends Model {
 
      }
 
+    
+
     public static function getTotalUnidadesXRutaXVentas($mes, $anio){
         $sql_server = new \sql_server();
          $fecha = new DateTime($anio.'-'.$mes.'-01');
@@ -87,19 +88,87 @@ class dashboard_model extends Model {
         $json = array();
 
         foreach ($query as $fila) {
-            $json[$i]["RUTA"] = $fila["Ruta"];
-            $json[$i]["REAL"] = number_format($fila["Cantidad"],2);
+            
+            $json[$i]["VENDE"] = dashboard_model::buscarVendedorXRuta($fila["Ruta"]);
             $meta =  Gn_couta_x_producto::where(['IdPeriodo'=> $idPeriodo, 'CodVendedor' => $fila["Ruta"]])->sum('Meta');
-            $json[$i]["META"] = number_format($meta,2);
-            $json[$i]["DIF"] = number_format(((floatval($fila["Cantidad"])/floatval($meta))*100),2)."%";
+            $json[$i]["METAU"] = number_format($meta,2)." U";
+            $json[$i]["REALU"] = number_format($fila["Cantidad"],2)." U";
+            
+            $json[$i]["DIFU"] = ($meta==0) ? "100.00%" : number_format(((floatval($fila["Cantidad"])/floatval($meta))*100),2)."%";
+            $monto =  Gn_couta_x_producto::where(['IdPeriodo'=> $idPeriodo, 'CodVendedor' => $fila["Ruta"]])->sum('val');
+            $json[$i]["METAE"] = "C$".number_format($monto,2);
+            $json[$i]["REALE"] = "C$".number_format($fila["Monto"],2);
+            $json[$i]["DIFE"] = ($meta==0) ? "100.00%" : number_format(((floatval($fila["Monto"])/floatval($monto))*100),2)."%";
+            $json[$i]["RUTA"] = '<a href="#!" id="rutaDetVenta" onclick="getDetalleVenta('.$mes.','.$anio.','."'".$json[$i]["METAU"]."'".','."'".$json[$i]["REALU"]."'".','."'".$json[$i]["METAE"]."'".','."'".$json[$i]["REALE"]."'".','."'".$fila["Ruta"]."'".')" >'.$fila["Ruta"].'</a>';
             $i++;
         }
         return $json;
 
-        $sql_server->close();
+            $sql_server->close();
+            $sql_exec = 'SELECT ';
     }
+
+    public static function buscarVendedorXRuta($ruta){
+        $sql_server = new \sql_server();
+        $vendedor = array();
+
+           $sql_exec =  "VENDEDOR_UMK ".$ruta;
+           $query = $sql_server->fetchArray($sql_exec,SQLSRV_FETCH_ASSOC);
+           foreach ($query as $fila){
+                $vendedor = $fila['NOMBRE'];
+           }
+           return $vendedor;
+    }
+
+    public static function getDetalleVentasXRuta($mes, $anio, $ruta){
+        $sql_server = new \sql_server();
+        $sql_exec = '';
+        $request = Request();
+        $company_user = Company::where('id',$request->session()->get('company_id'))->first()->id;
+        $fecha = new DateTime($anio.'-'.$mes.'-01');
+        $idPeriodo = Metacuota_gumanet::where(['Fecha' => $fecha,'IdCompany'=> $company_user])->pluck('IdPeriodo');
+
+        switch ($company_user) {
+            case '1':
+                $sql_exec = "EXEC umk_VentaArticulo_Vendedor ".$mes.", ".$anio.", '".$ruta."'";
+                
+
+                break;
+            case '2':
+                $sql_exec = "EXEC Gp_VentaArticulo_Vendedor ".$mes.", ".$anio.", '".$ruta."'";
+                break;
+            case '3':
+                $sql_exec = "";
+                break;            
+            default:                
+                dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
+                break;
+        }
+
+        $query = $sql_server->fetchArray($sql_exec,SQLSRV_FETCH_ASSOC);
+
+        $i = 0;
+        $json = array();
+         foreach ($query as $fila) {
+            $json[$i]["ARTICULO"]       = $fila["ARTICULO"];
+            $json[$i]["DESCRIPCION"]    = $fila["DESCRIPCION"];
+            $meta =  Gn_couta_x_producto::where(['CodVendedor' => $ruta, 'IdPeriodo'=> $idPeriodo, 'CodProducto' => $fila["ARTICULO"]])->sum('Meta');
+            $json[$i]["METAU"] = number_format($meta,2);
+            $json[$i]["REALU"] = number_format($fila["CANTIDAD"], 2);
+            $json[$i]["DIFU"] = ($meta==0 || $meta=="") ? "0.00%" : number_format(((floatval($fila["CANTIDAD"])/floatval($meta))*100),2)."%";
+            $monto =  Gn_couta_x_producto::where(['CodVendedor' => $ruta, 'IdPeriodo'=> $idPeriodo, 'CodProducto' => $fila["ARTICULO"]])->sum('val');
+            $json[$i]["METAE"] = number_format($monto,2);
+            $json[$i]["REALE"] = number_format($fila["MONTO"], 2);
+            $json[$i]["DIFE"] = ($meta==0 || $meta=="") ? "0.00%" : number_format(((floatval($fila["MONTO"])/floatval($monto))*100),2)."%";
+            $i++;
+        } 
+        $sql_server->close();
+        return $json;
+
+    }
+
     
-    public static function getDetalleVentas($tipo, $mes, $anio, $cliente, $articulo) {
+    public static function getDetalleVentas($tipo, $mes, $anio, $cliente, $articulo, $ruta) {
         $sql_server = new \sql_server();
 
         $sql_exec = '';
@@ -108,8 +177,9 @@ class dashboard_model extends Model {
 
         $cliente = ($cliente=='ND')?'':$cliente;
         $articulo = ($articulo=='ND')?'':$articulo;
+        $ruta = ($ruta=='ND')?'':$ruta;
 
-        switch ($company_user) {
+         switch ($company_user) {
             case '1':
                 $sql_exec = "EXEC Umk_VentaLinea_Articulo ".$mes.", ".$anio.", '', '".$cliente."', '".$articulo."', ''";
 
@@ -124,6 +194,8 @@ class dashboard_model extends Model {
                 dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
                 break;
         }
+
+       
         $query = $sql_server->fetchArray($sql_exec,SQLSRV_FETCH_ASSOC);
 
         $i = 0;
@@ -616,7 +688,7 @@ class dashboard_model extends Model {
             }else {
                 $total = floatval($query[0]['M_REC']);
             }
-<<<<<<< HEAD
+
 
             $json[0]['name'] = 'Real';
             $json[0]['data'] =  $total;
@@ -631,22 +703,7 @@ class dashboard_model extends Model {
             $json[1]['data'] = floatval($meta);
         }        
 
-=======
 
-            $json[0]['name'] = 'Real';
-            $json[0]['data'] =  $total;
-        }
-        
-        foreach($query2 as $t){
-            $meta = $t->meta;
-        }
-
-        if (count($query)>0 || $meta!=null) {
-            $json[1]['name'] = 'Meta';
-            $json[1]['data'] = floatval($meta);
-        }        
-
->>>>>>> d7576237ee446d2805f18dc7302397f5e19c3cd5
         return $json;
         $sql_server->close();
     }
@@ -685,15 +742,10 @@ class dashboard_model extends Model {
 
         foreach ($meses as $key => $mes) {
             $x1 = array_column(array_filter($query, function($item) use($anioActual, $mes) { return $item['anio'] == $anioActual and $item['mes']==$mes; } ), 'montoVenta');
-<<<<<<< HEAD
+
 
             $y1 = array_column(array_filter($query, function($item) use($anioPasado, $mes) { return $item['anio'] == $anioPasado and $item['mes']==$mes; } ), 'montoVenta');
 
-=======
-
-            $y1 = array_column(array_filter($query, function($item) use($anioPasado, $mes) { return $item['anio'] == $anioPasado and $item['mes']==$mes; } ), 'montoVenta');
-
->>>>>>> d7576237ee446d2805f18dc7302397f5e19c3cd5
             (count($x1)>0)?(array_push($val1__,$x1[0])):(false);
             (count($y1)>0)?(array_push($val2__,$y1[0])):(array_push($val2__,0));
         }
