@@ -97,10 +97,30 @@
             <div class="col-sm-12">
                 <div class="card mt-3">
                   <div class="card-body">
-                    <h5 class="card-title" id="title-page-tem"></h5>
-                    <p class="text-muted" id="fechaFiltrada"></p>
                     <div class="row">
-                        <div class="col-sm-11 mt-2">
+                        <div class="col-sm-4 mt-3">
+                            <h5 class="card-title" id="title-page-tem"></h5>
+                            <p class="text-muted" id="fechaFiltrada"></p>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="card text-center">
+                              <div class="card-body">
+                                <h5 class="card-title" id="MontoReal"></h5>
+                                <p class="card-text" id="txtMontoReal"></p>
+                              </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4" id="montoMetaContent">
+                            <div class="card text-center">
+                              <div class="card-body">
+                                <h5 class="card-title" id="MontoMeta"></h5>
+                                <p class="card-text" id="txtMontoMeta"></p>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-11 mt-3">
                            <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1"><i data-feather="search"></i></span>
@@ -108,7 +128,7 @@
                                 <input type="text" id="filterDtTemp" class="form-control" placeholder="Buscar">
                             </div>
                         </div>
-                        <div class="col-sm-1 mt-2">
+                        <div class="col-sm-1 mt-3">
                              <div class="input-group">
                                 <select class="custom-select" id="cantRowsDtTemp">
                                     <option value="5" selected>5</option>
@@ -125,16 +145,12 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-4 mt-2">
+            <div class="col-sm-12 mt-2">
                 <div class="table-responsive">
                     <div id="cjRutVentas"><table class="table table-bordered table-sm" width="100%" id="dtTotalXRutaVent" ></table></div>        
                 </div>
             </div>
-            <div class="col-sm-8 mt-2">
-                <div class="table-responsive">
-                    <div id="cjVentas"><table class="table table-bordered table-sm" width="100%" id="dtVentas" ></table></div>
-                </div>
-            </div>
+            
             <div class="col-sm-12 mt-2">
                 <div class="table-responsive">
                     <div id="cjRecuperacion">
@@ -159,21 +175,74 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-3 mt-1">
-                <div class="card text-center">
-                  <div class="card-body">
-                    <h5 class="card-title" id="MontoReal"></h5>
-                    <p class="card-text" id="txtMontoReal"></p>
-                  </div>
+        
+    </div>
+</div>
+<!-- Modal:Detalle Venta Comparación Meta, Real Cumplimineto -->
+<div class="modal fade" id="mdDetailsVentas" tabindex="-1" role="dialog" aria-labelledby="titleModal" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="tituloDelModalDetVent"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="bodyModal">
+                <div class="row">
+                <div class="col-sm-2">                    
+                    <p class="text-muted m-0" >Real en unidades</p>
+                    <p class="font-weight-bolder" style="font-size: 1.3rem!important" id="total_Real_Unidad"></p>
+                </div>
+                <div class="col-sm-2">
+                    <p class="text-muted m-0">Meta en unidades</p>
+                    <p class="font-weight-bolder" style="font-size: 1.3rem!important" id="total_Meta_Unidad"></p>
+                </div>
+                <div class="col-sm-2 border-right">
+                    <p class="text-muted m-0">Diferencia en %</p>
+                    <p class="font-weight-bolder" style="font-size: 1.3rem!important" id="total_Dif_Unidad"></p>
+                </div>
+                <div class="col-sm-2">
+                    <p class="text-muted m-0" >Real en C$</p>
+                    <p class="font-weight-bolder" style="font-size: 1.3rem!important" id="total_Real_Efectivo"></p>
+                </div>
+                <div class="col-sm-2">
+                    <p class="text-muted m-0">Meta en C$</p>
+                    <p class="font-weight-bolder" style="font-size: 1.3rem!important" id="total_Meta_Efectivo"></p>
+                </div>
+                <div class="col-sm-2">
+                    <p class="text-muted m-0">Diferencia en %</p>
+                    <p class="font-weight-bolder" style="font-size: 1.3rem!important" id="total_Dif_Efectivo"></p>
                 </div>
             </div>
-            <div class="col-sm-3 mt-1" id="montoMetaContent">
-                <div class="card text-center">
-                  <div class="card-body">
-                    <h5 class="card-title" id="MontoMeta"></h5>
-                    <p class="card-text" id="txtMontoMeta"></p>
-                  </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-11 mt-2">
+                   <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1"><i data-feather="search"></i></span>
+                        </div>
+                        <input type="text" id="filterDtDetalle" class="form-control" placeholder="Buscar">
+                    </div>
+                </div>
+                <div class="col-sm-1 mt-2">
+                     <div class="input-group">
+                        <select class="custom-select" id="cantRowsDtDetalle">
+                            <option value="5" selected>5</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                            <option value="-1">Todo</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+                <div class="row">
+                    <div class="col-sm-12 mt-3">
+                        <div class="table-responsive">
+                            <div id="cjVentas"><table class="table table-bordered table-sm" width="100%" id="dtVentas" ></table></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
