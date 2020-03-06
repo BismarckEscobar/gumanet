@@ -21,6 +21,39 @@
     content: attr(data-label);
 }
 
+/*Sidebar Menu left*/
+.vertical-nav {
+  min-width: 14.5rem;
+  width: 14.5rem;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s;
+}
+
+#sidebarCollapse {
+  cursor: pointer;
+}
+
+#sidebar-menu-left.active {
+  margin-left: -17rem;
+}
+
+#content.active {
+  width: 100%;
+  margin: 0;
+}
+
+.page-content {
+  width: calc(100% -17rem);
+  margin-left: 14.5rem;
+  transition: all 0.4s;
+}
+/*Fin de Sidebar Menu left*/
+
 .input-fecha {
   height: 30px;
   width: 100%;
