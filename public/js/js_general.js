@@ -36,6 +36,33 @@ $("body").click( function(e) {
     }    
 });
 
+// Sidebar toggle behavior
+$('#sidebarCollapse').on('click', function() {
+    $.removeCookie('navbar');
+
+    if ( $("#sidebar-menu-left").hasClass('active') ) {        
+        $.cookie( 'navbar' , true)
+    }else {
+        $.cookie( 'navbar' , false)
+    }
+    $('#sidebar-menu-left, #content').toggleClass('active');
+    
+});
+
+function fullScreen() {
+    if ( $.cookie('navbar')=='true' ) {
+        $('#sidebar-menu-left, #content')
+        .addClass('notactive')
+        .removeClass('active');
+    }else if( $.cookie('navbar')=='false' ) {
+        $('#sidebar-menu-left, #content')
+        .addClass('active')
+        .removeClass('notactive');
+    }
+
+    
+}
+
 feather.replace();
 
 function inicializaControlFecha() {

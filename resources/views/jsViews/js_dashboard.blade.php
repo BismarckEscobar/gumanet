@@ -1,5 +1,6 @@
 <script>
 $(document).ready(function() {
+    fullScreen();
     var date    = new Date();
     var anio    = parseInt(date.getFullYear())
     var mes     = parseInt(date.getMonth()+1);
@@ -11,7 +12,8 @@ $(document).ready(function() {
                     'container-cc' : 'Reporte YTD (Total de Items)',
                     'container-tc' : 'Top 10 de Clientes',
                     'container-tp' : 'Top 10 de Productos',
-                    'container-vms': 'Comportamiento de ventas' };
+                    'container-vms': 'Comportamiento de ventas',
+                    'container-cat': 'Ventas por categorias' };
 
     var list_dash = '';
 
@@ -116,6 +118,55 @@ $(document).ready(function() {
         }
     };
 
+    //GRAFICA VENTAS POR CATEGORIAS
+    ventasXCateg = {
+        chart: {
+            type: 'pie',
+            renderTo: 'grafVtsXCateg',
+            options3d: {
+                enabled: true,
+                alpha: 45,
+                beta: 0
+            }
+        },
+        title: {
+            text: 'Ventas por categorias'
+        },
+        subtitle: {},
+        accessibility: {
+            point: {
+                valueSuffix: '%'
+            }
+        },
+        tooltip: {
+            pointFormat: '<b>C${point.y:,.2f}</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                depth: 45,
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.name}'
+                }
+            },
+            series: {
+                allowPointSelect: false,
+                borderWidth: 0,
+                dataLabels: {
+                    enabled: true,
+                    formatter: function( ) {
+                    return this.point.name+' '+ FormatPretty(this.y);
+                  }
+                }
+            },
+        },
+        series: [{
+            data: [],
+        }],
+    };
+
     //GRAFICA VENTAS
     ventas = {
         chart: {
@@ -143,10 +194,9 @@ $(document).ready(function() {
             }
         },
         tooltip: {
-        formatter: function() {
-          // this = point
-          return this.series.tooltipOptions.customTooltipPerSeries.call(this);
-        }
+            formatter: function() {
+                return this.series.tooltipOptions.customTooltipPerSeries.call(this);
+            }
         },
         legend: {
             enabled: true
@@ -159,11 +209,6 @@ $(document).ready(function() {
                     enabled: true,
                   formatter: function() {
                     return FormatPretty(this.y);
-                    /*if (this.y > 1000) {
-                      return Highcharts.numberFormat(this.y / 1000, 1) + "K";
-                    } else {
-                      return this.y
-                    }*/
                   }
                 }
             },
@@ -171,6 +216,7 @@ $(document).ready(function() {
         series: [],
     };
 
+    //GRAFICA RECUPERACION DEL MES
     recuperacionMes = {
        chart: {
             type: 'column',
@@ -324,7 +370,6 @@ $(document).ready(function() {
             title: {
                 text: ''
             }
-
         },
         legend: {
             enabled: false
@@ -372,15 +417,13 @@ $(document).ready(function() {
             title: {
                 text: ''
             }
-
         },
         legend: {
             enabled: false
         },
         plotOptions: {
             series: {
-                allowPointSelect: false,
-                
+                allowPointSelect: false,                
                 borderWidth: 0,
                 dataLabels: {
                     enabled: true,
@@ -468,7 +511,7 @@ $(document).ready(function() {
 
 });
 
-var colors = ['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4']
+var colors = ['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'];
 
 $("#filterM_A").click( function(e) {
     var mes = $('#opcMes option:selected').val();
@@ -482,10 +525,11 @@ var ventas                      = {};
 var recuperacionMes             = {};
 var comparacionMesesVentas      = {};
 var comparacionMesesItems       = {};
+var ventasXCateg                = {};
 var montoMetaVenta              = 0;
 var montoMetaRecup              = 0;
 function actualizandoGraficasDashboard(mes, anio) {
-    $("#grafClientes, #grafProductos, #grafVentas, #grafBodega, #grafRecupera, #grafCompMontos, #grafCompCantid")
+    $("#grafClientes, #grafProductos, #grafVentas, #grafBodega, #grafRecupera, #grafCompMontos, #grafCompCantid, #grafVtsXCateg")
     .empty()
     .append(`<div style="height:400px; background:#ffff; padding:20px">
                 <div class="d-flex align-items-center">
@@ -499,7 +543,6 @@ function actualizandoGraficasDashboard(mes, anio) {
         var title = [];
 
         $.each(json, function (i, item) {
-
             switch (item['tipo']) {
                 case 'dtaBodega':
                     dta = [];
@@ -511,9 +554,7 @@ function actualizandoGraficasDashboard(mes, anio) {
                         })
 
                         title.push(x['name'])
-                    });
-
-                    
+                    });                    
                     val_bodega.xAxis.categories = title;
                     val_bodega.series[0].data = dta;
                     val_bodega.subtitle = 'Datos hasta la fecha';
@@ -530,8 +571,7 @@ function actualizandoGraficasDashboard(mes, anio) {
                         })
 
                         title.push(x['name'])
-                    });
-                    
+                    });                    
                     clientes.xAxis.categories = title;
                     clientes.series[0].data = dta;
                     chart = new Highcharts.Chart(clientes);
@@ -547,11 +587,30 @@ function actualizandoGraficasDashboard(mes, anio) {
                         })
 
                         title.push(x['name'])
-                    });
-                    
+                    });                    
                     productos.xAxis.categories = title;
                     productos.series[0].data = dta;
                     chart = new Highcharts.Chart(productos);
+                break;
+                case 'dtaVentasXCateg':
+                    dta = [];
+                    cate = '<option>TODAS LAS CATEGORIAS</option>';
+
+                    $.each(item['data'], function(i, x) {
+                        dta.push({
+                            name  : x['name'],
+                            y     : x['data']
+                        })
+                        cate += `<option>`+x['name']+`</option>` 
+                    });
+                    $("#select-cate")
+                    .append(cate)
+                    .selectpicker('refresh');
+
+                    ventasXCateg.subtitle = {text: 'Todas las  categorias'};
+                    ventasXCateg.series[0].data = dta;
+                    chart = new Highcharts.Chart(ventasXCateg);
+                    $('.highcharts-title').append('<p>Vamos venga</p>')
                 break;
                 case 'dtaVentasMes':
                     dta = [];
@@ -560,7 +619,6 @@ function actualizandoGraficasDashboard(mes, anio) {
                     ventas.series = [];
                     if (item['data'].length>0) {
                         $.each(item['data'], function(i, x) {
-
                             if (x['name']=='items') {
                                 items = parseFloat(x['data']);
                             } else {
@@ -568,9 +626,8 @@ function actualizandoGraficasDashboard(mes, anio) {
                                     name  : x['name'],
                                     y     : x['data'],
                                 })
-
                                 title.push(x['name']);
-                            }                        
+                            }
                         });
 
                         var real_ = dta[0]['y'];
@@ -632,8 +689,6 @@ function actualizandoGraficasDashboard(mes, anio) {
                     }
 
                     chart = new Highcharts.Chart(ventas);
-                    
-
                 break;
                 case 'dtaCompMesesVentas':
                     dtaVentasMes = item['data'];
@@ -746,6 +801,32 @@ function actualizandoGraficasDashboard(mes, anio) {
         });
     });
 }
+
+$("#select-cate").change(function() {
+    cate = this.value;
+    $.ajax({
+        url: 'dataCate',
+        type: 'post',
+        data: {
+            mes : $('#opcMes option:selected').val(),
+            anio: $('#opcAnio option:selected').val(),
+            cate: this.value
+        },
+        async: true,
+        success: function(response) {
+            dta = [];
+            $.each(response, function(i, x) {
+                dta.push({
+                    name  : x['name'],
+                    y     : x['data']
+                })
+            });            
+            ventasXCateg.subtitle = {text: cate};
+            ventasXCateg.series[0].data = dta;
+            chart = new Highcharts.Chart(ventasXCateg);
+        }
+    })
+})
 
 var ventasMensuales = {};
 function grafVentasMensuales() {
@@ -1380,12 +1461,9 @@ function reordenandoPantalla() {
         $("#" + div01 + " div.graf").each(function() {
             ($(this).is(":visible"))?x++:x=x;            
         })
-
         cont = 12 / x;
-
         $( "#" + div01 + " div.graf" ).removeClass( "col-sm-*" ).addClass( "col-sm-"+cont );
         x=0;
-
     });
 } 
 
