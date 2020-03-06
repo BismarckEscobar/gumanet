@@ -35,38 +35,36 @@
 <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
-<div class="container-fluid">
+@include('layouts.menu')
+<div class="page-content" id="content">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li><a href="#!" id="sidebarCollapse"><i class="material-icons ml-2 mr-3">menu</i></a></li>
+      @if(Auth::User()->activeRole()!=3)
+      <li class="breadcrumb-item" id="item-nav-01"><a href="Dashboard">Dashboard</a></li>
+      @endif                                        
+      <li class="ml-auto"><a href="#!"><i class="active-menu material-icons" style="font-size: 20px">settings</i></a></li>
+  </ol>
+  </nav>
+  <div class="container-fluid">
     <div class="row">
-        <div class="col-sm-2">            
-            @include('layouts.menu')
-        </div>
-        <div class="col-sm-10 p-0">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    @if(Auth::User()->activeRole()!=3)
-                      <li  class="breadcrumb-item" id="item-nav-01"><a href="Dashboard">Dashboard</a></li>
-                    @endif                                        
-                    <li class="ml-auto"><a href="#!" class="active-menu"><i class="active-menu material-icons" style="font-size: 20px">settings</i></a></li>
-                </ol>
-            </nav>
-            <div class="p-3">
-                @yield('content')
-                <div id="sidebar" class="border-left shadow-sm p-3">
-                    <p class="font-weight-bold ml-2">Configuración<button type="button" class="active-menu close" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>
-                    <ul class="list-group list-group-flush mt-3">
-                      <li><a href="{{ route('formReset') }}"><i class="align-middle mb-1 material-icons">https</i> Cambiar contraseña</a></li>
-                      <li><a href="{{ route('logout') }}"  onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="align-middle mb-1 material-icons" >exit_to_app</i> Cerrar sesion</a></li>
-                    </ul><hr>
-                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        @csrf
-                    </form>
-
-                    <!--OPCIONES PARA DASHBOARDS-->
-                    <div id="content-dash"></div>
-                </div>
-            </div>
-        </div>
+      <div class="col-sm-12">        
+        @yield('content')
+        <div id="sidebar" class="border-left shadow-sm p-3">
+            <p class="font-weight-bold ml-2">Configuración<button type="button" class="active-menu close" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>
+            <ul class="list-group list-group-flush mt-3">
+              <li><a href="{{ route('formReset') }}"><i class="align-middle mb-1 material-icons">https</i> Cambiar contraseña</a></li>
+              <li><a href="{{ route('logout') }}"  onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="align-middle mb-1 material-icons" >exit_to_app</i> Cerrar sesion</a></li>
+            </ul><hr>
+             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+              @csrf
+            </form>
+            <!--OPCIONES PARA DASHBOARDS-->
+            <div id="content-dash"></div>
+        </div>        
+      </div>
     </div>
+  </div>
 </div>
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -93,6 +91,7 @@
 <script src="{{ url('js/ext/Chart.min.js') }}"></script>
 <script src="{{ url('js/jquery-2.1.1.min.js') }}"></script>
 <script src="{{ url('js/highcharts.js') }}"></script>
+<script src="{{ url('js/highcharts-3d.js') }}"></script>
 <script src="{{ url('js/popper.min.js') }}"></script>
 <script src="{{ url('js/bootstrap.min.js') }}"></script>
 <script src="{{ url('js/bootstrap-select.js') }}"></script>

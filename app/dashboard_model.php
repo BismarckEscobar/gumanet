@@ -488,6 +488,58 @@ class dashboard_model extends Model {
         $sql_server->close();
     }
 
+    public static function getVentasXCategorias($mes, $anio) {
+        $sql_server = new \sql_server();
+        $Dta = array();
+
+        $sql_exec = '';
+        $request = Request();
+        $company_user = Company::where('id',$request->session()->get('company_id'))->first()->id;
+
+        switch ($company_user) {
+            case '1':
+                $sql_exec = "SELECT
+                            SUM(VENTA) AS Monto,
+                            Clasificacion3 As ClaseTerapeutica
+                            FROM Softland.DBO.VtasTotal_UMK (nolock)
+                            WHERE month(DIA)=".$mes." AND year(DIA)=".$anio."
+                            AND  Ruta NOT IN('F01', 'F12')
+                            GROUP BY Clasificacion3,Clasificacion5";
+                break;
+            case '2':
+                $sql_exec = "SELECT
+                            SUM(VENTA) AS Monto,
+                            Clasificacion3 As ClaseTerapeutica
+                            FROM Softland.DBO.GP_VtasTotal_UMK (nolock)
+                            WHERE month(DIA)=".$mes." AND year(DIA)=".$anio."
+                            AND  Ruta NOT IN('F01', 'F12')
+                            GROUP BY Clasificacion3,Clasificacion5";
+                break;
+            case '3':
+                $sql_exec = "";
+                break;            
+            default:                
+                dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
+                break;
+        }
+        $json = array();
+        $i=0;
+        $query = $sql_server->fetchArray($sql_exec, SQLSRV_FETCH_ASSOC);
+
+        if( count($query)>0 ) {
+            foreach ($query as $key) {
+
+                $json[$i]['name']       = $key['ClaseTerapeutica'];
+                $json[$i]['data']       = floatval($key['Monto']);
+
+                $i++;
+            }
+        }
+
+        return $json;
+        //$sql_server->close();
+    }
+
     public static function getValBodegas($date) {
         $sql_server = new \sql_server();
 
@@ -530,6 +582,59 @@ class dashboard_model extends Model {
         $sql_server->close();
     }
 
+    public static function ventaXCategorias($mes, $anio, $cate) {
+        $sql_server = new \sql_server();
+        $Dta = array();
+
+        $sql_exec = '';
+        $request = Request();
+        $company_user = Company::where('id',$request->session()->get('company_id'))->first()->id;        
+
+        if ($cate=='TODAS LAS CATEGORIAS') {
+        	return dashboard_model::getVentasXCategorias($mes, $anio);
+        }else{
+        	switch ($company_user) {
+            	case '1':
+                	$sql_exec = "EXEC Umk_VentaLinea_Articulo ".$mes.", ".$anio.", '".$cate."', '', '','' ";
+                	$sql_meta = "EXEC UMK_meta_articulos ".$mes.", ".$anio.", '".$cate."', '', '' ";
+                break;
+            	case '2':
+                	$sql_exec = "EXEC Gp_VentaLinea_Articulo ".$mes.", ".$anio.", '".$cate."', '', '','' ";
+                 	$sql_meta = "EXEC Gp_meta_articulos ".$mes.", ".$anio.", '".$cate."', '', '' ";
+                break;
+            	case '3':
+                	$sql_exec = "";
+                break;            
+            	default:                
+                	dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
+                break;
+        	}
+
+        	$query = $sql_server->fetchArray($sql_exec, SQLSRV_FETCH_ASSOC);
+        	$query2 = $sql_server->fetchArray($sql_meta, SQLSRV_FETCH_ASSOC);
+
+        	$json = array();
+        	$real_ = $meta_ = 0;
+
+        	if( count($query)>0 ){
+				$real_ = array_sum(array_column($query, 'Monto'));
+        	}
+
+        	if( count($query2)>0 ){
+				$meta_ = floatval($query2[0]['meta']);
+        	}
+
+		    $json[0]['name'] = 'Real';
+		    $json[0]['data'] = floatval($real_);
+
+		    $json[1]['name'] = 'Meta';
+		    $json[1]['data'] = $meta_;
+
+        	$sql_server->close();        	
+        	return $json;
+    	}
+    }
+
     public static function getDataGraficas($mes, $anio) {
         $array_merge = array();
         $date = $anio.'-'.$mes.'-01';
@@ -564,7 +669,12 @@ class dashboard_model extends Model {
             'data' => dashboard_model::getComparacionMesItems($mes, $anio) 
         );
 
-        $array_merge = array_merge($dtaBodega, $dtaTop10Cl, $dtaTop10Pr, $dtaVtasMes, $dtaRecupera, $dtaCompMesesVentas, $dtaCompMesesItems);
+        $dtaVentasXCateg[] = array(
+        	'tipo' => 'dtaVentasXCateg',
+        	'data' => dashboard_model::getVentasXCategorias($mes, $anio)
+        );
+
+        $array_merge = array_merge($dtaBodega, $dtaTop10Cl, $dtaTop10Pr, $dtaVtasMes, $dtaRecupera, $dtaCompMesesVentas, $dtaCompMesesItems, $dtaVentasXCateg);
         return $array_merge;
         $sql_server->close();
     }
