@@ -89,8 +89,9 @@ class dashboard_model extends Model {
 
         foreach ($query as $fila) {
             
-            $json[$i]["VENDE"] = dashboard_model::buscarVendedorXRuta($fila["Ruta"]);
+            $json[$i]["VENDE"] = dashboard_model::buscarVendedorXRuta($fila["Ruta"], $company_user);
             $meta =  Gn_couta_x_producto::where(['IdPeriodo'=> $idPeriodo, 'CodVendedor' => $fila["Ruta"]])->sum('Meta');
+
             $json[$i]["METAU"] = number_format($meta,2)." U";
             $json[$i]["REALU"] = number_format($fila["Cantidad"],2)." U";
             
@@ -108,19 +109,42 @@ class dashboard_model extends Model {
             $sql_exec = 'SELECT ';
     }
 
-    public static function buscarVendedorXRuta($ruta){
+    public static function buscarVendedorXRuta($ruta, $compañia){
         $sql_server = new \sql_server();
-        $vendedor = array();
+        $vendedor = array(); 
 
-           $sql_exec =  "VENDEDOR_UMK ".$ruta;
-           $query = $sql_server->fetchArray($sql_exec,SQLSRV_FETCH_ASSOC);
-           foreach ($query as $fila){
+
+        switch ($compañia) {
+            case '1':
+                $sql_exec =  "VENDEDOR_UMK ".$ruta;
+                $query = $sql_server->fetchArray($sql_exec,SQLSRV_FETCH_ASSOC);
+                foreach ($query as $fila){
                 $vendedor = $fila['NOMBRE'];
-           }
+                }
+                break;
+
+            case '2':
+                $sql_exec =  "VENDEDOR_GP ".$ruta;
+                $query = $sql_server->fetchArray($sql_exec,SQLSRV_FETCH_ASSOC);
+                foreach ($query as $fila){
+                $vendedor = $fila['NOMBRE'];
+                }
+                break;
+            case '3':
+                # code...
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+
+           
            return $vendedor;
     }
-
+// Tabla de detalles
     public static function getDetalleVentasXRuta($mes, $anio, $ruta){
+
         $sql_server = new \sql_server();
         $sql_exec = '';
         $request = Request();
@@ -132,7 +156,6 @@ class dashboard_model extends Model {
             case '1':
                 $sql_exec = "EXEC umk_VentaArticulo_Vendedor ".$mes.", ".$anio.", '".$ruta."'";
                 
-
                 break;
             case '2':
                 $sql_exec = "EXEC Gp_VentaArticulo_Vendedor ".$mes.", ".$anio.", '".$ruta."'";
@@ -153,6 +176,7 @@ class dashboard_model extends Model {
             $json[$i]["ARTICULO"]       = $fila["ARTICULO"];
             $json[$i]["DESCRIPCION"]    = $fila["DESCRIPCION"];
             $meta =  Gn_couta_x_producto::where(['CodVendedor' => $ruta, 'IdPeriodo'=> $idPeriodo, 'CodProducto' => $fila["ARTICULO"]])->sum('Meta');
+          
             $json[$i]["METAU"] = number_format($meta,2);
             $json[$i]["REALU"] = number_format($fila["CANTIDAD"], 2);
             $json[$i]["DIFU"] = ($meta==0 || $meta=="") ? "0.00%" : number_format(((floatval($fila["CANTIDAD"])/floatval($meta))*100),2)."%";
