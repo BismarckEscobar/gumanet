@@ -171,26 +171,56 @@ class dashboard_model extends Model {
         $query = $sql_server->fetchArray($sql_exec,SQLSRV_FETCH_ASSOC);
 
         $i = 0;
+        $j=0;
+        $codProdVendido = array();
         $json = array();
+        ////Agrega los productos que se han vendido de meta y los que no se encuentran en meta en el arreglo Json para mostrar en tabla de metas  
          foreach ($query as $fila) {
             $json[$i]["ARTICULO"]       = $fila["ARTICULO"];
             $json[$i]["DESCRIPCION"]    = $fila["DESCRIPCION"];
             $meta =  Gn_couta_x_producto::where(['CodVendedor' => $ruta, 'IdPeriodo'=> $idPeriodo, 'CodProducto' => $fila["ARTICULO"]])->sum('Meta');
-          
+            
+             $MetaCodArticVendido[$j] = Gn_couta_x_producto::where(['CodVendedor' => $ruta, 'IdPeriodo'=> $idPeriodo, 'CodProducto' => $fila["ARTICULO"]])->pluck('CodProducto');
+             if (count($MetaCodArticVendido[$j]) > 0) {// si la cantidad de caracteres mayor a cero, registra valor
+                $MetaCodArticVendido[$j] =  $MetaCodArticVendido[$j];
+                $j++;
+            }
+            
+           
             $json[$i]["METAU"] = number_format($meta,2);
             $json[$i]["REALU"] = number_format($fila["CANTIDAD"], 2);
             $json[$i]["DIFU"] = ($meta==0 || $meta=="") ? "0.00%" : number_format(((floatval($fila["CANTIDAD"])/floatval($meta))*100),2)."%";
+
             $monto =  Gn_couta_x_producto::where(['CodVendedor' => $ruta, 'IdPeriodo'=> $idPeriodo, 'CodProducto' => $fila["ARTICULO"]])->sum('val');
             $json[$i]["METAE"] = number_format($monto,2);
             $json[$i]["REALE"] = number_format($fila["MONTO"], 2);
             $json[$i]["DIFE"] = ($meta==0 || $meta=="") ? "0.00%" : number_format(((floatval($fila["MONTO"])/floatval($monto))*100),2)."%";
             $i++;
         } 
+        
+          ////Agrega los productos que no se han vendido en el arreglo Json para mostrar en tabla de metas  
+        $query_prod_no_vendidos = Gn_couta_x_producto::where(['CodVendedor' => $ruta, 'IdPeriodo'=> $idPeriodo])->whereNotIn('CodProducto',$MetaCodArticVendido)->get();
+        
+        foreach ($query_prod_no_vendidos as $fila) {
+            $json[$i]["ARTICULO"]       = $fila["CodProducto"];
+            $json[$i]["DESCRIPCION"]    = $fila["NombreProducto"].'<span style = "color: red"> &nbsp(No vendido)</span>';
+            
+            $json[$i]["METAU"] = number_format($fila["Meta"],2);
+            $json[$i]["REALU"] = 0.00;
+            $json[$i]["DIFU"] = ($fila["Meta"]==0 || $fila["Meta"]=="") ? "0.00%" : number_format(((0.00/floatval($fila["Meta"]))*100),2)."%";
+
+            $json[$i]["METAE"] = number_format($fila["val"],2);
+            $json[$i]["REALE"] = 0.00;
+            $json[$i]["DIFE"] = ($fila["val"]==0 || $fila["val"]=="") ? "0.00%" : number_format(((0.00/floatval($fila["val"]))*100),2)."%";
+            $i++;
+        } 
+        
+
         $sql_server->close();
         return $json;
 
     }
-
+    
     
     public static function getDetalleVentas($tipo, $mes, $anio, $cliente, $articulo, $ruta) {
         $sql_server = new \sql_server();
