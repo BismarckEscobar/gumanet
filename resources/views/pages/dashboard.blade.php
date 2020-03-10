@@ -60,14 +60,14 @@
             </div>
         </div>
     </div>
-    <div class="content-graf">
+    <div class="content-graf mb-5">
         <div class="row" id="ct04">
             <div class="graf col-sm-12 mt-3"><div class="container-vms" id="grafVtsMes"></div></div>
         </div>
         <div class="row" id="ct05">            
-            <div class="graf col-sm-12 mt-3 text-right">                
-                <select class="selectpicker col-sm-4 form-control form-control-sm mb-2 mt-3" id="select-cate" data-show-subtext="false" data-live-search="true" ></select>
+            <div class="graf col-sm-12 mt-3 text-right">
                 <figure class="highcharts-figure">
+                <select class="selectpicker col-sm-4 form-control form-control-sm mb-2 mt-3" id="select-cate" data-show-subtext="false" data-live-search="true" ></select>
                     <div class="container-cat" id="grafVtsXCateg"></div>
                 </figure>
             </div>
@@ -87,7 +87,7 @@
         </div>
     </div>
     <!-- PAGINA TEMPORAL DE DETALLES -->
-    <div id="page-details" class="p-4" style="background-color: #f1f5f8">
+    <div id="page-details" class="p-4 border-left" style="background-color: #f1f5f8">
         <div class="row">
             <div class="col-sm-12">
                 <a href="#!" class="active-page-details btn btn-outline-primary btn-sm">Regresar</a>

@@ -1,5 +1,6 @@
 <script>
 $(document).ready(function() {
+	fullScreen();
     //AGREGO LA RUTA AL NAVEGADOR
     $("#item-nav-01").after(`<li class="breadcrumb-item active">Ventas</li>`);
 
@@ -43,6 +44,11 @@ $(document).ready(function() {
 	};
     dataVentasClientes(false);
     dataVentasArticulos(false);
+
+	var st = $('#sidebar-menu-left').hasClass('active');
+	if (st) {
+	    $('#page-details').css('width','100%')
+	}
 });
 $(".active-page-details").click( function() {//Regresar ala ventana anterior
     $("#page-details").toggleClass('active');
@@ -56,6 +62,11 @@ $('#btnSearchArt').on('keyup', function() {
 $('#btnSearchCl').on('keyup', function() {
     var table = $('#tblClientes').DataTable();
     table.search(this.value).draw();
+});
+
+$( "#cmbTableCant").change(function() {
+	var table = $('#tblClientes').DataTable();
+	table.page.len(this.value).draw();
 });
 
 $("#filterData").click( function() {
