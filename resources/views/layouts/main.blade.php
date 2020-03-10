@@ -52,9 +52,9 @@
         @yield('content')
         <div id="sidebar" class="border-left shadow-sm p-3">
             <p class="font-weight-bold ml-2">Configuración<button type="button" class="active-menu close" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>
-            <ul class="list-group list-group-flush mt-3">
-              <li><a href="{{ route('formReset') }}"><i class="align-middle mb-1 material-icons">https</i> Cambiar contraseña</a></li>
-              <li><a href="{{ route('logout') }}"  onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="align-middle mb-1 material-icons" >exit_to_app</i> Cerrar sesion</a></li>
+            <ul class="list-group list-group-flush">
+              <li><a href="{{ route('formReset') }}"><i class="align-middle material-icons">https</i> Cambiar contraseña</a></li>
+              <li><a href="{{ route('logout') }}"  onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="align-middle material-icons" >exit_to_app</i> Cerrar sesion</a></li>
             </ul><hr>
              <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
               @csrf
