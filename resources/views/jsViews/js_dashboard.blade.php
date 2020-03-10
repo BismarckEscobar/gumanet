@@ -509,6 +509,10 @@ $(document).ready(function() {
         }]        
     }
 
+    var st = $('#sidebar-menu-left').hasClass('active');
+    if (st) {
+        $('#page-details').css('width','100%')
+    }
 });
 
 var colors = ['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'];
@@ -861,12 +865,10 @@ function detalleVentasMes(tipo, title, cliente, articulo) {
     $("#page-details").toggleClass('active');
     mes = $("#opcMes option:selected").val();
     mesNombre = $("#opcMes option:selected").text();
-    anio = $("#opcAnio option:selected").val();
-    
+    anio = $("#opcAnio option:selected").val();    
 
     FechaFiltrada = `Mostrando registros de `+mesNombre+` de `+anio;
     $("#fechaFiltrada").text(FechaFiltrada);
-
     $('#filterDtTemp').val('');
 
     switch(tipo) {        
@@ -1436,7 +1438,7 @@ $( "#cantRowsDtDetalle").change(function() {
 
 $(".active-page-details").click( function() {
     $("#cantRowsDtTemp").val("5");
-    $("#page-details").toggleClass('active');
+    $("#page-details").toggleClass('active');    
 });
 
 /*OCULTANDO GRAFICAS DASHBOARD*/
@@ -1500,7 +1502,6 @@ function FormatPretty(number) {
         numberString += scale
     }
     return numberString;
-
 }
 
 </script>
