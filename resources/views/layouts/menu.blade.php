@@ -41,6 +41,12 @@
               Metas
             </a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link text-secondary" href="Recuperacion">
+              <span data-feather="dollar-sign"></span>
+              Recuperación
+            </a>
+          </li>
           @elseif(Auth::User()->activeRole()==2)
           <li class="nav-item">                
               <a class="nav-link text-secondary" href="Dashboard">
@@ -66,6 +72,12 @@
                   <span data-feather="file"></span>
                   Metas
               </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-secondary" href="Recuperacion">
+              <span data-feather="dollar-sign"></span>
+              Recuperación
+            </a>
           </li>
           @endif
           <li class="nav-item">

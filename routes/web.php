@@ -16,6 +16,7 @@ Route::get('/Inventario','inventario_controller@index');
 Route::get('/Metas','metas_controller@index');
 Route::get('/Usuario','usuario_controller@index');
 Route::get('/Reportes','reportes_controller@index');
+Route::get('/Recuperacion','recuperacion_controller@index');
 
 
 //RUTAS LOGIN
@@ -77,6 +78,10 @@ Route::post('/dataCate', 'dashboard_controller@ventaXCategorias');
 //RUTAS REPORTES VENTAS
 Route::post('/ventasDetalle','reportes_controller@detalleVentas');
 Route::post('/getDetFactVenta','reportes_controller@getDetFactVenta');
+
+//RUTAS RECUPERACION
+Route::get('/getMoneyRecuRowsByRoutes/{mes}/{anio}','recuperacion_controller@getMoneyRecuRowsByRoutes');
+Route::post('/agregatMetaRecup','recuperacion_controller@agregatMetaRecup');
 
 
 
