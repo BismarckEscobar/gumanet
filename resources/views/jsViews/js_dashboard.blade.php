@@ -1,6 +1,5 @@
 <script>
 $(document).ready(function() {
-    fullScreen();
     var date    = new Date();
     var anio    = parseInt(date.getFullYear())
     var mes     = parseInt(date.getMonth()+1);
@@ -56,7 +55,7 @@ $(document).ready(function() {
             decimalPoint: '.',
             thousandsSep: ','
         },
-    colors: ['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4']
+        colors: ['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4']
     });
 
     //GRAFICA VENTAS MENSUALES
@@ -139,7 +138,7 @@ $(document).ready(function() {
             }
         },
         tooltip: {
-            pointFormat: '<b>C${point.y:,.2f}</b>'
+            pointFormat: "<p class='font-weight-bold' style='font-size:14px'>C${point.y:,.2f}<br><span class='font-weight-bold' style='color:green; font-size:14px'>({point.porc}%)</span></p>"
         },
         plotOptions: {
             pie: {
@@ -513,6 +512,8 @@ $(document).ready(function() {
     if (st) {
         $('#page-details').css('width','100%')
     }
+
+    fullScreen();
 });
 
 var colors = ['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'];
@@ -599,11 +600,15 @@ function actualizandoGraficasDashboard(mes, anio) {
                 case 'dtaVentasXCateg':
                     dta = [];
                     cate = '<option>TODAS LAS CATEGORIAS</option>';
+                    
+                    objVenta = item['data'].map(function (obj) {return obj.data;});
+                    mTotal = objVenta.reduce(function (m, n) {return m + n;}, 0);
 
                     $.each(item['data'], function(i, x) {
                         dta.push({
                             name  : x['name'],
-                            y     : x['data']
+                            y     : x['data'],
+                            porc  : numeral((parseFloat(x['data'])/parseFloat(mTotal))*100).format('0.00')
                         })
                         cate += `<option>`+x['name']+`</option>` 
                     });
@@ -819,10 +824,15 @@ $("#select-cate").change(function() {
         async: true,
         success: function(response) {
             dta = [];
+            
+            objVenta = response.map(function (obj) {return obj.data;});
+            mTotal = objVenta.reduce(function (m, n) {return m + n;}, 0);
+            
             $.each(response, function(i, x) {
                 dta.push({
                     name  : x['name'],
-                    y     : x['data']
+                    y     : x['data'],
+                    porc  : numeral((parseFloat(x['data'])/parseFloat(mTotal))*100).format('0.00')
                 })
             });            
             ventasXCateg.subtitle = {text: cate};
@@ -863,16 +873,19 @@ function detalleVentasMes(tipo, title, cliente, articulo) {
     .addClass('text-uppercase')
     .text(title);
     $("#page-details").toggleClass('active');
-    mes = $("#opcMes option:selected").val();
-    mesNombre = $("#opcMes option:selected").text();
-    anio = $("#opcAnio option:selected").val();    
+    mes         = $("#opcMes option:selected").val();
+    mesNombre   = $("#opcMes option:selected").text();
+    anio        = $("#opcAnio option:selected").val();    
 
     FechaFiltrada = `Mostrando registros de `+mesNombre+` de `+anio;
     $("#fechaFiltrada").text(FechaFiltrada);
     $('#filterDtTemp').val('');
 
-    switch(tipo) {        
+    switch(tipo) {
         case 'vent':
+            $('#MontoReal').text('Cargando...');
+            $('#cumplMeta').text('Cargando...');
+            $('#cumplMetaContent').show();
             $("#montoMetaContent").show();
             $("#cjVentas").show();
             $("#cjRecuperacion").hide();
@@ -885,115 +898,16 @@ function detalleVentasMes(tipo, title, cliente, articulo) {
             $.ajax({// calcula el total real neto
                     url: "detalles/"+tipo+"/"+mes+"/"+anio+"/ND/ND/ND",
                     type: "GET",
-                    async: false,
-                    success: function(res){
-                       var i = 0;
-                        total = 0;
-                        for (i = 0; i < res.length; i++) {
-                            valor = res[i]['MONTO'];
-                            valor = valor.replace(/,/gi,"");//remplazar todas las comas por ""
-                            total +=parseFloat(valor.replace(",",""));
-                           
-                        }
-                        ;
-                         
-                        $('#MontoReal').text('C$'+ numeral(total).format('0,0.00'));// muestra el total real neto
+                    async: true,
+                    success: function(res) {
+                        tmp = parseFloat($('#MontoMeta').text().replace(/[\ U,C$]/g, ''))
+                        $('#MontoReal').empty()
+                                        .text('C$ '+ numeral(res[0]['MONTO']).format('0,0.00'));
+
+                        cump = (tmp>0)?(( parseFloat(res[0]['MONTO']) / tmp ) * 100):0;
+                        $('#cumplMeta').text(numeral(cump).format('0.00')+'%');
                     }
                 });
-
-            /*$('#dtVentas').dataTable({
-                responsive: true,
-                "autoWidth":false,
-                "ajax":{
-                    "url": "detalles/"+tipo+"/"+mes+"/"+anio+"/ND/ND/ND",
-                    'dataSrc': '',
-                },
-                "destroy" : true,
-                "info":    false,
-                "lengthMenu": [[5,10,20,50,-1], [20,30,50,100,"Todo"]],
-                "language": {
-                    "zeroRecords": "Cargando...",
-                    "paginate": {
-                        "first":      "Primera",
-                        "last":       "Última ",
-                        "next":       "Siguiente",
-                        "previous":   "Anterior"
-                    },
-                    "lengthMenu": "MOSTRAR _MENU_",
-                    "emptyTable": "NO HAY DATOS DISPONIBLES",
-                    "search":     "BUSCAR"
-                },
-                'columns': [
-                    { "title": "Articulo",      "data": "ARTICULO" },
-                    { "title": "Descripcion",   "data": "DESCRIPCION" },
-                    { "title": "U/M",           "data": "U_MEDIDA" },
-                    { "title": "Cantidad",      "data": "CANTIDAD" },
-                    { "title": "P.Unit",       "data": "PRECIOUND" },
-                    { "title": "Monto",         "data": "MONTO" }
-                ],
-                "columnDefs": [
-                    {"className": "dt-center", "targets": [ 0, 2 ]},
-                    {"className": "dt-right", "targets": [ 3, 4, 5 ]}
-                ],
-                "footerCallback": function ( row, data, start, end, display ) {
-                    var api = this.api(), data;
-                    var intVal = function ( i ) {
-                        return typeof i === 'string' ?
-                            i.replace(/[\$,]/g, '')*1 :
-                            typeof i === 'number' ?
-                                i : 0;
-                    };
-                    total = api
-                        .column( 5 )
-                        .data()
-                        .reduce( function (a, b) {
-                            return intVal(a) + intVal(b);
-                        }, 0 );
-
-                    $('#MontoReal').text('C$'+ numeral(total).format('0,0.00'));
-                }
-            });*/
-
-            /*
-            //Tabla Ventas del Mes por Ruta
-            $("#dtTotalXRutaVent").dataTable({
-                responsive: true,
-                "autoWidth":false,
-                "ajax":{
-                    "url": "ruta/"+mes+"/"+anio,
-                    'dataSrc': '',
-                },
-                "destroy" : true,
-                "info":    false,
-                "lengthMenu": [[8,10,20,50,-1], [20,30,50,100,"Todo"]],
-                "language": {
-                    "zeroRecords": "Cargando...",
-                    "paginate": {
-                        "first":      "Primera",
-                        "last":       "Última ",
-                        "next":       "Siguiente",
-                        "previous":   "Anterior"
-                    },
-                    "lengthMenu": "MOSTRAR _MENU_",
-                    "emptyTable": "NO HAY DATOS DISPONIBLES",
-                    "search":     "BUSCAR"
-                },
-                'columns': [
-                    { "title": "Ruta",      "data": "RUTA" },
-                    { "title": "Monto",   "data": "MONTO" },
-                ],
-                "columnDefs": [
-
-                    {"className": "dt-center", "targets": [ 0, 1 ]}
-
-                ],
-                
-            });
-            $('#txtMontoReal').text('Total real ventas');
-            $('#txtMontoMeta').text('Total meta venta');
-
-
-            */
 
             //Tabla Ventas de Unidades de productos por productos por Mes por Ruta
             $(tableActive).dataTable({
@@ -1019,93 +933,100 @@ function detalleVentasMes(tipo, title, cliente, articulo) {
                     "search":     "BUSCAR"
                 },
                 'columns': [
-                    { "title": "Ruta",      "data": "RUTA" },
-                    { "title": "Vendedor", "data": "VENDE" },
-                    { "title": "Meta",      "data": "METAU" },
-                    { "title": "Real",      "data": "REALU" },
-                    { "title": "% Cumplimiento","data": "DIFU" },
-                    { "title": "Meta",      "data": "METAE" },
-                    { "title": "Real",      "data": "REALE" },
-                    { "title": "% Cumplimiento","data": "DIFE" },
+                    { "title": "Ruta",              "data": "RUTA" },
+                    { "title": "Nombre",            "data": "VENDE" },
+                    { "title": "Meta Units.",       "data": "METAU" },
+                    { "title": "Real Units.",       "data": "REALU" },
+                    { "title": "% Cumpl. Units.",   "data": "DIFU" },
+                    { "title": "Meta Vtas.",        "data": "METAE" },
+                    { "title": "Real Vtas.",        "data": "REALE" },
+                    { "title": "% Cumpl. Vtas.",    "data": "DIFE" },
                 ],
                 "columnDefs": [
-                    {"className": "dt-center", "targets": [ 0, 1 , 2, 3, 4, 5, 6, 7]}
+                    {"className": "dt-left", "targets": [ 1 ]},
+                    //{"className": "dt-right", "targets": [ 2, 3, 4, 5, 6, 7 ]},
+                    {"className": "dt-back-unit", "targets": [ 2, 3, 4 ]},
+                    {"className": "dt-back-vtas", "targets": [ 5, 6, 7 ]},
+                    {"className": "dt-center", "targets": [ 0 ]}
                 ],
                 
             });
             $('#txtMontoReal').text('Total real ventas');
             $('#txtMontoMeta').text('Total meta venta');
+            break;
+        case 'recu':
+            $("#cjRecuperacion").show();
+            $('#cumplMetaContent').show();
+            $("#cjVentas").hide();
+            $("#cjRutVentas").hide();
+            $("#cjCliente").hide();
+            $("#cjArticulo").hide();
+            $("#montoMetaContent").show();
+            $("#MontoMeta").text('C$ '+montoMetaRecup);
+            $("#cantRowsDtTemp selected").val("5");
+            tableActive = `#dtRecuperacion`;
 
-
-        break;
-      case 'recu':
-        $("#cjRecuperacion").show();
-        $("#cjVentas").hide();
-        $("#cjRutVentas").hide();
-        $("#cjCliente").hide();
-        $("#cjArticulo").hide();
-        $("#montoMetaContent").show();
-        $("#MontoMeta").text('C$ '+montoMetaRecup);
-        $("#cantRowsDtTemp selected").val("5");
-        tableActive = `#dtRecuperacion`;
-        
-        $(tableActive).dataTable({
-            responsive: true,
-            "autoWidth":false,
-            "ajax":{
-                "url": "detalles/"+tipo+"/"+mes+"/"+anio+"/ND/ND/ND",
-                'dataSrc': '',
-            },
-            "info":    false,
-            "destroy" : true,
-            "lengthMenu": [[5,10,20,50,-1], [20,30,50,100,"Todo"]],
-            "language": {
-                "zeroRecords": "Cargando...",
-                "paginate": {
-                    "first":      "Primera",
-                    "last":       "Última ",
-                    "next":       "Siguiente",
-                    "previous":   "Anterior"
+            $(tableActive).dataTable({
+                responsive: true,
+                "autoWidth":false,
+                "ajax":{
+                    "url": "detalles/"+tipo+"/"+mes+"/"+anio+"/ND/ND/ND",
+                    'dataSrc': '',
                 },
-                "lengthMenu": "MOSTRAR _MENU_",
-                "emptyTable": "NO HAY DATOS DISPONIBLES",
-                "search":     "BUSCAR"
-            },
-            'columns': [
-                { "title": "Ruta",          "data": "RUTA" },
-                { "title": "Nombre",        "data": "NOMBRE" },
-                { "title": "Monto",         "data": "MONTO" },
-                { "title": "Meta",          "data": "META" },
-                { "title": "Efectividad",   "data": "EFEC" }
-            ],
-            "columnDefs": [
-                {"className": "dt-right", "targets": [ 2, 3 ]},
-                {"className": "dt-center", "targets": [ 0, 4 ]},
-            ],
-            "footerCallback": function ( row, data, start, end, display ) {
-                var api = this.api(), data;
-                var intVal = function ( i ) {
-                    return typeof i === 'string' ?
+                "info":    false,
+                "destroy" : true,
+                "lengthMenu": [[5,10,20,50,-1], [20,30,50,100,"Todo"]],
+                "language": {
+                    "zeroRecords": "Cargando...",
+                    "paginate": {
+                        "first":      "Primera",
+                        "last":       "Última ",
+                        "next":       "Siguiente",
+                        "previous":   "Anterior"
+                    },
+                    "lengthMenu": "MOSTRAR _MENU_",
+                    "emptyTable": "NO HAY DATOS DISPONIBLES",
+                    "search":     "BUSCAR"
+                },
+                'columns': [
+                    { "title": "Ruta",          "data": "RUTA" },
+                    { "title": "Nombre",        "data": "NOMBRE" },
+                    { "title": "Monto",         "data": "MONTO" },
+                    { "title": "Meta",          "data": "META" },
+                    { "title": "Efectividad",   "data": "EFEC" }
+                ],
+                "columnDefs": [
+                    {"className": "dt-right", "targets": [ 2, 3 ]},
+                    {"className": "dt-center", "targets": [ 0, 4 ]}
+                ],
+                "footerCallback": function ( row, data, start, end, display ) {
+                    var api = this.api(), data;
+                    var intVal = function ( i ) {
+                        return typeof i === 'string' ?
                         i.replace(/[\$,]/g, '')*1 :
                         typeof i === 'number' ?
-                            i : 0;
-                };
-                total = api
+                        i : 0;
+                    };
+                    total = api
                     .column( 2 )
                     .data()
                     .reduce( function (a, b) {
-                        return intVal(a) + intVal(b);
+                    return intVal(a) + intVal(b);
                     }, 0 );
-                $('#MontoReal').text('C$'+ numeral(total).format('0,0.00'));
-            }
-        })
-        
-        $('#txtMontoReal').text('Total real recuperado');
-        $('#txtMontoMeta').text('Total meta recuperacion');
+                    tmp = parseFloat($('#MontoMeta').text().replace(/[\ U,C$]/g, ''));
+                    cump = (tmp>0)?(( parseFloat(total) / tmp ) * 100):0;
+                    $('#cumplMeta').text(numeral(cump).format('0.00')+'%');
+                    $('#MontoReal').text('C$'+ numeral(total).format('0,0.00'));
+                }
+            })
+
+            $('#txtMontoReal').text('Total real recuperado');
+            $('#txtMontoMeta').text('Total meta recuperacion');
         break;
         case 'clien':
             $("#cjRecuperacion").hide();
             $("#cjVentas").hide();
+            $('#cumplMetaContent').hide();
             $("#cjRutVentas").hide();
             $("#cjArticulo").hide();
             $("#montoMetaContent").hide()
@@ -1142,7 +1063,7 @@ function detalleVentasMes(tipo, title, cliente, articulo) {
                 ],
                 "columnDefs": [
                     {"className": "dt-right", "targets": [ 2, 3 ]},
-                    {"className": "dt-center", "targets": [ 0 ]},
+                    {"className": "dt-center", "targets": [ 0 ]}
                 ],
                 "footerCallback": function ( row, data, start, end, display ) {
                     var api = this.api(), data;
@@ -1161,6 +1082,7 @@ function detalleVentasMes(tipo, title, cliente, articulo) {
                     $('#MontoReal').text('C$'+ numeral(total).format('0,0.00'));
                     $('#txtMontoReal').text('Total facturado');
 
+
                     $('#MontoMeta').text('');
                     $('#txtMontoMeta').text('');
                 }
@@ -1168,6 +1090,7 @@ function detalleVentasMes(tipo, title, cliente, articulo) {
         break;
         case 'artic':
             $("#cjRecuperacion").hide();
+            $('#cumplMetaContent').hide();
             $("#cjVentas").hide();
             $("#cjRutVentas").hide();
             $("#cjCliente").hide();
@@ -1236,98 +1159,94 @@ function detalleVentasMes(tipo, title, cliente, articulo) {
     $("#dtVentas_filter, #dtRecuperacion_filter, #dtCliente_filter, #dtTotalXRutaVent_filter, #dtArticulo_filter").hide();
 }
 
-function getDetalleVenta(mes, anio, metau, realu, metae, reale, ruta){
-    
+function getDetalleVenta(mes, anio, metau, realu, metae, reale, ruta, nombre) {
     $('#dtVentas').dataTable({
-                responsive: true,
-                "autoWidth":false,
-                "ajax":{
-                    "url": "detallesVentasRuta/"+mes+"/"+anio+"/"+ruta,
-                    'dataSrc': '',
-                },
-                "destroy" : true,
-                "info":    false,
-                "lengthMenu": [[5,10,20,50,-1], [20,30,50,100,"Todo"]],
-                "language": {
-                    "zeroRecords": "Cargando...",
-                    "paginate": {
-                        "first":      "Primera",
-                        "last":       "Última ",
-                        "next":       "Siguiente",
-                        "previous":   "Anterior"
-                    },
-                    "lengthMenu": "MOSTRAR _MENU_",
-                    "emptyTable": "NO HAY DATOS DISPONIBLES",
-                    "search":     "BUSCAR"
-                },
-               'columns': [
-                   { "title": "Articulo",      "data": "ARTICULO" },
-                   { "title": "Descripción",      "data": "DESCRIPCION" },
-                    { "title": "Meta",      "data": "METAU" },
-                    { "title": "Real",      "data": "REALU" },
-                    { "title": "% Cumplimiento","data": "DIFU" },
-                    { "title": "Meta",      "data": "METAE" },
-                    { "title": "Real",      "data": "REALE" },
-                    { "title": "% Cumplimiento","data": "DIFE" },
-                ],
-                "columnDefs": [
-                    {"className": "dt-center", "targets": [ 0,2,3,4,5,6,7]},
-                    {"width": "10%", "targets": [ 2,3]},
-                    {"width": "40%", "targets": [ 1]},
-                ],
-                "footerCallback": function ( row, data, start, end, display ) {
-                    var api = this.api(), data;
-                    var intVal = function ( i ) {
-                        return typeof i === 'string' ?
-                            i.replace(/[\ U,C$]/g, '')*1 :
-                            typeof i === 'number' ?
-                                i : 0;
-                    };
-                    totalRealU = api
-                        .column( 3 )
-                        .data()
-                        .reduce( function (a, b) {
-                            return intVal(a) + intVal(b);
-                        }, 0 );
-                     totalMetaU = api
-                        .column( 2 )
-                        .data()
-                        .reduce( function (a, b) {
-                            return intVal(a) + intVal(b);
-                    }, 0 );
-                    totalDifU = (totalMetaU==0) ? "0.00%" : ((parseFloat(realu.replace(/[\ U,C$]/g, ''))/parseFloat(metau.replace(/[\ U,C$]/g, '')))*100);
+        responsive: true,
+        "autoWidth":false,
+        "ajax":{
+            "url": "detallesVentasRuta/"+mes+"/"+anio+"/"+ruta,
+            'dataSrc': '',
+        },
+        "destroy" : true,
+        "info":    false,
+        "lengthMenu": [[5,10,20,50,-1], [20,30,50,100,"Todo"]],
+        "language": {
+            "zeroRecords": "Cargando...",
+            "paginate": {
+                "first":      "Primera",
+                "last":       "Última ",
+                "next":       "Siguiente",
+                "previous":   "Anterior"
+            },
+            "lengthMenu": "MOSTRAR _MENU_",
+            "emptyTable": "NO HAY DATOS DISPONIBLES",
+            "search":     "BUSCAR"
+        },
+       'columns': [
+            { "title"   : "Articulo",       "data"  : "ARTICULO" },
+            { "title"   : "Descripción",    "data"  : "DESCRIPCION" },
+            { "title"   : "Meta Units.",     "data"  : "METAU" },
+            { "title"   : "Real Units.",     "data"  : "REALU" },
+            { "title"   : "% Cumpl. Units.",  "data"  : "DIFU" },
+            { "title"   : "Meta Vtas.",      "data"  : "METAE" },
+            { "title"   : "Real Vtas.",      "data"  : "REALE" },
+            { "title"   : "% Cumpl. Vtas.",   "data"  : "DIFE" }
+        ],
+        "columnDefs": [
+            {"className": "dt-center", "targets": [ 0 ]},
+            {"className": "dt-back-unit", "targets": [ 2, 3, 4 ]},
+            {"className": "dt-back-vtas", "targets": [ 5, 6, 7 ]},
+            {"width": "20%", "targets": [ 1]},
+        ],
+        "footerCallback": function ( row, data, start, end, display ) {
+            var api = this.api(), data;
+            var intVal = function ( i ) {
+                return typeof i === 'string' ?
+                    i.replace(/[\ U,C$]/g, '')*1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+            totalRealU = api
+                .column( 3 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+             totalMetaU = api
+                .column( 2 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0 );
+            totalDifU = (totalMetaU==0) ? "0.00%" : ((parseFloat(realu.replace(/[\ U,C$]/g, ''))/parseFloat(metau.replace(/[\ U,C$]/g, '')))*100);
 
 
-                     totalRealE = api
-                        .column( 6 )
-                        .data()
-                        .reduce( function (a, b) {
-                            return intVal(a) + intVal(b);
-                    }, 0 );
-                     totalMetaE = api
-                        .column( 5 )
-                        .data()
-                        .reduce( function (a, b) {
-                            return intVal(a) + intVal(b);
-                    }, 0 );
-                    totalDifE = (totalMetaE==0) ? "0.00%" : ((parseFloat(reale.replace(/[\ U,C$]/g, ''))/parseFloat(metae.replace(/[\ U,C$]/g, '')))*100);
+             totalRealE = api
+                .column( 6 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0 );
+             totalMetaE = api
+                .column( 5 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0 );
+            totalDifE = (totalMetaE==0) ? "0.00%" : ((parseFloat(reale.replace(/[\ U,C$]/g, ''))/parseFloat(metae.replace(/[\ U,C$]/g, '')))*100);
 
-
-
-                    $('#total_Real_Unidad').text(numeral(realu.replace(/[\ U,C$]/g, '')).format('0,0.00')+" U");
-                    $('#total_Meta_Unidad').text(numeral(metau.replace(/[\ U,C$]/g, '')).format('0,0.00')+" U");
-                    $('#total_Dif_Unidad').text(numeral(totalDifU).format('0,0.00')+'%');
-                    $('#total_Real_Efectivo').text('C$'+numeral(reale.replace(/[\ U,C$]/g, '')).format('0,0.00'));
-                    $('#total_Meta_Efectivo').text('C$'+numeral(metae.replace(/[\ U,C$]/g, '')).format('0,0.00'));
-                    $('#total_Dif_Efectivo').text(numeral(totalDifE).format('0,0.00')+'%');
-                }
-            });
-
-
+            $('#vendedorNombre').text(nombre);
+            $('#total_Real_Unidad').text(numeral(realu.replace(/[\ U,C$]/g, '')).format('0,0.00')+" U");
+            $('#total_Meta_Unidad').text(numeral(metau.replace(/[\ U,C$]/g, '')).format('0,0.00')+" U");
+            $('#total_Dif_Unidad').text(numeral(totalDifU).format('0,0.00')+'%');
+            $('#total_Real_Efectivo').text('C$'+numeral(reale.replace(/[\ U,C$]/g, '')).format('0,0.00'));
+            $('#total_Meta_Efectivo').text('C$'+numeral(metae.replace(/[\ U,C$]/g, '')).format('0,0.00'));
+            $('#total_Dif_Efectivo').text(numeral(totalDifE).format('0,0.00')+'%');
+        }
+    });
     $("#dtVentas_length").hide();
     $("#dtVentas_filter").hide();
-     $('#mdDetailsVentas').modal('show');
-
+    $('#mdDetailsVentas').modal('show');
 }
 
 function detalleComparacionVentas(obj, tp) {

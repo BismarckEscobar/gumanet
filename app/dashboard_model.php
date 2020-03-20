@@ -88,19 +88,19 @@ class dashboard_model extends Model {
         $json = array();
 
         foreach ($query as $fila) {
-            
-            $json[$i]["VENDE"] = dashboard_model::buscarVendedorXRuta($fila["Ruta"], $company_user);
+            $VENDEDOR = dashboard_model::buscarVendedorXRuta($fila["Ruta"], $company_user);
+            $json[$i]["VENDE"] = $VENDEDOR;
             $meta =  Gn_couta_x_producto::where(['IdPeriodo'=> $idPeriodo, 'CodVendedor' => $fila["Ruta"]])->sum('Meta');
 
-            $json[$i]["METAU"] = number_format($meta,2)." U";
-            $json[$i]["REALU"] = number_format($fila["Cantidad"],2)." U";
+            $json[$i]["METAU"] = number_format($meta,2);
+            $json[$i]["REALU"] = number_format($fila["Cantidad"],2);
             
             $json[$i]["DIFU"] = ($meta==0) ? "100.00%" : number_format(((floatval($fila["Cantidad"])/floatval($meta))*100),2)."%";
             $monto =  Gn_couta_x_producto::where(['IdPeriodo'=> $idPeriodo, 'CodVendedor' => $fila["Ruta"]])->sum('val');
-            $json[$i]["METAE"] = "C$".number_format($monto,2);
-            $json[$i]["REALE"] = "C$".number_format($fila["Monto"],2);
+            $json[$i]["METAE"] = "C$ ".number_format($monto,2);
+            $json[$i]["REALE"] = "C$ ".number_format($fila["Monto"],2);
             $json[$i]["DIFE"] = ($meta==0) ? "100.00%" : number_format(((floatval($fila["Monto"])/floatval($monto))*100),2)."%";
-            $json[$i]["RUTA"] = '<a href="#!" id="rutaDetVenta" onclick="getDetalleVenta('.$mes.','.$anio.','."'".$json[$i]["METAU"]."'".','."'".$json[$i]["REALU"]."'".','."'".$json[$i]["METAE"]."'".','."'".$json[$i]["REALE"]."'".','."'".$fila["Ruta"]."'".')" >'.$fila["Ruta"].'</a>';
+            $json[$i]["RUTA"] = '<a href="#!" id="rutaDetVenta" onclick="getDetalleVenta('.$mes.','.$anio.','."'".$json[$i]["METAU"]."'".','."'".$json[$i]["REALU"]."'".','."'".$json[$i]["METAE"]."'".','."'".$json[$i]["REALE"]."'".','."'".$fila["Ruta"]."'".', '."'".$VENDEDOR."'".')" >'.$fila["Ruta"].'</a>';
             $i++;
         }
         return $json;
@@ -143,7 +143,7 @@ class dashboard_model extends Model {
            return $vendedor;
     }
 // Tabla de detalles
-    public static function getDetalleVentasXRuta($mes, $anio, $ruta){
+    public static function getDetalleVentasXRuta($mes, $anio, $ruta) {
 
         $sql_server = new \sql_server();
         $sql_exec = '';
@@ -170,55 +170,40 @@ class dashboard_model extends Model {
 
         $query = $sql_server->fetchArray($sql_exec,SQLSRV_FETCH_ASSOC);
 
-        $i = 0;
-        $j=0;
+        $i      = 0;
+        $j      = 0;
+        $label = '';
         $codProdVendido = array();
         $json = array();
-        ////Agrega los productos que se han vendido de meta y los que no se encuentran en meta en el arreglo Json para mostrar en tabla de metas  
+
          foreach ($query as $fila) {
-            $json[$i]["ARTICULO"]       = $fila["ARTICULO"];
-            $json[$i]["DESCRIPCION"]    = $fila["DESCRIPCION"];
-            $meta =  Gn_couta_x_producto::where(['CodVendedor' => $ruta, 'IdPeriodo'=> $idPeriodo, 'CodProducto' => $fila["ARTICULO"]])->sum('Meta');
-            
-             $MetaCodArticVendido[$j] = Gn_couta_x_producto::where(['CodVendedor' => $ruta, 'IdPeriodo'=> $idPeriodo, 'CodProducto' => $fila["ARTICULO"]])->pluck('CodProducto');
-             if (count($MetaCodArticVendido[$j]) > 0) {// si la cantidad de caracteres mayor a cero, registra valor
-                $MetaCodArticVendido[$j] =  $MetaCodArticVendido[$j];
-                $j++;
+            $meta_u = $meta_v = 0;
+
+            if (Gn_couta_x_producto::where(['CodVendedor' => $ruta, 'IdPeriodo'=> $idPeriodo, 'CodProducto' => $fila["ARTICULO"]])->first()) {
+                $meta_u =  Gn_couta_x_producto::where(['CodVendedor' => $ruta, 'IdPeriodo'=> $idPeriodo, 'CodProducto' => $fila["ARTICULO"]])->sum('Meta');
+
+                $meta_v = Gn_couta_x_producto::where(['CodVendedor' => $ruta, 'IdPeriodo'=> $idPeriodo, 'CodProducto' => $fila["ARTICULO"]])->sum('val');
+                $label = '';
             }
-            
-           
-            $json[$i]["METAU"] = number_format($meta,2);
-            $json[$i]["REALU"] = number_format($fila["CANTIDAD"], 2);
-            $json[$i]["DIFU"] = ($meta==0 || $meta=="") ? "0.00%" : number_format(((floatval($fila["CANTIDAD"])/floatval($meta))*100),2)."%";
+            else {
+                $meta = number_format(0, 2);
+                $label = "<p class='text-danger'> (No definido en meta)</p>";
+            }
 
-            $monto =  Gn_couta_x_producto::where(['CodVendedor' => $ruta, 'IdPeriodo'=> $idPeriodo, 'CodProducto' => $fila["ARTICULO"]])->sum('val');
-            $json[$i]["METAE"] = number_format($monto,2);
-            $json[$i]["REALE"] = number_format($fila["MONTO"], 2);
-            $json[$i]["DIFE"] = ($meta==0 || $meta=="") ? "0.00%" : number_format(((floatval($fila["MONTO"])/floatval($monto))*100),2)."%";
-            $i++;
-        } 
-        
-          ////Agrega los productos que no se han vendido en el arreglo Json para mostrar en tabla de metas  
-        $query_prod_no_vendidos = Gn_couta_x_producto::where(['CodVendedor' => $ruta, 'IdPeriodo'=> $idPeriodo])->whereNotIn('CodProducto',$MetaCodArticVendido)->get();
-        
-        foreach ($query_prod_no_vendidos as $fila) {
-            $json[$i]["ARTICULO"]       = $fila["CodProducto"];
-            $json[$i]["DESCRIPCION"]    = $fila["NombreProducto"].'<span style = "color: red"> &nbsp(No vendido)</span>';
+            $json[$i]["ARTICULO"]       = $fila["ARTICULO"];
+            $json[$i]["DESCRIPCION"]    = $fila["DESCRIPCION"].$label;
+            $json[$i]["METAU"]          = number_format($meta_u, 2);
+            $json[$i]["REALU"]          = number_format($fila["CANTIDAD"], 2);
+            $json[$i]["DIFU"]           = ($meta_u==0) ? "0.00%" : number_format(((floatval($fila["CANTIDAD"])/floatval($meta_u))*100),2)."%";
             
-            $json[$i]["METAU"] = number_format($fila["Meta"],2);
-            $json[$i]["REALU"] = 0.00;
-            $json[$i]["DIFU"] = ($fila["Meta"]==0 || $fila["Meta"]=="") ? "0.00%" : number_format(((0.00/floatval($fila["Meta"]))*100),2)."%";
-
-            $json[$i]["METAE"] = number_format($fila["val"],2);
-            $json[$i]["REALE"] = 0.00;
-            $json[$i]["DIFE"] = ($fila["val"]==0 || $fila["val"]=="") ? "0.00%" : number_format(((0.00/floatval($fila["val"]))*100),2)."%";
+            $json[$i]["METAE"]          = number_format($meta_v, 2);
+            $json[$i]["REALE"]          = number_format($fila["MONTO"], 2);
+            $json[$i]["DIFE"]           = ($meta_v==0) ? "0.00%" : number_format(((floatval($fila["MONTO"])/floatval($meta_v))*100),2)."%";
             $i++;
-        } 
-        
+        }
 
         $sql_server->close();
         return $json;
-
     }
     
     
@@ -257,15 +242,8 @@ class dashboard_model extends Model {
 
         switch ($tipo) {
         	case 'vent':
-		        foreach ($query as $fila) {
-		        	$json[$i]["ARTICULO"] 		= $fila["articulo"];
-		        	$json[$i]["DESCRIPCION"] 	= $fila["descripcion"];
-		            $json[$i]["U_MEDIDA"] 		= $fila["UM"];
-		            $json[$i]["CANTIDAD"] 		= number_format($fila["Cantidad"], 2);
-                    $json[$i]["PRECIOUND"]      = number_format($fila["precioUnitario"], 2);
-		            $json[$i]["MONTO"] 			= number_format($fila["total"], 2);
-		            $i++;
-		        }
+                $real_ = array_sum(array_column($query, 'total'));
+                $json[$i]['MONTO'] = $real_;
         		break;
         	case 'recu':
                     $mes = (strlen($mes)==1)?'0'.$mes:$mes;
@@ -721,12 +699,10 @@ class dashboard_model extends Model {
         }else{
         	switch ($company_user) {
             	case '1':
-                	$sql_exec = "EXEC Umk_VentaLinea_Articulo ".$mes.", ".$anio.", '".$cate."', '', '','' ";
-                	$sql_meta = "EXEC UMK_meta_articulos ".$mes.", ".$anio.", '".$cate."', '', '' ";
+                	$sql_exec = "EXEC Umk_VentaLinea_Articulo ".$mes.", ".$anio.", '', '', '','' ";
                 break;
             	case '2':
-                	$sql_exec = "EXEC Gp_VentaLinea_Articulo ".$mes.", ".$anio.", '".$cate."', '', '','' ";
-                 	$sql_meta = "EXEC Gp_meta_articulos ".$mes.", ".$anio.", '".$cate."', '', '' ";
+                	$sql_exec = "EXEC Gp_VentaLinea_Articulo ".$mes.", ".$anio.", '', '', '','' ";
                 break;
             	case '3':
                 	$sql_exec = "";
@@ -737,23 +713,20 @@ class dashboard_model extends Model {
         	}
 
         	$query = $sql_server->fetchArray($sql_exec, SQLSRV_FETCH_ASSOC);
-        	$query2 = $sql_server->fetchArray($sql_meta, SQLSRV_FETCH_ASSOC);
 
         	$json = array();
         	$real_ = $meta_ = 0;
 
-        	if( count($query)>0 ){
-				$real_ = array_sum(array_column($query, 'Monto'));
+        	if( count($query)>0 ) {
+                $real_ = array_sum(array_column(array_filter($query, function($item) use($cate) { return $item['ClaseTerapeutica'] == $cate; } ), 'Monto'));
+				
+                $meta_ = array_sum(array_column(array_filter($query, function($item) use($cate) { return $item['ClaseTerapeutica'] != $cate; } ), 'Monto'));
         	}
 
-        	if( count($query2)>0 ){
-				$meta_ = floatval($query2[0]['meta']);
-        	}
-
-		    $json[0]['name'] = 'Real';
+		    $json[0]['name'] = 'CATEGORIA: '.$cate;
 		    $json[0]['data'] = floatval($real_);
 
-		    $json[1]['name'] = 'Meta';
+		    $json[1]['name'] = 'Venta total';
 		    $json[1]['data'] = $meta_;
 
         	$sql_server->close();        	

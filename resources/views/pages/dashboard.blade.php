@@ -62,7 +62,7 @@
     </div>
     <div class="content-graf mb-5">
         <div class="row" id="ct04">
-            <div class="graf col-sm-12 mt-3"><div class="container-vms" id="grafVtsMes"></div></div>
+            <div class="graf col-sm-12 mt-3"><div class="container-vms" id="grafVtsMes" style="width: 100%; margin: 0 auto"></div></div>
         </div>
         <div class="row" id="ct05">            
             <div class="graf col-sm-12 mt-3 text-right">
@@ -89,7 +89,7 @@
     <!-- PAGINA TEMPORAL DE DETALLES -->
     <div id="page-details" class="p-4 border-left" style="background-color: #f1f5f8">
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-lg-12">
                 <a href="#!" class="active-page-details btn btn-outline-primary btn-sm">Regresar</a>
             </div>
         </div>
@@ -98,24 +98,24 @@
                 <div class="card mt-3">
                   <div class="card-body">
                     <div class="row">
-                        <div class="col-sm-4 mt-3">
+                        <div class="col-sm-4 border-right">
                             <h5 class="card-title" id="title-page-tem"></h5>
                             <p class="text-muted" id="fechaFiltrada"></p>
                         </div>
-                        <div class="col-sm-4">
-                            <div class="card text-center">
-                              <div class="card-body">
-                                <h5 class="card-title" id="MontoReal"></h5>
-                                <p class="card-text" id="txtMontoReal"></p>
-                              </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4" id="montoMetaContent">
-                            <div class="card text-center">
-                              <div class="card-body">
-                                <h5 class="card-title" id="MontoMeta"></h5>
-                                <p class="card-text" id="txtMontoMeta"></p>
-                              </div>
+                        <div class="col-sm-8">
+                            <div class="row ml-3">
+                                <div class="col-sm-4" id="montoMetaContent">
+                                    <p class="text-muted m-0" id="txtMontoMeta"></p>
+                                    <p class="font-weight-bolder" style="font-size: 1.3rem!important" id="MontoMeta"></p>
+                                </div>
+                                <div class="col-sm-4" id="montoRealContent">
+                                    <p class="text-muted m-0" id="txtMontoReal"></p>
+                                    <p class="font-weight-bolder" style="font-size: 1.3rem!important" id="MontoReal"></p>
+                                </div>
+                                <div class="col-sm-4" id="cumplMetaContent">
+                                    <p class="text-muted m-0">% Cumpl.</p>
+                                    <p class="font-weight-bolder text-info" style="font-size: 1.3rem!important" id="cumplMeta"></p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -183,31 +183,31 @@
     <div class="modal-dialog modal-xl" role="document" >
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="tituloDelModalDetVent"></h5>
+                <h5 class="modal-title font-weight-bolder text-info" id="vendedorNombre"></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body" id="bodyModal">
                 <div class="row">
-                <div class="col-sm-2">                    
-                    <p class="text-muted m-0" >Real en unidades</p>
-                    <p class="font-weight-bolder" style="font-size: 1.3rem!important" id="total_Real_Unidad"></p>
-                </div>
                 <div class="col-sm-2">
-                    <p class="text-muted m-0">Meta en unidades</p>
+                    <p class="text-muted m-0">Meta Units.</p>
                     <p class="font-weight-bolder" style="font-size: 1.3rem!important" id="total_Meta_Unidad"></p>
+                </div>
+                <div class="col-sm-2">                    
+                    <p class="text-muted m-0" >Real Units.</p>
+                    <p class="font-weight-bolder" style="font-size: 1.3rem!important" id="total_Real_Unidad"></p>
                 </div>
                 <div class="col-sm-2 border-right">
                     <p class="text-muted m-0">Diferencia en %</p>
                     <p class="font-weight-bolder" style="font-size: 1.3rem!important" id="total_Dif_Unidad"></p>
                 </div>
                 <div class="col-sm-2">
-                    <p class="text-muted m-0" >Real en C$</p>
+                    <p class="text-muted m-0" >Real Vtas.</p>
                     <p class="font-weight-bolder" style="font-size: 1.3rem!important" id="total_Real_Efectivo"></p>
                 </div>
                 <div class="col-sm-2">
-                    <p class="text-muted m-0">Meta en C$</p>
+                    <p class="text-muted m-0">Meta Vtas.</p>
                     <p class="font-weight-bolder" style="font-size: 1.3rem!important" id="total_Meta_Efectivo"></p>
                 </div>
                 <div class="col-sm-2">
