@@ -1,5 +1,3 @@
-
-
 .expan_more {
   background-color: #e2e2e2;
   border-radius: 50%;
@@ -20,66 +18,6 @@
 .custom-file-input~.custom-file-label::after {
     content: attr(data-label);
 }
-
-/*Sidebar Menu left*/
-.vertical-nav {
-  min-width: 14.5rem;
-  width: 14.5rem;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
-  transition: all 0.4s;
-}
-
-#sidebarCollapse {
-  cursor: pointer;
-}
-
-#sidebar-menu-left.active {
-  margin-left: -17rem;
-}
-
-#content.active {
-  width: 100%;
-  margin: 0;
-}
-
-.page-content {
-  width: calc(100% -17rem);
-  margin-left: 14.5rem;
-  transition: all 0.4s;
-}
-
-@media screen and (max-width:640px) {
-  #page-details {
-    width: 100%;
-    right: -100%;
-  }
-
-  .breadcrumb-item {
-    display: none
-  }
-
-  #sidebar-menu-left {
-    margin-left: -17rem;
-  }
-  #sidebar-menu-left.active {
-    margin-left: 0;
-  }
-  #content {
-    width: 100%;
-    margin: 0;
-  }
-  #content.active {
-    margin-left: 17rem;
-    width: calc(100% - 17rem);
-  }
-
-}
-
-/*Fin de Sidebar Menu left*/
 
 .input-fecha {
   height: 30px;
@@ -131,10 +69,6 @@
   background-color: red!important
 }
 
-.nav-link-grey {
-  /*color: white!important*/
-}
-
 /*Sidebar lateral izquierda*/
 #sidebar {
   position: fixed;
@@ -166,13 +100,46 @@
 }
 /*Fin de Sidebar*/
 
+/*Sidebar Menu left*/
+.vertical-nav {
+  min-width: 14.5rem;
+  width: 14.5rem;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s;
+}
+
+#sidebarCollapse {
+  cursor: pointer;
+}
+
+#sidebar-menu-left.active {
+  margin-left: -17rem;
+}
+
+#content.active {
+  width: 100%;
+  margin: 0;
+}
+
+.page-content {
+  width: calc(100% -17rem);
+  margin-left: 14.5rem;
+  transition: all 0.4s;
+}
+/*Fin de Sidebar*/
+
 /*Ventana detalles*/
 #page-details {
   position: fixed;
   bottom: 0;
-  width: calc(100% - 14.5rem);
-  right: -100%;
+  width: 84%;
   height: 100%;
+  right: -84%;
   transition: all 300ms linear;
   background-color: white;
 }
@@ -222,17 +189,59 @@
   color: #e2e2e2!important;
 }
 /*DATATBLES FIN*/
+@media screen and (max-width:900px) {
+  #page-details {
+    width: 100%;
+    right: -100%;
+  }
+
+  .breadcrumb-item {
+    display: none
+  }
 
 
+}
+
+@media only screen and (min-width:420px) and (max-width:900px) {
+.d-none {
+    display: none!important;
+}
+}
+
+.dt-back-unit {
+  background: #eaebff;
+  text-align: right;
+}
+
+.dt-back-vtas {
+  background: #d3d6ff;
+  text-align: right;
+}
 
 #_version {
-  position:fixed;
-  text-align: left;
-  left: 0px;
-  bottom:0px;
-  height:25px;
-  min-width: 14.5rem;
+   position:fixed;
+   text-align: left;
+   left: 0px;
+   bottom:0px;
+   height:25px;
+     min-width: 14.5rem;
   width: 14.5rem;
-  font-size: 11px;   
-  padding: 5px 10px 0px 10px;
- }
+   font-size: 11px;
+   
+   padding: 5px 10px 0px 10px;   
+}
+
+
+.highcharts-container, .highcharts-container svg {
+    width: 100% !important;
+    height: 100% !important;
+}
+.wrapper {
+  display: table;
+  width: 100%;
+}
+
+.element {
+  display: table-cell;
+  width: 50%;
+}

@@ -39,13 +39,15 @@ $("body").click( function(e) {
 // Sidebar toggle behavior
 $('#sidebarCollapse').on('click', function() {
     $.removeCookie('navbar');
-
     if ( $("#sidebar-menu-left").hasClass('active') ) {        
         $.cookie( 'navbar' , true)
+        
     }else {
         $.cookie( 'navbar' , false)
+        
     }
-    $('#sidebar-menu-left, #content').toggleClass('active');
+    $('#sidebar-menu-left, #content').toggleClass('active');    
+
     
 });
 
