@@ -509,7 +509,7 @@
         $('#annoHistorialMeta').text($('#selectAnnoMeta option:selected').text());
 	}
 
-	btnSearchMetas
+	
 	$('#btnSearchMetas').on('keyup', function() {
 	    var table = $('#tblExcelImportMeta').DataTable();
 	    table.search(this.value).draw();

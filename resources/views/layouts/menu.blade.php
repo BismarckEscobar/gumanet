@@ -46,6 +46,12 @@
                   <span data-feather="users"></span>
                   Usuarios
               </a>
+           </li>
+           <li>
+            <a class="nav-link text-secondary" href="Recuperacion">
+              <span data-feather="dollar-sign"></span>
+              Recuperación
+            </a>
           </li>
           @elseif(Auth::User()->activeRole()==2)
           <li class="nav-item">                
