@@ -47,8 +47,7 @@ class LoginController extends Controller
                 break;
             case '3':
                     return '/Metas';
-                break; 
-            default:
+                break;
             case '4':
                     return '/Recuparacion';
                 break; 

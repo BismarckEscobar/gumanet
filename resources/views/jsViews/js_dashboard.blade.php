@@ -1,5 +1,6 @@
 <script>
 $(document).ready(function() {
+    fullScreen();
     var date    = new Date();
     var anio    = parseInt(date.getFullYear())
     var mes     = parseInt(date.getMonth()+1);
@@ -506,14 +507,8 @@ $(document).ready(function() {
                 }
             },
         }]        
-    }
+    }   
 
-    var st = $('#sidebar-menu-left').hasClass('active');
-    if (st) {
-        $('#page-details').css('width','100%')
-    }
-
-    fullScreen();
 });
 
 var colors = ['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'];
@@ -538,7 +533,7 @@ function actualizandoGraficasDashboard(mes, anio) {
     .empty()
     .append(`<div style="height:400px; background:#ffff; padding:20px">
                 <div class="d-flex align-items-center">
-                  <strong>Cargando...</strong>
+                  <strong class="text-info">Cargando...</strong>
                   <div class="spinner-border ml-auto text-primary" role="status" aria-hidden="true"></div>
                 </div>
             </div>`);
@@ -848,7 +843,7 @@ function grafVentasMensuales() {
     .empty()
     .append(`<div style="height:400px; background:#ffff; padding:20px">
                 <div class="d-flex align-items-center">
-                  <strong>Cargando comportamiento de ventas...</strong>
+                  <strong class="text-info">Cargando comportamiento de ventas...</strong>
                   <div class="spinner-border ml-auto text-primary" role="status" aria-hidden="true"></div>
                 </div>
             </div>`);
@@ -1157,6 +1152,12 @@ function detalleVentasMes(tipo, title, cliente, articulo) {
     }
     $("#dtVentas_length, #dtRecuperacion_length, #dtCliente_length, #dtTotalXRutaVent_length, #dtArticulo_length").hide();
     $("#dtVentas_filter, #dtRecuperacion_filter, #dtCliente_filter, #dtTotalXRutaVent_filter, #dtArticulo_filter").hide();
+
+    var st = $('#sidebar-menu-left').hasClass('active');
+
+    if (st) {        
+        $('#page-details').css('width','100%')
+    }
 }
 
 function getDetalleVenta(mes, anio, metau, realu, metae, reale, ruta, nombre) {
@@ -1236,12 +1237,18 @@ function getDetalleVenta(mes, anio, metau, realu, metae, reale, ruta, nombre) {
             totalDifE = (totalMetaE==0) ? "0.00%" : ((parseFloat(reale.replace(/[\ U,C$]/g, ''))/parseFloat(metae.replace(/[\ U,C$]/g, '')))*100);
 
             $('#vendedorNombre').text(nombre);
-            $('#total_Real_Unidad').text(numeral(realu.replace(/[\ U,C$]/g, '')).format('0,0.00')+" U");
-            $('#total_Meta_Unidad').text(numeral(metau.replace(/[\ U,C$]/g, '')).format('0,0.00')+" U");
-            $('#total_Dif_Unidad').text(numeral(totalDifU).format('0,0.00')+'%');
+            $('#total_Real_Unidad').text(numeral(realu.replace(/[\ U,C$]/g, '')).format('0,0.00'));
+            $('#total_Meta_Unidad').text(numeral(metau.replace(/[\ U,C$]/g, '')).format('0,0.00'));
+            $('#total_Dif_Unidad')
+            .attr('class','font-weight-bolder text-info')
+            .text(numeral(totalDifU).format('0,0.00')+'%');
+
             $('#total_Real_Efectivo').text('C$'+numeral(reale.replace(/[\ U,C$]/g, '')).format('0,0.00'));
             $('#total_Meta_Efectivo').text('C$'+numeral(metae.replace(/[\ U,C$]/g, '')).format('0,0.00'));
-            $('#total_Dif_Efectivo').text(numeral(totalDifE).format('0,0.00')+'%');
+            
+            $('#total_Dif_Efectivo')
+            .attr('class','font-weight-bolder text-info')
+            .text(numeral(totalDifE).format('0,0.00')+'%');
         }
     });
     $("#dtVentas_length").hide();
