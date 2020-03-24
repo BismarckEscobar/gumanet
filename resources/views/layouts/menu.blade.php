@@ -3,13 +3,15 @@
   <div class="container-fluid">
     <div class="row mt-3">
       <div class="col-sm-12 text-center">
-        <img class="rounded mb-1" src="{{ url('images/p20.png') }}" width="85%">
+        <a class="nav-link text-secondary" href="Dashboard">
+          <img class="rounded mb-1" src="{{ url('images/p20.png') }}" width="100%">
+        </a>
       </div>
     </div>
     <div class="row">
       <div class="col-sm-12">
-        <p class="font-weight-normal mt-0 mb-0 text-left ml-3"><strong>Usuario: </strong>{{ Auth::User()->email }}</p>
-        <p class="font-weight-normal text-left ml-3"><strong>Unidad: </strong>{{ Session::get('companyName')}}</p>
+        <p class="font-weight-normal mt-0 mb-0 text-left ml-3"><strong class="text-muted">Usuario: </strong>{{ Auth::User()->email }}</p>
+        <p class="font-weight-normal text-left ml-3"><strong class="text-muted">Unidad: </strong>{{ Session::get('companyName')}}</p>
       </div>
     </div>
     <hr style="padding:0; margin:0;"></hr>
@@ -95,8 +97,7 @@
       </div>
     </div>
   </div>
-  <div id="_version">
-    
+  <div id="_version">    
   @include('layouts.app_version', array( 'appVersion'=>Auth::User()->gitVersion() ))
   </div>
 </div>

@@ -108,7 +108,6 @@
   position: fixed;
   top: 0;
   left: 0;
-
   box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
   transition: all 0.4s;
 }
@@ -139,7 +138,7 @@
   bottom: 0;
   width: 84%;
   height: 100%;
-  right: -84%;
+  right: -100%;
   transition: all 300ms linear;
   background-color: white;
 }
@@ -198,6 +197,22 @@
   .breadcrumb-item {
     display: none
   }
+
+  #page-details {
+    position: fixed;
+    bottom: 0;
+    width: 84%;
+    height: 100%;
+    right: -100%;
+    transition: all 300ms linear;
+    background-color: white;
+  }
+
+.page-content {
+  width: calc(100%);
+  margin-left: 14.5rem;
+  transition: all 0.4s;
+}
 
 
 }

@@ -52,16 +52,25 @@ $('#sidebarCollapse').on('click', function() {
 });
 
 function fullScreen() {
+    //SI ESTA EN UN TELEFONO
+    if (($('header').width() <= 420 )) {
+        $('#sidebar-menu-left, #content')
+        .addClass('active')
+        .removeClass('notactive');
+    }
+
     if ( $.cookie('navbar')=='true' ) {
         $('#sidebar-menu-left, #content')
         .addClass('notactive')
         .removeClass('active');
-    }else if( $.cookie('navbar')=='false' ) {
+    }else if( $.cookie('navbar')=='false'  ) {
         $('#sidebar-menu-left, #content')
         .addClass('active')
         .removeClass('notactive');
     }
 }
+
+
 
 feather.replace();
 
