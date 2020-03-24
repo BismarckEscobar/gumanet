@@ -64,25 +64,27 @@
         </div>
         <div class="row justify-content-left border-top pt-3">    
 
-          <div class="col-sm-12 mb-2">
+          {{--<div class="col-sm-12 mb-2">
              <div class="input-group">
                   <div class="input-group-prepend">
                       <span class="input-group-text" id="basic-addon1"><i data-feather="search"></i></span>
                   </div>
                   <input type="text" id="InputDtSearchIntroRecup" class="form-control" placeholder="Buscar" aria-label="Username" aria-describedby="basic-addon1">
               </div>
-          </div>
+          </div>--}}
+
+                              
           {{-- <div class="col-sm-2 mb-2">
-                                                       <div class="input-group mb-3">
-                                                          <select class="custom-select" id="InputDtShowColumnsIntroRecupa" name="InputDtShowColumnsIntroRecup">
-                                                              <option value="10" selected>10</option>
-                                                              <option value="20">20</option>
-                                                              <option value="50">50</option>
-                                                              <option value="100">100</option>
-                                                              <option value="-1">Todo</option>
-                                                          </select>
-                                                      </div>
-                                                  </div> --}}
+             <div class="input-group mb-3">
+                <select class="custom-select" id="InputDtShowColumnsIntroRecupa" name="InputDtShowColumnsIntroRecup">
+                    <option value="10" selected>10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                    <option value="-1">Todo</option>
+                </select>
+            </div>
+        </div> --}}
 
 
         </div>
@@ -97,7 +99,7 @@
         <div class="row text-right">
           <div class="col-sm-12 ">
               <div class="form-group">
-                  <a href="#!" style="width: 23%" id="btnSaveIntroRecup" class="btn btn-primary float-right">Guardar</a>
+                  <a href="#!" style="width: 23%" id="btnSaveIntroRecup" class="btn btn-primary float-right"></a>
               </div>
           </div> 
         </div>

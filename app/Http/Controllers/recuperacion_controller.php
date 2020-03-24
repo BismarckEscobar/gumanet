@@ -6,6 +6,7 @@ use App;
 use App\Models;
 use App\User;
 use App\Gn_couta_x_producto;
+use App\Umk_recuperacion;
 use App\Tmp_meta_exl;
 use App\meta_recuperacion_exl;
 use DataTables;
@@ -43,19 +44,40 @@ class recuperacion_controller extends Controller
         $request->session()->put('companyName', $company->nombre);// agregar nombre de compañia a session[], para obtenert el nombre al cargar otras pagina 
     }
 
+    public function getMetaXRuta($fecha, $ruta){
+        $request = Request();
+
+       
+      
+    }
+
     public function getMoneyRecuRowsByRoutes($mes, $anio){
         $request = Request();
         $fecha =  date('Y-m-d', strtotime($anio.'-'.$mes.'-01'));
         $recuperacion = array();
         $json = array();
         $i = 0;
-        $recuperacion = meta_recuperacion_exl::where(['fechaMeta'=>$fecha, 'idCompanny'=>$request->session()->get('company_id')])->get();
+        $meta=0;
+        $recuperacion = Umk_recuperacion::where(['fecha_recup'=>$fecha, 'idCompanny'=>$request->session()->get('company_id')])->get();
 
         foreach ($recuperacion as $key) {
-          
+            $meta = meta_recuperacion_exl::where(['fechaMeta'=>$fecha, 'idCompanny'=> $request->session()->get('company_id'), 'ruta' => $key['ruta']])->pluck('meta');
+
+
+
+            $meta =  str_replace(['[',']'],'',$meta);
+
+
+                if ($meta == '') {
+                    $meta = '0.00';
+                }else{
+                    $meta = $meta;
+
+                } 
+
             $json[$i]['RECU_RUTA'] =  $key['ruta'];
             $json[$i]['RECU_VENDE'] =  $key['vendedor'];
-            $json[$i]['RECU_META'] =  '<span id ="recu_meta_'.$key['ruta'].'">C$'.number_format($key['meta']).'</span>';
+            $json[$i]['RECU_META'] =  '<span id ="recu_meta_'.$key['ruta'].'">C$'.$meta.'</span>';
 
             if ($key['recuperado_credito']>0) {
               $json[$i]['RECU_CREDITO'] =  '<input type="text" onkeyup="getAttr(this)" class="form-control" value="'.$key['recuperado_credito'].'" id ="recu_credito_'.$key['ruta'].'">';
@@ -69,7 +91,7 @@ class recuperacion_controller extends Controller
             }
 
             $json[$i]['RECU_TOTAL'] =  ($key['recuperado_credito'] == 0 && $key['recuperado_contado'] == 0) ? '<span id="recu_total_'.$key['ruta'].'">C$0.00</span>' : '<span id="recu_total_'.$key['ruta'].'">C$'.number_format($key['recuperado_credito'] + $key['recuperado_contado']).'</span>';
-            $json[$i]['RECU_CUMPLIMIENTO'] =  ($key['meta']==0) ? '<span id="recu_cumplimiento_'.$key['ruta'].'">100.00%</span>' : '<span id="recu_cumplimiento_'.$key['ruta'].'">'.number_format(((floatval($key['recuperado_credito']) + floatval($key['recuperado_contado']))/floatval($key['meta'])*100),2).'%</span>';
+            $json[$i]['RECU_CUMPLIMIENTO'] =  ($meta=='0.00') ? '<span id="recu_cumplimiento_'.$key['ruta'].'">0.00%</span>' : '<span id="recu_cumplimiento_'.$key['ruta'].'">'.number_format(((floatval($key['recuperado_credito']) + floatval($key['recuperado_contado']))/floatval($meta)*100),2).'%</span>';
             //$json[$i]['RECU_OPCIONES'] =  '<a href="#" class="btn btn-primary btn-sm active" role="button" aria-pressed="true"><span class="fa fa-pencil">Eliminar</span></a>';
 
             $i++;
@@ -78,7 +100,8 @@ class recuperacion_controller extends Controller
         return  $json;
     }
 
-    public function agregatMetaRecup(Request $request){
+    public function actualizarMetaRecup(Request $request){
+
          $data = array();
         $data = $request->all();
         
@@ -87,7 +110,7 @@ class recuperacion_controller extends Controller
         
             $company_id = Company::where('id',$request->session()->get('company_id'))->first()->id;
             foreach($data['data'] as $key) {
-                meta_recuperacion_exl::where(['idCompanny' => $company_id,'ruta' => $key['ruta']])->update(array('recuperado_credito' => $key['Recu_credito'],'recuperado_contado' => $key['Recu_contado']));
+                Umk_recuperacion::where(['idCompanny' => $company_id, 'ruta'=> $key['ruta'], 'fecha_recup' => $key['fecha']])->update(array('recuperado_credito' => $key['Recu_credito'],'recuperado_contado' => $key['Recu_contado']));
             }
             return 1;
             
@@ -95,6 +118,137 @@ class recuperacion_controller extends Controller
 
             return 0;
         }
+
+    }
+
+
+    public function agregarMetaRecup(Request $request){
+
+
+
+
+        $data = array();
+        $data = $request->all();
+        $respuesta = 0;
+        $company_id = Company::where('id',$request->session()->get('company_id'))->first()->id;
+
+       /* if (isset($data['no_filtered']) && isset($data['filtered'])) {
+            $cantFiltered = count($data['filtered']);
+            $cantNoFiltered = count($data['no_filtered']);
+            $cont = $cantFiltered + $cantNoFiltered;
+            $j= 0;
+            
+
+            for ($i=0; $i < $cont; $i++) { 
+
+                while($i < $cantFiltered){
+                    
+                    $input = ['ruta'=> $data['filtered'][$i]['ruta'], 'vendedor'=> $data['filtered'][$i]['vendedor'], 'fecha_recup' => $data['filtered'][$i]['fecha'], 'idCompanny' => $company_id, 'recuperado_contado' => $data['filtered'][$i]['Recu_contado'],'recuperado_credito'=> $data['filtered'][$i]['Recu_credito']];
+                    Umk_recuperacion::insert($input);
+                }
+
+                while($i >=  $cantFiltered && $i < $cont){
+                    
+                   $input = ['ruta'=> $data['no_filtered'][$j]['ruta'], 'vendedor'=> $data['no_filtered'][$j]['vendedor'], 'fecha_recup' => $data['no_filtered'][$j]['fecha'], 'idCompanny' => $company_id];
+                Umk_recuperacion::insert($input);
+                $j++;
+                }
+
+
+            }
+
+
+            $respuesta =  1;
+            
+            
+        }else  if (isset($data['no_filtered']) && !isset($data['filtered'])) {
+
+             foreach($data['filtered'] as $key) {
+                $input = ['ruta'=> $key['ruta'], 'vendedor'=> $key['vendedor'], 'fecha_recup' => $key['fecha'], 'idCompanny' => $company_id, 'recuperado_contado' => $key['Recu_contado'],'recuperado_credito'=> $key['Recu_credito']];
+                Umk_recuperacion::insert($input);
+        
+            }
+            $respuesta =  1;      
+
+        }else{
+            $respuesta =  0;  
+        }*/
+
+
+        if (isset($data['filtered'])) {
+
+            $company_id = Company::where('id',$request->session()->get('company_id'))->first()->id;
+
+            foreach($data['filtered'] as $key) {
+                $input = ['ruta'=> $key['ruta'], 'vendedor'=> $key['vendedor'], 'fecha_recup' => $key['fecha'], 'idCompanny' => $company_id, 'recuperado_contado' => $key['Recu_contado'],'recuperado_credito'=> $key['Recu_credito']];
+                Umk_recuperacion::insert($input);
+        
+            }
+            return 1;
+            
+        }else{
+
+            return 0;
+        }
+        return $respuesta;
+
+    }
+
+
+
+
+    public function obtenerRutasRecu($mes, $anio, request $request){
+
+        $otroTipoVende = "'F01','F12','F16','F18','F19'";
+        $fecha =  date('Y-m-d', strtotime($anio.'-'.$mes.'-01'));
+        $sql_server = new \sql_server();
+        
+        $company_id = Company::where('id',$request->session()->get('company_id'))->first()->id;
+
+        $sql_view = '';
+        //leer las rutas y nombre de vendedores de la compañia seleccionada
+        switch($company_id){
+            case '1':
+                $sql_view = 'SELECT VENDEDOR, NOMBRE FROM UMK_VENDEDORES_ACTIVO WHERE VENDEDOR NOT IN ('.$otroTipoVende.')';
+            break;
+            case '2':
+                $sql_view = 'SELECT * FROM GP_VENDEDORES_ACTIVOS WHERE VENDEDOR NOT IN ('.$otroTipoVende.')';
+            break;
+        }
+
+        $query = $sql_server->fetchArray($sql_view,SQLSRV_FETCH_ASSOC);
+
+        $i = 0;
+        $json = array();
+        $meta = array();
+
+        
+        foreach ($query as $fila) {
+            $meta = meta_recuperacion_exl::where(['fechaMeta'=>$fecha, 'idCompanny'=> $request->session()->get('company_id'), 'ruta' => $fila["VENDEDOR"]])->pluck('meta');
+           
+             $meta =  str_replace(['[',']'],'',$meta);
+
+
+                if ($meta == "") {
+                    $meta = '0.00';
+                }else{ 
+                    $meta = $meta;
+
+                } 
+              
+            $json[$i]["RECU_RUTA"]          = $fila["VENDEDOR"];
+            $json[$i]["RECU_VENDE"]         = $fila["NOMBRE"];
+            $json[$i]["RECU_META"]          =  '<span id ="recu_meta_'.$fila['VENDEDOR'].'">C$'. $meta.'</span>';
+            $json[$i]["RECU_CONTADO"]       = '<input type="text" onkeyup="getAttr(this)" class="form-control" value="0.00" id ="recu_contado_'.$fila['VENDEDOR'].'">';
+            $json[$i]["RECU_CREDITO"]       = '<input type="text" onkeyup="getAttr(this)" class="form-control" value="0.00" id ="recu_credito_'.$fila['VENDEDOR'].'">';
+            $json[$i]["RECU_TOTAL"]         = '<span id="recu_total_'.$fila['VENDEDOR'].'">C$0.00</span>';
+            $json[$i]["RECU_CUMPLIMIENTO"]  = '<span id="recu_cumplimiento_'.$fila['VENDEDOR'].'">0.00%</span>';
+            $i++;
+        }
+
+        $sql_server->close();
+        return $json;
+        
 
     }
 
