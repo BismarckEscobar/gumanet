@@ -81,7 +81,9 @@ Route::post('/getDetFactVenta','reportes_controller@getDetFactVenta');
 
 //RUTAS RECUPERACION
 Route::get('/getMoneyRecuRowsByRoutes/{mes}/{anio}','recuperacion_controller@getMoneyRecuRowsByRoutes');
-Route::post('/agregatMetaRecup','recuperacion_controller@agregatMetaRecup');
+Route::post('/agregarMetaRecup','recuperacion_controller@agregarMetaRecup');
+Route::post('/actualizarMetaRecup','recuperacion_controller@actualizarMetaRecup');
+Route::get('/obtenerRutasRecu/{mes}/{anio}','recuperacion_controller@obtenerRutasRecu');
 
 
 
