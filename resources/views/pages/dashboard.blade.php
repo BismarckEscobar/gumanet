@@ -8,7 +8,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-6">
-            <h1 class="h4 pb-0">Dashboard</h1> 
+            <h1 class="h4 pb-0 text-info">Dashboard</h1> 
         </div>
         <div class="col-sm-6">
             <div class="row" >
@@ -174,8 +174,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-        
+        </div>        
     </div>
 </div>
 <!-- Modal:Detalle Venta Comparación Meta, Real Cumplimineto -->
