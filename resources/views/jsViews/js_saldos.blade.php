@@ -1,5 +1,7 @@
 <script type="text/javascript">
-	
+$(document).ready(function() {
+	fullScreen();
+})
 $( "#cmbRutas").change(function() {
 	tBody = "";
 	$("#tBody")
