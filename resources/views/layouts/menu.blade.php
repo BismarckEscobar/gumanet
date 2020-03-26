@@ -2,13 +2,11 @@
 <div class="vertical-nav bg-white border-right" id="sidebar-menu-left">
   <div class="container-fluid">
     <div class="row mt-3">
-      <div class="col-sm-12 text-center">
-        <a class="nav-link text-secondary" href="Dashboard">
-          <img class="rounded mb-1" src="{{ url('images/p20.png') }}" width="100%">
-        </a>
+      <div class="col-sm-12 text-center">        
+        <img class="rounded mb-1" src="{{ url('images/p20.png') }}" width="85%">        
       </div>
     </div>
-    <div class="row">
+    <div class="row mt-3">
       <div class="col-sm-12">
         <p class="font-weight-normal mt-0 mb-0 text-left ml-3"><strong class="text-muted">Usuario: </strong>{{ Auth::User()->email }}</p>
         <p class="font-weight-normal text-left ml-3"><strong class="text-muted">Unidad: </strong>{{ Session::get('companyName')}}</p>
@@ -51,10 +49,18 @@
            </li>
            <li>
             <a class="nav-link text-secondary" href="Recuperacion">
-              <span data-feather="dollar-sign"></span>
+              <span data-feather="corner-down-left"></span>
               Recuperación
             </a>
           </li>
+          @if(Session::get('companyName')=='UNIMARK')
+          <li>
+            <a class="nav-link text-secondary" href="Saldos">
+              <span data-feather="dollar-sign"></span>
+              Saldos
+            </a>
+          </li>
+          @endif
           @elseif(Auth::User()->activeRole()==2)
           <li class="nav-item">                
               <a class="nav-link text-secondary" href="Dashboard">
@@ -74,6 +80,14 @@
                   Inventario
               </a>
           </li>
+          @if(Session::get('companyName')=='UNIMARK')
+          <li>
+            <a class="nav-link text-secondary" href="Saldos">
+              <span data-feather="dollar-sign"></span>
+              Saldos
+            </a>
+          </li>
+          @endif
           @elseif(Auth::User()->activeRole()==3)
           <li class="nav-item">
               <a class="nav-link text-secondary" href="Metas">
