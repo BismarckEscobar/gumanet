@@ -17,7 +17,7 @@ Route::get('/Metas','metas_controller@index');
 Route::get('/Usuario','usuario_controller@index');
 Route::get('/Reportes','reportes_controller@index');
 Route::get('/Recuperacion','recuperacion_controller@index');
-
+Route::get('/Saldos','saldos_controller@index');
 
 //RUTAS LOGIN
 Route::get('/','Auth\LoginController@showLoginForm');//pagina login
@@ -85,6 +85,5 @@ Route::post('/agregarMetaRecup','recuperacion_controller@agregarMetaRecup');
 Route::post('/actualizarMetaRecup','recuperacion_controller@actualizarMetaRecup');
 Route::get('/obtenerRutasRecu/{mes}/{anio}','recuperacion_controller@obtenerRutasRecu');
 
-
-
-
+//RUTAS SALDOS
+Route::post('/saldoxRuta','saldos_controller@saldosXRuta');
