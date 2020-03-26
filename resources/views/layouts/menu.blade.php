@@ -51,10 +51,18 @@
            </li>
            <li>
             <a class="nav-link text-secondary" href="Recuperacion">
-              <span data-feather="dollar-sign"></span>
+              <span data-feather="corner-down-left"></span>
               Recuperación
             </a>
           </li>
+          @if(Session::get('companyName')=='UNIMARK')
+          <li>
+            <a class="nav-link text-secondary" href="Saldos">
+              <span data-feather="dollar-sign"></span>
+              Saldos
+            </a>
+          </li>
+          @endif
           @elseif(Auth::User()->activeRole()==2)
           <li class="nav-item">                
               <a class="nav-link text-secondary" href="Dashboard">
@@ -74,6 +82,14 @@
                   Inventario
               </a>
           </li>
+          @if(Session::get('companyName')=='UNIMARK')
+          <li>
+            <a class="nav-link text-secondary" href="Saldos">
+              <span data-feather="dollar-sign"></span>
+              Saldos
+            </a>
+          </li>
+          @endif
           @elseif(Auth::User()->activeRole()==3)
           <li class="nav-item">
               <a class="nav-link text-secondary" href="Metas">
