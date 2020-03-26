@@ -77,7 +77,7 @@
                     { "title": "Recu. Crédito",      "data": "RECU_CREDITO" },
                     { "title": "Recu. Contado","data": "RECU_CONTADO" },
                     { "title": "Recu. Total",      "data": "RECU_TOTAL" },
-                    { "title": "% Cumplimiento",      "data": "RECU_CUMPLIMIENTO" },
+                    { "title": "% Cumplimiento Crédito",      "data": "RECU_CUMPLIMIENTO" },
                     //{ "title": 'Opciones',"data": "RECU_OPCIONES" },
                 ],
                 "columnDefs": [
@@ -134,8 +134,8 @@
         cumplimiento = Number($('#recu_cumplimiento_'+ruta).val().replace('%',""));
         
         totalRecu = Number(valCredito) + Number(valContado);
-        $('#recu_total_'+ruta).text("C$" + totalRecu);
-        $('#recu_cumplimiento_'+ruta).text((meta <= 0)? '0.00%' : numeral((totalRecu/meta)*100).format('0.00')+'%');
+        $('#recu_total_'+ruta).text("C$" + numeral(totalRecu).format('0,0.00'));
+        $('#recu_cumplimiento_'+ruta).text((meta <= 0)? '0.00%' : numeral((Number(valCredito)/meta)*100).format('0,0.00')+'%');
         
     }
 
