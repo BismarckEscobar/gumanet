@@ -91,7 +91,7 @@ class recuperacion_controller extends Controller
             }
 
             $json[$i]['RECU_TOTAL'] =  ($key['recuperado_credito'] == 0 && $key['recuperado_contado'] == 0) ? '<span id="recu_total_'.$key['ruta'].'">C$0.00</span>' : '<span id="recu_total_'.$key['ruta'].'">C$'.number_format($key['recuperado_credito'] + $key['recuperado_contado']).'</span>';
-            $json[$i]['RECU_CUMPLIMIENTO'] =  ($meta=='0.00') ? '<span id="recu_cumplimiento_'.$key['ruta'].'">0.00%</span>' : '<span id="recu_cumplimiento_'.$key['ruta'].'">'.number_format(((floatval($key['recuperado_credito']) + floatval($key['recuperado_contado']))/floatval($meta)*100),2).'%</span>';
+            $json[$i]['RECU_CUMPLIMIENTO'] =  ($meta=='0.00') ? '<span id="recu_cumplimiento_'.$key['ruta'].'">0.00%</span>' : '<span id="recu_cumplimiento_'.$key['ruta'].'">'.number_format(((floatval($key['recuperado_credito']) /*+ floatval($key['recuperado_contado'])*/)/floatval($meta)*100),2).'%</span>';
             //$json[$i]['RECU_OPCIONES'] =  '<a href="#" class="btn btn-primary btn-sm active" role="button" aria-pressed="true"><span class="fa fa-pencil">Eliminar</span></a>';
 
             $i++;
@@ -238,7 +238,7 @@ class recuperacion_controller extends Controller
               
             $json[$i]["RECU_RUTA"]          = $fila["VENDEDOR"];
             $json[$i]["RECU_VENDE"]         = $fila["NOMBRE"];
-            $json[$i]["RECU_META"]          =  '<span id ="recu_meta_'.$fila['VENDEDOR'].'">C$'. $meta.'</span>';
+            $json[$i]["RECU_META"]          =  '<span id ="recu_meta_'.$fila['VENDEDOR'].'">C$'.number_format($meta,2).'</span>';
             $json[$i]["RECU_CONTADO"]       = '<input type="text" onkeyup="getAttr(this)" class="form-control" value="0.00" id ="recu_contado_'.$fila['VENDEDOR'].'">';
             $json[$i]["RECU_CREDITO"]       = '<input type="text" onkeyup="getAttr(this)" class="form-control" value="0.00" id ="recu_credito_'.$fila['VENDEDOR'].'">';
             $json[$i]["RECU_TOTAL"]         = '<span id="recu_total_'.$fila['VENDEDOR'].'">C$0.00</span>';
