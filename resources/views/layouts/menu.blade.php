@@ -2,13 +2,11 @@
 <div class="vertical-nav bg-white border-right" id="sidebar-menu-left">
   <div class="container-fluid">
     <div class="row mt-3">
-      <div class="col-sm-12 text-center">
-        <a class="nav-link text-secondary" href="Dashboard">
-          <img class="rounded mb-1" src="{{ url('images/p20.png') }}" width="100%">
-        </a>
+      <div class="col-sm-12 text-center">        
+        <img class="rounded mb-1" src="{{ url('images/p20.png') }}" width="85%">        
       </div>
     </div>
-    <div class="row">
+    <div class="row mt-3">
       <div class="col-sm-12">
         <p class="font-weight-normal mt-0 mb-0 text-left ml-3"><strong class="text-muted">Usuario: </strong>{{ Auth::User()->email }}</p>
         <p class="font-weight-normal text-left ml-3"><strong class="text-muted">Unidad: </strong>{{ Session::get('companyName')}}</p>
