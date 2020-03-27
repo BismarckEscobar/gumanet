@@ -871,6 +871,7 @@ function detalleVentasMes(tipo, title, cliente, articulo) {
     mes         = $("#opcMes option:selected").val();
     mesNombre   = $("#opcMes option:selected").text();
     anio        = $("#opcAnio option:selected").val();    
+    pageName    = 'Dashboard';
 
     FechaFiltrada = `Mostrando registros de `+mesNombre+` de `+anio;
     $("#fechaFiltrada").text(FechaFiltrada);
@@ -961,7 +962,80 @@ function detalleVentasMes(tipo, title, cliente, articulo) {
             $("#cantRowsDtTemp selected").val("5");
             tableActive = `#dtRecuperacion`;
 
+
+        var route="getMoneyRecuRowsByRoutes/"+mes+"/"+anio+"/"+pageName;
+        var metodo = 'GET';
             $(tableActive).dataTable({
+                responsive: true,
+                "autoWidth":false,
+                'ajax':{
+                    'url':route,
+                    'method':metodo,
+                    'async' : false,
+                    'dataSrc': '',
+                },        
+                "destroy" : true,
+                "info":    false,
+                "lengthMenu": [[30], [30]],
+                "language": {
+                    "zeroRecords": "Cargando...",
+                    "paginate": {
+                        "first":      "Primera",
+                        "last":       "Última ",
+                        "next":       "Siguiente",
+                        "previous":   "Anterior"
+                    },
+                    "lengthMenu": "MOSTRAR _MENU_",
+                    "emptyTable": "NO HAY DATOS DISPONIBLES",
+                    "search":     "BUSCAR"
+                },
+                'columns': [
+                    { "title": "Ruta",      "data": "RECU_RUTA" },
+                    { "title": "Vendedor", "data": "RECU_VENDE" },
+                    { "title": "Meta",      "data": "RECU_META" },
+                    { "title": "Recu. Crédito",      "data": "RECU_CREDITO" },
+                    { "title": "Recu. Contado","data": "RECU_CONTADO" },
+                    { "title": "Recu. Total",      "data": "RECU_TOTAL" },
+                    { "title": "% Cumplimiento Crédito",      "data": "RECU_CUMPLIMIENTO" },
+                    //{ "title": 'Opciones',"data": "RECU_OPCIONES" },
+                ],
+                "columnDefs": [
+                    {"className": "dt-center", "targets": [ 0, 1 , 2, 3, 4, 5, 6,]},
+                    {"width":"5%","targets":[0,6]},
+                    {"width":"40%","targets":[1]},
+                    {"width":"10%","targets":[2,3,4,5,6]}
+                ],
+                "footerCallback": function ( row, data, start, end, display ) {
+                    var api = this.api(), data;
+                    var intVal = function ( i ) {
+                        return typeof i === 'string' ?
+                        i.replace(/[\C$,]/g, '')*1 :
+                        typeof i === 'number' ?
+                        i : 0;
+                    };
+                    total = api
+                    .column( 3 )
+                    .data()
+                    .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                    }, 0 );
+                    tmp = parseFloat($('#MontoMeta').text().replace(/[\ U,C$]/g, ''));
+                    cump = (tmp>0)?(( parseFloat(total) / tmp ) * 100):0;
+                    $('#cumplMeta').text(numeral(cump).format('0.00')+'%');
+                    $('#MontoReal').text('C$'+ numeral(total).format('0,0.00'));
+                },
+                "fnInitComplete": function () {
+                    
+                }
+                
+            });
+
+        $('#dtIntroRecup_length').hide();//Ocultar select que muestra cantidad de registros por pagina
+        $('#dtIntroRecup_filter').hide();//Esconde input de filtro de tabla por texto escrito
+
+       
+
+           /* $(tableActive).dataTable({
                 responsive: true,
                 "autoWidth":false,
                 "ajax":{
@@ -1013,10 +1087,12 @@ function detalleVentasMes(tipo, title, cliente, articulo) {
                     $('#cumplMeta').text(numeral(cump).format('0.00')+'%');
                     $('#MontoReal').text('C$'+ numeral(total).format('0,0.00'));
                 }
-            })
+            })*/
 
             $('#txtMontoReal').text('Total real recuperado');
             $('#txtMontoMeta').text('Total meta recuperacion');
+
+
         break;
         case 'clien':
             $("#cjRecuperacion").hide();
