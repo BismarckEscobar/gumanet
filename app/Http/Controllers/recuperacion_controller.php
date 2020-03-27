@@ -51,7 +51,9 @@ class recuperacion_controller extends Controller
       
     }
 
-    public function getMoneyRecuRowsByRoutes($mes, $anio){
+    public function getMoneyRecuRowsByRoutes($mes, $anio, $pageName){
+
+       
         $request = Request();
         $fecha =  date('Y-m-d', strtotime($anio.'-'.$mes.'-01'));
         $recuperacion = array();
@@ -77,17 +79,39 @@ class recuperacion_controller extends Controller
 
             $json[$i]['RECU_RUTA'] =  $key['ruta'];
             $json[$i]['RECU_VENDE'] =  $key['vendedor'];
-            $json[$i]['RECU_META'] =  '<span id ="recu_meta_'.$key['ruta'].'">C$'.$meta.'</span>';
+            $json[$i]['RECU_META'] =  '<span id ="recu_meta_'.$key['ruta'].'">C$'. number_format($meta,2).'</span>';
 
             if ($key['recuperado_credito']>0) {
-              $json[$i]['RECU_CREDITO'] =  '<input type="text" onkeyup="getAttr(this)" class="form-control" value="'.$key['recuperado_credito'].'" id ="recu_credito_'.$key['ruta'].'">';
+
+                if($pageName == 'Recuperacion'){
+                    $json[$i]['RECU_CREDITO'] =  '<input type="text" onkeyup="getAttr(this)" class="form-control" value="'.$key['recuperado_credito'].'" id ="recu_credito_'.$key['ruta'].'">';
+                }else{
+                    $json[$i]['RECU_CREDITO'] = 'C$'. number_format($key['recuperado_credito'],2);
+                }
+             
             }else{
-                  $json[$i]['RECU_CREDITO'] =  '<input type="text" onkeyup="getAttr(this)" class="form-control" value="0.00" id ="recu_credito_'.$key['ruta'].'">';
+                if($pageName == 'Recuperacion'){
+                    $json[$i]['RECU_CREDITO'] =  '<input type="text" onkeyup="getAttr(this)" class="form-control" value="0.00" id ="recu_credito_'.$key['ruta'].'">';
+                 }else{
+                    $json[$i]['RECU_CREDITO'] =  "C$0.00" ;
+                 }
+                 
             }
             if ($key['recuperado_contado']>0) {
-                $json[$i]['RECU_CONTADO'] =  '<input type="text" onkeyup="getAttr(this)" class="form-control" value="'.$key['recuperado_contado'].'" id ="recu_contado_'.$key['ruta'].'">';
+                if($pageName == 'Recuperacion'){
+                    $json[$i]['RECU_CONTADO'] =  '<input type="text" onkeyup="getAttr(this)" class="form-control" value="'.$key['recuperado_contado'].'" id ="recu_contado_'.$key['ruta'].'">';
+                  }else{
+                    $json[$i]['RECU_CONTADO'] =  'C$'. number_format($key['recuperado_contado'],2);
+                  }
+                
             }else{
-                $json[$i]['RECU_CONTADO'] =  '<input type="text" onkeyup="getAttr(this)" class="form-control" value="0.00" id ="recu_contado_'.$key['ruta'].'">';
+                 if($pageName == 'Recuperacion'){
+                    $json[$i]['RECU_CONTADO'] =  '<input type="text" onkeyup="getAttr(this)" class="form-control" value="0.00" id ="recu_contado_'.$key['ruta'].'">';
+                 }else{
+                    $json[$i]['RECU_CONTADO'] =  "C$0.00";
+
+                 }
+                
             }
 
             $json[$i]['RECU_TOTAL'] =  ($key['recuperado_credito'] == 0 && $key['recuperado_contado'] == 0) ? '<span id="recu_total_'.$key['ruta'].'">C$0.00</span>' : '<span id="recu_total_'.$key['ruta'].'">C$'.number_format($key['recuperado_credito'] + $key['recuperado_contado']).'</span>';
