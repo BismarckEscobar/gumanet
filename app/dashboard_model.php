@@ -5,6 +5,7 @@ use App\User;
 use App\Company;
 
 Use App\Gn_couta_x_producto;
+Use App\Umk_recuperacion;
 Use App\Metacuota_gumanet;
 
 use DB;
@@ -796,7 +797,9 @@ class dashboard_model extends Model {
         
         switch ($company_user) {
             case '1':
-                $sql_exec = "EXEC Recuperacion_Cartera '".$f1."', '".$f2."', ''; ";
+                $query = Umk_recuperacion::where(['fecha_recup' => $anio.'-'.$mes.'-01', 'IdCompanny' => $company_user])->pluck('recuperado_credito')->toArray();//"EXEC Recuperacion_Cartera '".$f1."', '".$f2."', ''; ";
+
+              
                 $sql_meta = "CALL sp_recuperacionMeta(".$mes.",".$anio.",".$company_user.", '' )";
                 break;
             case '2':
@@ -811,17 +814,23 @@ class dashboard_model extends Model {
                 break;
         }
         
-        $query = $sql_server->fetchArray($sql_exec, SQLSRV_FETCH_ASSOC);        
+        if ($company_user!=1) {
+          
+            $query = $sql_server->fetchArray($sql_exec, SQLSRV_FETCH_ASSOC); 
+        }     
         $query2 = DB::select($sql_meta);
         $meta = 0;
         $json = array();
+       
             
         if (count($query)>0) {
             if ($company_user==1) {
-                foreach ($query as $key) {
-                    $total = $total +  ( floatval($key['Recuperacion_Contado']) );
-                    
+                 
+                for ($i=0; $i < count($query) ; $i++) { 
+                     $total = $total +  (floatval($query[$i]));
                 }
+                   
+                   
             }else {
                 $total = floatval($query[0]['M_REC']);
             }

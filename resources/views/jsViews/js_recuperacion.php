@@ -5,7 +5,8 @@
 		 $("#item-nav-01").after(`<li class="breadcrumb-item active">Recuperacion</li>`);// mostrar mapa de ubicación actual
         var mes = $('#selectMesIntroRecup option:selected').val();
         var anio = $('#selectAnnoIntroRecup option:selected').val();
-        var route="getMoneyRecuRowsByRoutes/"+mes+"/"+anio;
+        pageName    = 'Recuperacion';
+        var route="getMoneyRecuRowsByRoutes/"+mes+"/"+anio+"/"+pageName;
         var metodo = 'GET';
         
         fillDtIntroRecup(route, metodo);
@@ -74,16 +75,16 @@
                     { "title": "Ruta",      "data": "RECU_RUTA" },
                     { "title": "Vendedor", "data": "RECU_VENDE" },
                     { "title": "Meta",      "data": "RECU_META" },
-                    { "title": "Recu. Crédito",      "data": "RECU_CREDITO" },
-                    { "title": "Recu. Contado","data": "RECU_CONTADO" },
-                    { "title": "Recu. Total",      "data": "RECU_TOTAL" },
+                    { "title": "Recup. Crédito",      "data": "RECU_CREDITO" },
+                    { "title": "Recup. Contado","data": "RECU_CONTADO" },
+                    { "title": "Recup. Total",      "data": "RECU_TOTAL" },
                     { "title": "% Cumplimiento Crédito",      "data": "RECU_CUMPLIMIENTO" },
                     //{ "title": 'Opciones',"data": "RECU_OPCIONES" },
                 ],
                 "columnDefs": [
-                    {"className": "dt-center", "targets": [ 0, 1 , 2, 3, 4, 5, 6,]},
-                    {"width":"5%","targets":[0,6]},
-                    {"width":"40%","targets":[1]},
+                    {"className": "dt-center", "targets": [ 0 , 2, 3, 4, 5, 6]},
+                    {"width":"8%","targets":[0,6]},
+                    {"width":"20%","targets":[1]},
                     {"width":"10%","targets":[2,3,4,5,6]}
                 ],
                 "fnInitComplete": function () {
@@ -150,10 +151,10 @@
     }
 
 
-    function existenDatosEnTablaRecu(mes, anio){
+    function existenDatosEnTablaRecu(mes, anio, pageName){
        var respuesta;
          $.ajax({
-           url : 'getMoneyRecuRowsByRoutes/'+mes+'/'+anio,
+           url :"getMoneyRecuRowsByRoutes/"+mes+"/"+anio+"/"+pageName,
            method:'GET',
            async : false,
            success: function(res){
@@ -171,11 +172,12 @@
     $('#btnCargardtIntroRecup').on('click', function(){
         var mes = $('#selectMesIntroRecup option:selected').val();
         var anio = $('#selectAnnoIntroRecup option:selected').val();
-        var route="getMoneyRecuRowsByRoutes/"+mes+"/"+anio;
+        pageName    = 'Recuperacion';
+        var route="getMoneyRecuRowsByRoutes/"+mes+"/"+anio+"/"+pageName;
         var metodo = 'GET';
         fillDtIntroRecup(route, metodo);
 
-        var ValidarTablaRecu = existenDatosEnTablaRecu(mes, anio);
+        var ValidarTablaRecu = existenDatosEnTablaRecu(mes, anio, pageName);
          if (ValidarTablaRecu.length > 0) {
             
             $('#btnSaveIntroRecup').text('Actualizar Registros');//si hay registro label del boton es igual a "Guardar"
@@ -195,8 +197,10 @@
     $('#btnSaveIntroRecup').on('click', function(){
         var data = new Array();
         var data2 = new Array();
+
         var mes = $('#selectMesIntroRecup option:selected').val();
         var anio = $('#selectAnnoIntroRecup option:selected').val();
+
         
         var  idCredito;
         var idContado;
@@ -206,29 +210,28 @@
         var j=0;
         var k=0;
           
-        
-            var route="getMoneyRecuRowsByRoutes/"+mes+"/"+anio;
-            var metodo = 'GET';
-            // Obtengo datos de tabla
-            for (var i = 0; i < table.data().count(); i++) {
-                idCredito = '#recu_credito_'+table.cell( i, 0 ).data();
-                idContado = '#recu_contado_'+table.cell( i, 0 ).data();
-                //lleno un arreglo con los datos de la tabla de cada ruta
-                
-                if ($(idCredito).val() != null) {
+        pageName    = 'Recuperacion';
+        var route="getMoneyRecuRowsByRoutes/"+mes+"/"+anio+"/"+pageName;
+        var metodo = 'GET';
+            
+        // Obtengo datos de tabla
+        for (var i = 0; i < table.data().count(); i++) {
+            idCredito = '#recu_credito_'+table.cell( i, 0 ).data();
+            idContado = '#recu_contado_'+table.cell( i, 0 ).data();
+            //lleno un arreglo con los datos de la tabla de cada ruta
+            
+            if ($(idCredito).val() != null) {
 
-                    data[j] = {ruta: table.cell( i, 0 ).data(), vendedor :table.cell( i, 1 ).data(), Recu_credito: $(idCredito).val(), Recu_contado: $(idContado).val(), fecha: anio +'-'+ mes +'-01'};
-                    j++;
-                   
-                }else{
-                    data2[k] = {ruta: table.cell( i, 0 ).data(), vendedor :table.cell( i, 1 ).data(), Recu_credito: $(idCredito).val(), Recu_contado: $(idContado).val(), fecha: anio +'-'+ mes +'-01'};
-                    k++;
-                }
-                
+                data[j] = {ruta: table.cell( i, 0 ).data(), vendedor :table.cell( i, 1 ).data(), Recu_credito: $(idCredito).val(), Recu_contado: $(idContado).val(), fecha: anio +'-'+ mes +'-01'};
+                j++;
+               
+            }else{
+                data2[k] = {ruta: table.cell( i, 0 ).data(), vendedor :table.cell( i, 1 ).data(), Recu_credito: $(idCredito).val(), Recu_contado: $(idContado).val(), fecha: anio +'-'+ mes +'-01'};
+                k++;
             }
             
-            console.log(data);
-             console.log(data2);
+        }
+        
 
         if (ValidarTablaRecu.length > 0) {
             console.log('Actualizar');
