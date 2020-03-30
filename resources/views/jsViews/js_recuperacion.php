@@ -75,16 +75,16 @@
                     { "title": "Ruta",      "data": "RECU_RUTA" },
                     { "title": "Vendedor", "data": "RECU_VENDE" },
                     { "title": "Meta",      "data": "RECU_META" },
-                    { "title": "Recu. Crédito",      "data": "RECU_CREDITO" },
-                    { "title": "Recu. Contado","data": "RECU_CONTADO" },
-                    { "title": "Recu. Total",      "data": "RECU_TOTAL" },
+                    { "title": "Recup. Crédito",      "data": "RECU_CREDITO" },
+                    { "title": "Recup. Contado","data": "RECU_CONTADO" },
+                    { "title": "Recup. Total",      "data": "RECU_TOTAL" },
                     { "title": "% Cumplimiento Crédito",      "data": "RECU_CUMPLIMIENTO" },
                     //{ "title": 'Opciones',"data": "RECU_OPCIONES" },
                 ],
                 "columnDefs": [
-                    {"className": "dt-center", "targets": [ 0, 1 , 2, 3, 4, 5, 6,]},
-                    {"width":"5%","targets":[0,6]},
-                    {"width":"40%","targets":[1]},
+                    {"className": "dt-center", "targets": [ 0 , 2, 3, 4, 5, 6]},
+                    {"width":"8%","targets":[0,6]},
+                    {"width":"20%","targets":[1]},
                     {"width":"10%","targets":[2,3,4,5,6]}
                 ],
                 "fnInitComplete": function () {
