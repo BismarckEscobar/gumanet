@@ -6,7 +6,7 @@
 
 .expan_more:hover {
   background-color: #cec7c7;
-}
+} 
 
 #customFile .custom-file-control:lang(en)::after {
   content: "Select file...";
