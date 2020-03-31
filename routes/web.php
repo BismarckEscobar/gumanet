@@ -86,4 +86,5 @@ Route::post('/actualizarMetaRecup','recuperacion_controller@actualizarMetaRecup'
 Route::get('/obtenerRutasRecu/{mes}/{anio}','recuperacion_controller@obtenerRutasRecu');
 
 //RUTAS SALDOS
+Route::get('/saldoAlls','saldos_controller@saldosAll');
 Route::post('/saldoxRuta','saldos_controller@saldosXRuta');

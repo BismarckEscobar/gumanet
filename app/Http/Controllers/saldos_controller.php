@@ -17,7 +17,6 @@ class saldos_controller extends Controller {
 
 		$data = [
 			'name' =>  'GUMA@NET',
-			'saldosAll' => saldos_model::saldosAll(''),
 			'rutas' => saldos_model::rutas()
 		];
 		
@@ -32,10 +31,15 @@ class saldos_controller extends Controller {
 		$request->session()->put('companyName', $company->nombre);
 	}
 
+	public function saldosAll() {
+		$obj = saldos_model::saldosAll('');
+		return response()->json($obj);
+	}
+
 	public function saldosXRuta(Request $request) {
         
         if($request->isMethod('post')) {
-            $obj = saldos_model::saldosAll($request->input('ruta'));
+            $obj = saldos_model::saldosXRuta($request->input('ruta_'));
             return response()->json($obj);
         }
 	}
