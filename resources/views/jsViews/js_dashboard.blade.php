@@ -976,7 +976,7 @@ function detalleVentasMes(tipo, title, cliente, articulo) {
                 },        
                 "destroy" : true,
                 "info":    false,
-                "lengthMenu": [[30], [30]],
+                "lengthMenu": [[5,10,15,-1], [5,10,15,"Todo"]],
                 "language": {
                     "zeroRecords": "Cargando...",
                     "paginate": {
@@ -993,9 +993,9 @@ function detalleVentasMes(tipo, title, cliente, articulo) {
                     { "title": "Ruta",      "data": "RECU_RUTA" },
                     { "title": "Vendedor", "data": "RECU_VENDE" },
                     { "title": "Meta",      "data": "RECU_META" },
-                    { "title": "Recu. Crédito",      "data": "RECU_CREDITO" },
-                    { "title": "Recu. Contado","data": "RECU_CONTADO" },
-                    { "title": "Recu. Total",      "data": "RECU_TOTAL" },
+                    { "title": "Recup. Crédito",      "data": "RECU_CREDITO" },
+                    { "title": "Recup. Contado","data": "RECU_CONTADO" },
+                    { "title": "Recup. Total",      "data": "RECU_TOTAL" },
                     { "title": "% Cumplimiento Crédito",      "data": "RECU_CUMPLIMIENTO" },
                     //{ "title": 'Opciones',"data": "RECU_OPCIONES" },
                 ],
@@ -1089,7 +1089,7 @@ function detalleVentasMes(tipo, title, cliente, articulo) {
                 }
             })*/
 
-            $('#txtMontoReal').text('Total real recuperado');
+            $('#txtMontoReal').text('Total real recup. crédito');
             $('#txtMontoMeta').text('Total meta recuperacion');
 
 
