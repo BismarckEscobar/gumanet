@@ -69,6 +69,26 @@
   background-color: red!important
 }
 
+.dt-back-unit {
+  background: #eaebff;
+  text-align: right;
+}
+
+.dt-back-vtas {
+  background: #d3d6ff;
+  text-align: right;
+}
+
+.dt-vencido {
+  background: #ffebee;
+  text-align: right;
+}
+
+.dt-n-vencido {
+  background: #e0f2f1;
+  text-align: right;
+}
+
 /*Sidebar lateral izquierda*/
 #sidebar {
   position: fixed;
@@ -221,16 +241,6 @@
 .d-none {
     display: none!important;
 }
-}
-
-.dt-back-unit {
-  background: #eaebff;
-  text-align: right;
-}
-
-.dt-back-vtas {
-  background: #d3d6ff;
-  text-align: right;
 }
 
 #_version {
