@@ -47,12 +47,14 @@
                   Usuarios
               </a>
            </li>
-           <li>
-            <a class="nav-link text-secondary" href="Recuperacion">
-              <span data-feather="corner-down-left"></span>
-              Recuperación
-            </a>
-          </li>
+            @if(Session::get('companyName')=='UNIMARK')
+             <li>
+              <a class="nav-link text-secondary" href="Recuperacion">
+                <span data-feather="corner-down-left"></span>
+                Recuperación
+              </a>
+            </li>
+          @endif
           @if(Session::get('companyName')=='UNIMARK')
           <li>
             <a class="nav-link text-secondary" href="Saldos">
@@ -95,13 +97,15 @@
                   Metas
               </a>
           </li>
-          @elseif(Auth::User()->activeRole()==4)
-          <li class="nav-item">
-              <a class="nav-link text-secondary" href="Recuperacion">
-                  <span data-feather="file"></span>
-                  Recuperacion
-              </a>
-          </li>
+          @elseif(Auth::User()->activeRole()==4 )
+            @if(Session::get('companyName')=='UNIMARK')
+               <li>
+                <a class="nav-link text-secondary" href="Recuperacion">
+                  <span data-feather="corner-down-left"></span>
+                  Recuperación
+                </a>
+              </li>
+            @endif
           @endif
           <li class="nav-item">
               <a class="nav-link text-danger font-weight-bold" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><span data-feather="log-out"></span> Cerrar sesion
