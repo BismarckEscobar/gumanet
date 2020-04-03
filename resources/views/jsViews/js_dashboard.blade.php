@@ -996,20 +996,19 @@ function detalleVentasMes(tipo, title, cliente, articulo) {
                     { "title": "Recup. Crédito",      "data": "RECU_CREDITO" },
                     { "title": "Recup. Contado","data": "RECU_CONTADO" },
                     { "title": "Recup. Total",      "data": "RECU_TOTAL" },
-                    { "title": "% Cumplimiento Crédito",      "data": "RECU_CUMPLIMIENTO" },
+                    { "title": "% Cump. Crédito",      "data": "RECU_CUMPLIMIENTO" },
                     //{ "title": 'Opciones',"data": "RECU_OPCIONES" },
                 ],
-                "columnDefs": [
-                    {"className": "dt-center", "targets": [ 0, 1 , 2, 3, 4, 5, 6,]},
-                    {"width":"5%","targets":[0,6]},
-                    {"width":"40%","targets":[1]},
-                    {"width":"10%","targets":[2,3,4,5,6]}
+               "columnDefs": [
+                    {"width":"20%","targets":[1]},
+                    {"width":"15%","targets":[2, 3, 4, 5, 6]},
+                    {"className": "dt-center", "targets":[0, 1, 2, 3, 4, 5, 6]}
                 ],
                 "footerCallback": function ( row, data, start, end, display ) {
                     var api = this.api(), data;
                     var intVal = function ( i ) {
                         return typeof i === 'string' ?
-                        i.replace(/[\C$,]/g, '')*1 :
+                        i.replace(/[^0-9.]/g, '')*1 :
                         typeof i === 'number' ?
                         i : 0;
                     };
