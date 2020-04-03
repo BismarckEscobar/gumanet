@@ -130,14 +130,16 @@ function format ( callback, ruta, n_vencido ) {
                 </div>
             </div>`).show();
     var thead = tbody = tfooter = '';
+    var tVencido = 0;
         thead =`
 		<div class="row mt-3 p-4">
 			<div class="col-sm-12">
 				<p class="font-weight-bold text-info">No vencido: `+n_vencido+`</p>
-		        <table class="table table-striped" width='100%'>
+				<hr>
+		        <table class="table table-striped" width='80%'>
 	                <tr>
-	                    <th class="center">Saldos</th>
-	                    <th class="center">Montos</th>
+	                    <th class="text-center">Saldos</th>
+	                    <th class="text-center">Montos</th>
 	                </tr>
 				<tbody>`;
     $.ajax({
@@ -154,30 +156,20 @@ function format ( callback, ruta, n_vencido ) {
                         </tr>`;
                 callback(thead + tbody).show();
             }
-            
-			tbody +=`
-			      <tr>
-			        <td>30 Días</td>
-			        <td>C$<span class="float-right">`+numeral(data[0]['Dias30']).format('0,0.00')+`</span></td>
-			      </tr>
-			      <tr>
-			        <td>60 Días</td>
-			        <td>C$<span class="float-right">`+numeral(data[0]['Dias60']).format('0,0.00')+`</span></td>
-			      </tr>
-			      <tr>
-			        <td>90 Días</td>
-			        <td>C$<span class="float-right">`+numeral(data[0]['Dias90']).format('0,0.00')+`</span></td>
-			      </tr>
-			      <tr>
-			        <td>120 Días</td>
-			        <td>C$<span class="float-right">`+numeral(data[0]['Dias120']).format('0,0.00')+`</span></td>
-			      </tr>
-			      <tr>
-			        <td>Más de 120 Días</td>
-			        <td>C$<span class="float-right">`+numeral(data[0]['Mas120']).format('0,0.00')+`</span></td>
-			      </tr>`;
 
-			tVencido = parseFloat(data[0]['Dias30'])+parseFloat(data[0]['Dias60'])+parseFloat(data[0]['Dias90'])+parseFloat(data[0]['Dias120'])+parseFloat(data[0]['Mas120']);
+            $.each(data, function(i, item) {
+
+ 				if (item['desc']!=='N_VENCIDOS') {
+					tbody +=
+					`<tr>
+					<td>`+item['desc']+`</td>
+					<td>C$<span class="float-right">`+numeral(item['value']).format('0,0.00')+`</span></td>
+					</tr>`;
+ 					
+ 					tVencido = tVencido + parseFloat(item['value']);
+ 				}
+            });
+
 			tfooter += `
                <tfoot>
                     <tr>
