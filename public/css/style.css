@@ -6,7 +6,7 @@
 
 .expan_more:hover {
   background-color: #cec7c7;
-}
+} 
 
 #customFile .custom-file-control:lang(en)::after {
   content: "Select file...";
@@ -67,6 +67,26 @@
 
 .shown tr td {
   background-color: red!important
+}
+
+.dt-back-unit {
+  background: #eaebff;
+  text-align: right;
+}
+
+.dt-back-vtas {
+  background: #d3d6ff;
+  text-align: right;
+}
+
+.dt-vencido {
+  background: #ffebee;
+  text-align: right;
+}
+
+.dt-n-vencido {
+  background: #e0f2f1;
+  text-align: right;
 }
 
 /*Sidebar lateral izquierda*/
@@ -221,16 +241,6 @@
 .d-none {
     display: none!important;
 }
-}
-
-.dt-back-unit {
-  background: #eaebff;
-  text-align: right;
-}
-
-.dt-back-vtas {
-  background: #d3d6ff;
-  text-align: right;
 }
 
 #_version {
