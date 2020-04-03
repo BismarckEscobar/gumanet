@@ -270,3 +270,7 @@
   display: table-cell;
   width: 50%;
 }
+
+#tbSaldos thead tr th {
+  text-align: center!important
+}
