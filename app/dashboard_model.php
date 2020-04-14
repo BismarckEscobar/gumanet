@@ -779,7 +779,11 @@ class dashboard_model extends Model {
         $sql_server->close();
     }
 
+
+    //datos de grafica de recuperacion
     public static function getRecuperaMes($mes, $anio) {
+        $otroTipoVende = array('F01','F02','F04','F12','F16','F18','F19');
+        $otroTipoVende_sql_server = "'F01','F02','F04','F12','F16','F18','F19'";
         $total = 0;
         $sql_server = new \sql_server();
 
@@ -797,13 +801,13 @@ class dashboard_model extends Model {
         
         switch ($company_user) {
             case '1':
-                $query = Umk_recuperacion::where(['fecha_recup' => $anio.'-'.$mes.'-01', 'IdCompanny' => $company_user])->pluck('recuperado_credito')->toArray();//"EXEC Recuperacion_Cartera '".$f1."', '".$f2."', ''; ";
+                $query = Umk_recuperacion::where(['fecha_recup' => $anio.'-'.$mes.'-01', 'IdCompanny' => $company_user])->whereNotIn('ruta',$otroTipoVende)->pluck('recuperado_credito')->toArray();//"EXEC Recuperacion_Cartera '".$f1."', '".$f2."', ''; ";
 
               
                 $sql_meta = "CALL sp_recuperacionMeta(".$mes.",".$anio.",".$company_user.", '' )";
                 break;
             case '2':
-                $sql_exec = "SELECT SUM(MONTO) AS M_REC FROM gn_recuperacion T0 WHERE Mes = ".$mes." AND Anno=".$anio." ";
+                $sql_exec = "SELECT SUM(MONTO) AS M_REC FROM gn_recuperacion T0 WHERE Mes = ".$mes." AND Anno=".$anio." AND COBRADOR NOT IN (".$otroTipoVende_sql_server.")";
                 $sql_meta = "CALL sp_recuperacionMeta(".$mes.",".$anio.",".$company_user.", '' )";
                 break;
             case '3':
@@ -853,6 +857,135 @@ class dashboard_model extends Model {
         return $json;
         $sql_server->close();
     }
+
+    //Muestra datos de tabla de detalle de recuperacion
+    public static function getRecuRowsByRoutes($mes, $anio, $pageName){
+
+        $otroTipoVende = array('F01','F02','F04','F12','F16','F18','F19');
+
+
+        $request = Request();
+        $fecha =  date('Y-m-d', strtotime($anio.'-'.$mes.'-01'));
+
+         $recuperacion = array();
+                $json = array();
+                $i = 0;
+                $meta=0;
+        
+
+        $company_user = Company::where('id',$request->session()->get('company_id'))->first()->id;
+        
+        switch ($company_user) {
+            case '1':
+               
+                $recuperacion = Umk_recuperacion::where(['fecha_recup'=>$fecha, 'idCompanny' => $request->session()->get('company_id')])->whereNotIn('ruta',$otroTipoVende)->get();
+
+                foreach ($recuperacion as $key) {
+                    $meta = meta_recuperacion_exl::where(['fechaMeta'=>$fecha, 'idCompanny'=> $request->session()->get('company_id'), 'ruta' => $key['ruta']])->pluck('meta');
+
+            
+
+
+
+                    $meta =  str_replace(['[',']'],'',$meta);
+
+
+                        if ($meta == '' || is_null($meta)) {
+                            $meta = '0.00';
+                        }else{
+                            $meta = $meta;
+
+                        } 
+
+                    $json[$i]['RECU_RUTA'] =  $key['ruta'];
+                    $json[$i]['RECU_VENDE'] =   '<span style="text-align: left; float: left" >'.$key['vendedor'].'</span>';
+
+                    if($pageName == 'Recuperacion'){
+                    $json[$i]['RECU_META'] =  '<input type="text" onkeyup="getAttr(this)" style="text-align: right" class="form-control" value="'.number_format($meta,2).'" id ="recu_meta_'.$key['ruta'].'">';
+                    }else{
+                        $json[$i]['RECU_META'] =  '<span style="text-align: right; float: right" >C$'.number_format($meta,2).'</span>';
+                    }
+
+                    if ($key['recuperado_credito']>0) {
+
+                        if($pageName == 'Recuperacion'){
+                            $json[$i]['RECU_CREDITO'] =  '<input type="text" onkeyup="getAttr(this)" style="text-align: right" class="form-control" value="'.number_format($key['recuperado_credito'],2).'" id ="recu_credito_'.$key['ruta'].'">';
+                        }else{
+                            $json[$i]['RECU_CREDITO'] = '<span style="text-align: right; float: right" >C$'. number_format($key['recuperado_credito'],2).'</span>';
+                        }
+                     
+                    }else{
+                        if($pageName == 'Recuperacion'){
+                            $json[$i]['RECU_CREDITO'] =  '<input type="text" onkeyup="getAttr(this)" style="text-align: right" class="form-control" value="0.00" id ="recu_credito_'.$key['ruta'].'">';
+                         }else{
+                            $json[$i]['RECU_CREDITO'] =  '<span style="text-align: right; float: right">C$0.00</span>' ;
+                         }
+                         
+                    }
+                    if ($key['recuperado_contado']>0) {
+                        if($pageName == 'Recuperacion'){
+                            $json[$i]['RECU_CONTADO'] =  '<input type="text" onkeyup="getAttr(this)" style="text-align: right" class="form-control" value="'.number_format($key['recuperado_contado'],2).'" id ="recu_contado_'.$key['ruta'].'">';
+                          }else{
+                            $json[$i]['RECU_CONTADO'] =  '<span style="text-align: right; float: right" >C$'. number_format($key['recuperado_contado'],2).'</span>';
+                          }
+                        
+                    }else{
+                         if($pageName == 'Recuperacion'){
+                            $json[$i]['RECU_CONTADO'] =  '<input type="text" onkeyup="getAttr(this)" style="text-align: right" class="form-control" value="0.00" id ="recu_contado_'.$key['ruta'].'">';
+                         }else{
+                            $json[$i]['RECU_CONTADO'] =  '<span style="text-align: right; float: right" >C$0.00</span>';
+
+                         }
+                        
+                    }
+
+                    $json[$i]['RECU_TOTAL'] =  ($key['recuperado_credito'] == 0 && $key['recuperado_contado'] == 0) ? '<span id="recu_total_'.$key['ruta'].'" style="text-align: right; float: right">C$0.00</span>' : '<span id="recu_total_'.$key['ruta'].'" style="text-align: right; float: right">C$'.number_format($key['recuperado_credito'] + $key['recuperado_contado']).'</span>';
+                    $json[$i]['RECU_CUMPLIMIENTO'] =  ($meta=='0.00') ? '<span id="recu_cumplimiento_'.$key['ruta'].'" style="text-align: right; float: right">0.00%</span>' : '<span id="recu_cumplimiento_'.$key['ruta'].'" style="text-align: right; float: right">'.number_format(((floatval($key['recuperado_credito']) /*+ floatval($key['recuperado_contado'])*/)/floatval($meta)*100),2).'%</span>';
+                    //$json[$i]['RECU_OPCIONES'] =  '<a href="#" class="btn btn-primary btn-sm active" role="button" aria-pressed="true"><span class="fa fa-pencil">Eliminar</span></a>';
+
+                    $i++;
+                }
+
+                break;
+            case '2':
+
+                $sql_server = new \sql_server();
+                $sql_exec = '';
+
+                $sql_exec = "SELECT COBRADOR AS ruta, MONTO as  FROM gn_recuperacion T0 WHERE Mes = ".$mes." AND Anno=".$anio." ";
+                $sql_meta = "CALL sp_recuperacionMeta(".$mes.",".$anio.",".$company_user.", '' )";
+
+                 $query = $sql_server->fetchArray($sql_exec, SQLSRV_FETCH_ASSOC);
+
+                foreach ($recuperacion as $key) {
+                    $meta = meta_recuperacion_exl::where(['fechaMeta'=>$fecha, 'idCompanny'=> $request->session()->get('company_id'), 'ruta' => $key['ruta']])->pluck('meta');
+                }
+
+
+                break;
+            case '3':
+                dd("Por el momento no hay nada que presentar para la empresa: ". $company->id);
+                break;            
+            default:                
+                dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
+                break;
+
+        }
+
+
+
+
+
+       
+
+        return  $json;
+
+       
+       
+        
+    }
+
+
 
     public static function getVentasMensuales() {
         $sql_server = new \sql_server();

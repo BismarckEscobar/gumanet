@@ -905,7 +905,7 @@ function detalleVentasMes(tipo, title, cliente, articulo) {
                     }
                 });
 
-            //Tabla Ventas de Unidades de productos por productos por Mes por Ruta
+            //Tabla Ventas del mes dashboard
             $(tableActive).dataTable({
                 responsive: true,
                 "autoWidth":false,
@@ -961,10 +961,11 @@ function detalleVentasMes(tipo, title, cliente, articulo) {
             $("#MontoMeta").text('C$ '+montoMetaRecup);
             $("#cantRowsDtTemp selected").val("5");
             tableActive = `#dtRecuperacion`;
+            //companny_id = $("#MontoMeta").text('companny_id');
 
 
-        var route="getMoneyRecuRowsByRoutes/"+mes+"/"+anio+"/"+pageName;
-        var metodo = 'GET';
+            var route="getRecuRowsByRoutes/"+mes+"/"+anio+"/"+pageName;
+            var metodo = 'GET';
             $(tableActive).dataTable({
                 responsive: true,
                 "autoWidth":false,
@@ -1029,8 +1030,8 @@ function detalleVentasMes(tipo, title, cliente, articulo) {
                 
             });
 
-        $('#dtIntroRecup_length').hide();//Ocultar select que muestra cantidad de registros por pagina
-        $('#dtIntroRecup_filter').hide();//Esconde input de filtro de tabla por texto escrito
+            $('#dtIntroRecup_length').hide();//Ocultar select que muestra cantidad de registros por pagina
+            $('#dtIntroRecup_filter').hide();//Esconde input de filtro de tabla por texto escrito
 
        
 

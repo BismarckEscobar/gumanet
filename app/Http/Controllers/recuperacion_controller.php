@@ -53,14 +53,14 @@ class recuperacion_controller extends Controller
 
     public function getMoneyRecuRowsByRoutes($mes, $anio, $pageName){
 
-       
+        $otroTipoVende = array('F01','F02','F04','F12','F16','F18','F19');
         $request = Request();
         $fecha =  date('Y-m-d', strtotime($anio.'-'.$mes.'-01'));
         $recuperacion = array();
         $json = array();
         $i = 0;
         $meta=0;
-        $recuperacion = Umk_recuperacion::where(['fecha_recup'=>$fecha, 'idCompanny' => $request->session()->get('company_id')])->get();
+        $recuperacion = Umk_recuperacion::where(['fecha_recup'=>$fecha, 'idCompanny' => $request->session()->get('company_id')])->whereNotIn('ruta',$otroTipoVende)->get();
 
 
         foreach ($recuperacion as $key) {
@@ -259,7 +259,7 @@ class recuperacion_controller extends Controller
 
     public function obtenerRutasRecu($mes, $anio, request $request){
 
-        $otroTipoVende = "'F01','F12','F16','F18','F19'";
+        $otroTipoVende = "'F01','F02','F04','F12','F16','F18','F19'";
         $fecha =  date('Y-m-d', strtotime($anio.'-'.$mes.'-01'));
         $sql_server = new \sql_server();
         

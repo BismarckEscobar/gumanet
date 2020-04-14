@@ -74,6 +74,7 @@ Route::get('/dataVentasMens','dashboard_controller@getVentasMensuales');
 Route::get('/top10Cls','dashboard_controller@getTop10Clientes');
 Route::get('/valBodegas','dashboard_controller@getValBodegas');
 Route::post('/dataCate', 'dashboard_controller@ventaXCategorias');
+Route::get('/getRecuRowsByRoutes/{mes}/{anio}/{pageName}','dashboard_controller@getRecuRowsByRoutes');
 
 //RUTAS REPORTES VENTAS
 Route::post('/ventasDetalle','reportes_controller@detalleVentas');

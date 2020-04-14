@@ -9,6 +9,7 @@
     <div class="row mt-3">
       <div class="col-sm-12">
         <p class="font-weight-normal mt-0 mb-0 text-left ml-3"><strong class="text-muted">Usuario: </strong>{{ Auth::User()->email }}</p>
+        {{-- <p id="companny_id" class="font-weight-normal mt-0 mb-0 text-left ml-3" hidden="true">{{ Session::get('company_id') }}</p> --}}
         <p class="font-weight-normal text-left ml-3"><strong class="text-muted">Unidad: </strong>{{ Session::get('companyName')}}</p>
       </div>
     </div>
