@@ -861,6 +861,7 @@ class dashboard_model extends Model {
     //Muestra datos de tabla de detalle de recuperacion
     public static function getRecuRowsByRoutes($mes, $anio, $pageName){
 
+        $otroTipoVende_sql_server = "'F01','F02','F04','F12','F16','F18','F19'";
         $otroTipoVende = array('F01','F02','F04','F12','F16','F18','F19');
 
 
@@ -952,16 +953,36 @@ class dashboard_model extends Model {
                 $sql_server = new \sql_server();
                 $sql_exec = '';
 
-                $sql_exec = "SELECT COBRADOR AS ruta, MONTO as  FROM gn_recuperacion T0 WHERE Mes = ".$mes." AND Anno=".$anio." ";
-                $sql_meta = "CALL sp_recuperacionMeta(".$mes.",".$anio.",".$company_user.", '' )";
+                $sql_exec = "SELECT COBRADOR AS ruta, SUM(MONTO) as recuperado FROM gn_recuperacion T0 WHERE Mes = ".$mes." AND Anno=".$anio." AND COBRADOR NOT IN (".$otroTipoVende_sql_server.") GROUP BY COBRADOR" ;
+                //$sql_meta = "CALL sp_recuperacionMeta(".$mes.",".$anio.",".$company_user.", '' )";
 
                  $query = $sql_server->fetchArray($sql_exec, SQLSRV_FETCH_ASSOC);
-
-                foreach ($recuperacion as $key) {
+                
+                foreach ($query as $key) {
                     $meta = meta_recuperacion_exl::where(['fechaMeta'=>$fecha, 'idCompanny'=> $request->session()->get('company_id'), 'ruta' => $key['ruta']])->pluck('meta');
+                    //$meta = "CALL sp_recuperacionMeta(".$mes.",".$anio.",".$company_user.", ".$key['ruta']." )";
+
+                     $meta =  str_replace(['[',']'],'',$meta);
+
+
+                        if ($meta == '' || is_null($meta)) {
+                            $meta = '0.00';
+                        }else{
+                            $meta = $meta;
+
+                        } 
+                        
+
+                    $json[$i]['RECU_RUTA']   =  $key['ruta'];
+                    $json[$i]['RECU_VENDE']  =  '<span style="text-align: left; float: left" >'.dashboard_model::buscarVendedorXRuta($key['ruta'], $company_user).'</span>';
+                    $json[$i]['RECU_META'] =  '<span style="text-align: right; float: right" >C$'.number_format($meta,2).'</span>';
+
+                    $json[$i]['RECU_TOTAL'] =  ($key['recuperado'] == 0) ? '<span id="recu_total_'.$key['ruta'].'" style="text-align: right; float: right">C$0.00</span>' : 'C$'.number_format($key['recuperado'],2);
+                    $json[$i]['RECU_CUMPLIMIENTO'] =  ($meta=='0.00') ? '<span id="recu_cumplimiento_'.$key['ruta'].'" style="text-align: right; float: right">0.00%</span>' : '<span id="recu_cumplimiento_'.$key['ruta'].'" style="text-align: right; float: right">'.number_format(((floatval($key['recuperado']) /*+ floatval($key['recuperado_contado'])*/)/floatval($meta)*100),2).'%</span>';
+                    $i++;
                 }
 
-
+               
                 break;
             case '3':
                 dd("Por el momento no hay nada que presentar para la empresa: ". $company->id);
