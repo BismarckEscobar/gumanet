@@ -964,9 +964,9 @@ function detalleVentasMes(tipo, title, cliente, articulo) {
 
             companny_id = $("#companny_id").text();
 
-            if (companny_id == '1') {
+            if (companny_id == '1' || companny_id == '4') {
 
-                $("#cjRecuperacion").show();
+                $("#cj  Recuperacion").show();
                 $("#cjRecu_GumaPharma").hide();
 
                 tableActive = `#dtRecuperacion`;

@@ -30,7 +30,10 @@ class dashboard_model extends Model {
                 break;
             case '3':
                 $sql_exec = "";
-                break;            
+                break;  
+            case '4':
+                $sql_exec = "EXEC Ventas_Rutas_INV ".$mes.", ".$anio;
+                break;          
             default:                
                 dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
                 break;
@@ -71,12 +74,14 @@ class dashboard_model extends Model {
                 
                 break;
             case '2':
-                 
                 $sql_exec = "EXEC Ventas_Rutas_GF ".$mes.", ".$anio;
                 break;
             case '3':
                 $sql_exec = "";
-                break;            
+                break;     
+                 case '4':
+                $sql_exec = "EXEC Ventas_Rutas_INV ".$mes.", ".$anio;
+                break;       
             default:                
                 dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
                 break;
@@ -134,6 +139,15 @@ class dashboard_model extends Model {
             case '3':
                 # code...
                 break;
+
+            case '4':
+                $sql_exec =  "VENDEDOR_INV ".$ruta;
+                $query = $sql_server->fetchArray($sql_exec,SQLSRV_FETCH_ASSOC);
+                foreach ($query as $fila){
+                $vendedor = $fila['NOMBRE'];
+                }
+               
+                break;
             
             default:
                 # code...
@@ -163,7 +177,10 @@ class dashboard_model extends Model {
                 break;
             case '3':
                 $sql_exec = "";
-                break;            
+                break;   
+            case '4':
+                $sql_exec = "EXEC Inv_VentaArticulo_Vendedor ".$mes.", ".$anio.", '".$ruta."'";
+                break;         
             default:                
                 dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
                 break;
@@ -229,7 +246,10 @@ class dashboard_model extends Model {
                 break;
             case '3':
                 $sql_exec = "";
-                break;            
+                break;    
+            case '4':
+                $sql_exec = "EXEC Inv_VentaLinea_Articulo ".$mes.", ".$anio.", '', '".$cliente."', '".$articulo."', ''";
+                break;        
             default:                
                 dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
                 break;
@@ -274,7 +294,10 @@ class dashboard_model extends Model {
                             break;
                         case '3':
                             $sql_exec = "";
-                            break;            
+                            break;  
+                        case '4':
+                           $sql_exec = "EXEC Inv_Recuperacion_Cartera '".$f1."', '".$f2."', '' ";
+                            break;          
                         default:                
                             dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
                             break;
@@ -351,7 +374,10 @@ class dashboard_model extends Model {
                 break;
             case '3':
                 $sql_exec = "";
-                break;            
+                break;    
+            case '4':
+                 $sql_exec = " EXEC Inv_ReportVentas_Cliente ".$mes.", ".$anio." ";
+                break;      
             default:                
                 dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
                 break;
@@ -393,7 +419,10 @@ class dashboard_model extends Model {
                 break;
             case '3':
                 $sql_exec = "";
-                break;            
+                break;   
+            case '4':
+                $sql_exec = " EXEC Inv_DetalleVentas_Mes ".$mes.", ".$anio." ";
+                break;        
             default:                
                 dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
                 break;
@@ -439,7 +468,11 @@ class dashboard_model extends Model {
                 break;
             case '3':
                 $sql_exec = "";
-                break;            
+                break; 
+            case '4':
+                $sql_exec = "EXEC Inv_VentaLinea_Articulo ".$mes.", ".$anio.", '', '', '', ''";
+                $sql_meta = "EXEC Inv_meta_articulos ".$mes.", ".$anio.", '', '', ''"; //Habra que revisar ya que se tendra que crear la cabecera en otra tabla
+                break;           
             default:                
                 dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
                 break;
@@ -480,7 +513,11 @@ class dashboard_model extends Model {
                 break;
             case '3':
                 $sql_exec = "";
-                break;            
+                break;  
+            case '4':
+               $sql_exec =
+                "SELECT dbo.INV_RETURN_ITEMS_MES(".$mes.", ".$anio.") cantItems";
+                break;          
             default:                
                 dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
                 break;
@@ -517,7 +554,11 @@ class dashboard_model extends Model {
                 break;
             case '3':
                 $sql_exec = "";
-                break;            
+                break; 
+            case '4':
+                $sql_exec =
+                "EXEC INV_GN_VENTAS_COMPARACION ".$mes.", ".$anio." ";
+                break;          
             default:                
                 dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
                 break;
@@ -566,7 +607,11 @@ class dashboard_model extends Model {
                 break;
             case '3':
                 $sql_exec = "";
-                break;            
+                break;  
+            case '4':
+                $sql_exec =
+                "EXEC INV_GN_ITEMS_COMPARACION ".$mes.", ".$anio." ";
+                break;        
             default:                
                 dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
                 break;
@@ -622,7 +667,17 @@ class dashboard_model extends Model {
                 break;
             case '3':
                 $sql_exec = "";
-                break;            
+                break;  
+
+            case '4':
+                $sql_exec = "SELECT
+                            SUM(VENTA) AS Monto,
+                            Clasificacion3 As ClaseTerapeutica
+                            FROM Softland.DBO.INV_VtasTotal_UMK (nolock)
+                            WHERE month(DIA)=".$mes." AND year(DIA)=".$anio."
+                            AND  Ruta NOT IN('F01', 'F12')
+                            GROUP BY Clasificacion3,Clasificacion5";
+                break;         
             default:                
                 dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
                 break;
@@ -661,7 +716,10 @@ class dashboard_model extends Model {
                 break;
             case '3':
                 $sql_exec = "";
-                break;            
+                break;           
+            case '4':
+                $sql_exec = " EXEC INV_ReportValorizacion_TotalINV '".$date."' ";
+                break;      
             default:                
                 dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
                 break;
@@ -707,7 +765,10 @@ class dashboard_model extends Model {
                 break;
             	case '3':
                 	$sql_exec = "";
-                break;            
+                break;   
+                case '4':
+                    $sql_exec = "EXEC Inv_VentaLinea_Articulo ".$mes.", ".$anio.", '', '', '','' ";
+                break;       
             	default:                
                 	dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
                 break;
@@ -808,17 +869,24 @@ class dashboard_model extends Model {
                 break;
             case '2':
                 $sql_exec = "SELECT SUM(MONTO) AS M_REC FROM gn_recuperacion T0 WHERE Mes = ".$mes." AND Anno=".$anio." AND COBRADOR NOT IN (".$otroTipoVende_sql_server.")";
+
                 $sql_meta = "CALL sp_recuperacionMeta(".$mes.",".$anio.",".$company_user.", '' )";
                 break;
             case '3':
                 $sql_exec = "";
-                break;            
+                break;
+              case '4':
+                $query = Umk_recuperacion::where(['fecha_recup' => $anio.'-'.$mes.'-01', 'IdCompanny' => $company_user])->pluck('recuperado_credito')->toArray();
+
+
+                $sql_meta = "CALL sp_recuperacionMeta(".$mes.",".$anio.",".$company_user.", '' )";
+                break;           
             default:                
                 dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
                 break;
         }
         
-        if ($company_user!=1) {
+        if ($company_user!= 1 && $company_user!= 4) {
           
             $query = $sql_server->fetchArray($sql_exec, SQLSRV_FETCH_ASSOC); 
         }     
@@ -828,7 +896,7 @@ class dashboard_model extends Model {
        
             
         if (count($query)>0) {
-            if ($company_user==1) {
+            if ($company_user== 1 || $company_user== 4) {
                  
                 for ($i=0; $i < count($query) ; $i++) { 
                      $total = $total +  (floatval($query[$i]));
@@ -986,7 +1054,77 @@ class dashboard_model extends Model {
                 break;
             case '3':
                 dd("Por el momento no hay nada que presentar para la empresa: ". $company->id);
-                break;            
+                break; 
+            case '4':
+              $recuperacion = Umk_recuperacion::where(['fecha_recup'=>$fecha, 'idCompanny' => $request->session()->get('company_id')])->whereNotIn('ruta',$otroTipoVende)->get();
+
+                foreach ($recuperacion as $key) {
+                    $meta = meta_recuperacion_exl::where(['fechaMeta'=>$fecha, 'idCompanny'=> $request->session()->get('company_id'), 'ruta' => $key['ruta']])->pluck('meta');
+
+            
+
+
+
+                    $meta =  str_replace(['[',']'],'',$meta);
+
+
+                        if ($meta == '' || is_null($meta)) {
+                            $meta = '0.00';
+                        }else{
+                            $meta = $meta;
+
+                        } 
+
+                    $json[$i]['RECU_RUTA'] =  $key['ruta'];
+                    $json[$i]['RECU_VENDE'] =   '<span style="text-align: left; float: left" >'.$key['vendedor'].'</span>';
+
+                    if($pageName == 'Recuperacion'){
+                    $json[$i]['RECU_META'] =  '<input type="text" onkeyup="getAttr(this)" style="text-align: right" class="form-control" value="'.number_format($meta,2).'" id ="recu_meta_'.$key['ruta'].'">';
+                    }else{
+                        $json[$i]['RECU_META'] =  '<span style="text-align: right; float: right" >C$'.number_format($meta,2).'</span>';
+                    }
+
+                    if ($key['recuperado_credito']>0) {
+
+                        if($pageName == 'Recuperacion'){
+                            $json[$i]['RECU_CREDITO'] =  '<input type="text" onkeyup="getAttr(this)" style="text-align: right" class="form-control" value="'.number_format($key['recuperado_credito'],2).'" id ="recu_credito_'.$key['ruta'].'">';
+                        }else{
+                            $json[$i]['RECU_CREDITO'] = '<span style="text-align: right; float: right" >C$'. number_format($key['recuperado_credito'],2).'</span>';
+                        }
+                     
+                    }else{
+                        if($pageName == 'Recuperacion'){
+                            $json[$i]['RECU_CREDITO'] =  '<input type="text" onkeyup="getAttr(this)" style="text-align: right" class="form-control" value="0.00" id ="recu_credito_'.$key['ruta'].'">';
+                         }else{
+                            $json[$i]['RECU_CREDITO'] =  '<span style="text-align: right; float: right">C$0.00</span>' ;
+                         }
+                         
+                    }
+                    if ($key['recuperado_contado']>0) {
+                        if($pageName == 'Recuperacion'){
+                            $json[$i]['RECU_CONTADO'] =  '<input type="text" onkeyup="getAttr(this)" style="text-align: right" class="form-control" value="'.number_format($key['recuperado_contado'],2).'" id ="recu_contado_'.$key['ruta'].'">';
+                          }else{
+                            $json[$i]['RECU_CONTADO'] =  '<span style="text-align: right; float: right" >C$'. number_format($key['recuperado_contado'],2).'</span>';
+                          }
+                        
+                    }else{
+                         if($pageName == 'Recuperacion'){
+                            $json[$i]['RECU_CONTADO'] =  '<input type="text" onkeyup="getAttr(this)" style="text-align: right" class="form-control" value="0.00" id ="recu_contado_'.$key['ruta'].'">';
+                         }else{
+                            $json[$i]['RECU_CONTADO'] =  '<span style="text-align: right; float: right" >C$0.00</span>';
+
+                         }
+                        
+                    }
+
+                    $json[$i]['RECU_TOTAL'] =  ($key['recuperado_credito'] == 0 && $key['recuperado_contado'] == 0) ? '<span id="recu_total_'.$key['ruta'].'" style="text-align: right; float: right">C$0.00</span>' : '<span id="recu_total_'.$key['ruta'].'" style="text-align: right; float: right">C$'.number_format($key['recuperado_credito'] + $key['recuperado_contado']).'</span>';
+                    $json[$i]['RECU_CUMPLIMIENTO'] =  ($meta=='0.00') ? '<span id="recu_cumplimiento_'.$key['ruta'].'" style="text-align: right; float: right">0.00%</span>' : '<span id="recu_cumplimiento_'.$key['ruta'].'" style="text-align: right; float: right">'.number_format(((floatval($key['recuperado_credito']) /*+ floatval($key['recuperado_contado'])*/)/floatval($meta)*100),2).'%</span>';
+                    //$json[$i]['RECU_OPCIONES'] =  '<a href="#" class="btn btn-primary btn-sm active" role="button" aria-pressed="true"><span class="fa fa-pencil">Eliminar</span></a>';
+
+                    $i++;
+                }
+
+                break;   
             default:                
                 dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
                 break;
@@ -1026,7 +1164,10 @@ class dashboard_model extends Model {
                 break;
             case '3':
                 $sql = "";
-                break;            
+                break;   
+            case '4':
+                 $sql = "EXECUTE INV_GN_VENTAS_MENSUALES";
+                break;    
             default:                
                 dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
                 break;

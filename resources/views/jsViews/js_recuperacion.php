@@ -29,24 +29,6 @@
 
 	});
 
-//VALIDA SI LA TABLA TIENE REGISTROS EN PANTALLA, NO INVLUYE TOTAL FILTRADOS
-   /* function validarSiDtMuestraRegistros(){
-        dt = $('#dtIntroRecup').DataTable();
-        var retornos = new Array();
-        var info = dt.page.info();
-        var cantRegShowOnDt = info.recordsDisplay;// muestra solo los registros mostrados en dataTable.
-        if (cantRegShowOnDt != 0){
-            
-
-             retornos['verdadero'] = 1;
-             retornos['rows'] = cantRegShowOnDt;
-            
-        }else{
-            retornos['verdadero'] = 0;
-            retornos['rows'] = 0;
-        }
-        return retornos;
-    }*/
 
     function fillDtIntroRecup(route, metodo){
         //Mostrar datos de recuperación en data table
@@ -129,7 +111,7 @@
 
        
 
-         $("#recu_meta_"+ruta).keyup(function (){
+        $("#recu_meta_"+ruta).keyup(function (){
             $("#recu_meta_"+ruta).maskMoney({prefix:'C$', thousands:',', decimal:'.', affixesStay: true});
             //this.value = 'C$'+numeral((this.value).replace(/[^0-9.,C$]/g, '')).format('0,0.00');
         });
@@ -253,7 +235,7 @@
         var route="getMoneyRecuRowsByRoutes/"+mes+"/"+anio+"/"+pageName;
         var metodo = 'GET';
             
-        // Obtengo datos de tabla
+        // Obtengo datos de data table
         for (var i = 0; i < table.data().count(); i++) {
             idMeta    = $('#recu_meta_'+table.cell( i, 0 ).data()).val();
             idCredito = $('#recu_credito_'+table.cell( i, 0 ).data()).val();
@@ -263,29 +245,26 @@
             idMeta = idMeta.replace(/[^0-9.]/g, '');
             idCredito = idCredito.replace(/[^0-9.]/g, '');
             idContado = idContado.replace(/[^0-9.]/g, '');
+
+            vendedores = table.cell( i, 1 ).data();
+            vendedores = (vendedores.replace(`<span style="text-align: left; float: left" ><span style="text-align: left; float: left" >`, '')).replace(`</span></span>`,'');
+
+            console.log(vendedores);
             
 
 
-         //   if ($(idCredito).val() != null) {
+       
 
                 data[j] = {
                     ruta: table.cell( i, 0 ).data(),
-                    vendedor: table.cell( i, 1 ).data(),
+                    vendedor: vendedores,
                     Meta_recu: idMeta,
                     Recu_credito: idCredito,
                     Recu_contado: idContado,
                     fecha: anio +'-'+ mes +'-01'};
                 j++;
                
-           /* }else{
-                data2[k] = {ruta: table.cell( i, 0 ).data(),
-                    vendedor :table.cell( i, 1 ).data(),
-                    Meta_recu: $(idMeta).val(),
-                    Recu_credito: $(idCredito).val(), 
-                    Recu_contado: $(idContado).val(),
-                    fecha: anio +'-'+ mes +'-01'};
-                k++;
-            }*/
+          
             
         }
 
@@ -295,6 +274,7 @@
 
         if (ValidarTablaRecu.length > 0) {
            
+        console.log("Actualizando");
             // Actualizo datos en campos credito y contado
             $.ajax({
                 url:"actualizarMetaRecup",
@@ -317,6 +297,8 @@
                 }
             });
         }else{
+
+        console.log("Creando");
            
             //Crear nuevos registros de recuperacion
              $.ajax({
