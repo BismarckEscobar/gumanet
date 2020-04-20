@@ -905,7 +905,7 @@ function detalleVentasMes(tipo, title, cliente, articulo) {
                     }
                 });
 
-            //Tabla Ventas de Unidades de productos por productos por Mes por Ruta
+            //Tabla Ventas del mes dashboard
             $(tableActive).dataTable({
                 responsive: true,
                 "autoWidth":false,
@@ -951,7 +951,7 @@ function detalleVentasMes(tipo, title, cliente, articulo) {
             $('#txtMontoMeta').text('Total meta venta');
             break;
         case 'recu':
-            $("#cjRecuperacion").show();
+            
             $('#cumplMetaContent').show();
             $("#cjVentas").hide();
             $("#cjRutVentas").hide();
@@ -960,137 +960,174 @@ function detalleVentasMes(tipo, title, cliente, articulo) {
             $("#montoMetaContent").show();
             $("#MontoMeta").text('C$ '+montoMetaRecup);
             $("#cantRowsDtTemp selected").val("5");
-            tableActive = `#dtRecuperacion`;
+            
 
+            companny_id = $("#companny_id").text();
 
-        var route="getMoneyRecuRowsByRoutes/"+mes+"/"+anio+"/"+pageName;
-        var metodo = 'GET';
-            $(tableActive).dataTable({
-                responsive: true,
-                "autoWidth":false,
-                'ajax':{
-                    'url':route,
-                    'method':metodo,
-                    'async' : false,
-                    'dataSrc': '',
-                },        
-                "destroy" : true,
-                "info":    false,
-                "lengthMenu": [[5,10,15,-1], [5,10,15,"Todo"]],
-                "language": {
-                    "zeroRecords": "Cargando...",
-                    "paginate": {
-                        "first":      "Primera",
-                        "last":       "Última ",
-                        "next":       "Siguiente",
-                        "previous":   "Anterior"
+            if (companny_id == '1' || companny_id == '4') {
+
+                $("#cj  Recuperacion").show();
+                $("#cjRecu_GumaPharma").hide();
+
+                tableActive = `#dtRecuperacion`;
+
+                var route="getRecuRowsByRoutes/"+mes+"/"+anio+"/"+pageName;
+                var metodo = 'GET';
+                $(tableActive).dataTable({
+                    responsive: true,
+                    "autoWidth":false,
+                    'ajax':{
+                        'url':route,
+                        'method':metodo,
+                        'async' : false,
+                        'dataSrc': '',
+                    },        
+                    "destroy" : true,
+                    "info":    false,
+                    "lengthMenu": [[5,10,15,-1], [5,10,15,"Todo"]],
+                    "language": {
+                        "zeroRecords": "Cargando...",
+                        "paginate": {
+                            "first":      "Primera",
+                            "last":       "Última ",
+                            "next":       "Siguiente",
+                            "previous":   "Anterior"
+                        },
+                        "lengthMenu": "MOSTRAR _MENU_",
+                        "emptyTable": "NO HAY DATOS DISPONIBLES",
+                        "search":     "BUSCAR"
                     },
-                    "lengthMenu": "MOSTRAR _MENU_",
-                    "emptyTable": "NO HAY DATOS DISPONIBLES",
-                    "search":     "BUSCAR"
-                },
-                'columns': [
-                    { "title": "Ruta",      "data": "RECU_RUTA" },
-                    { "title": "Vendedor", "data": "RECU_VENDE" },
-                    { "title": "Meta",      "data": "RECU_META" },
-                    { "title": "Recup. Crédito",      "data": "RECU_CREDITO" },
-                    { "title": "Recup. Contado","data": "RECU_CONTADO" },
-                    { "title": "Recup. Total",      "data": "RECU_TOTAL" },
-                    { "title": "% Cumplimiento Crédito",      "data": "RECU_CUMPLIMIENTO" },
-                    //{ "title": 'Opciones',"data": "RECU_OPCIONES" },
-                ],
-                "columnDefs": [
-                    {"className": "dt-center", "targets": [ 0, 1 , 2, 3, 4, 5, 6,]},
-                    {"width":"5%","targets":[0,6]},
-                    {"width":"40%","targets":[1]},
-                    {"width":"10%","targets":[2,3,4,5,6]}
-                ],
-                "footerCallback": function ( row, data, start, end, display ) {
-                    var api = this.api(), data;
-                    var intVal = function ( i ) {
-                        return typeof i === 'string' ?
-                        i.replace(/[\C$,]/g, '')*1 :
-                        typeof i === 'number' ?
-                        i : 0;
-                    };
-                    total = api
-                    .column( 3 )
-                    .data()
-                    .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                    }, 0 );
-                    tmp = parseFloat($('#MontoMeta').text().replace(/[\ U,C$]/g, ''));
-                    cump = (tmp>0)?(( parseFloat(total) / tmp ) * 100):0;
-                    $('#cumplMeta').text(numeral(cump).format('0.00')+'%');
-                    $('#MontoReal').text('C$'+ numeral(total).format('0,0.00'));
-                },
-                "fnInitComplete": function () {
+                    'columns': [
+                        { "title": "Ruta",      "data": "RECU_RUTA" },
+                        { "title": "Vendedor", "data": "RECU_VENDE" },
+                        { "title": "Meta",      "data": "RECU_META" },
+                        { "title": "Recup. Crédito",      "data": "RECU_CREDITO" },
+                        { "title": "Recup. Contado","data": "RECU_CONTADO" },
+                        { "title": "Recup. Total",      "data": "RECU_TOTAL" },
+                        { "title": "% Cump. Crédito",      "data": "RECU_CUMPLIMIENTO" },
+                        //{ "title": 'Opciones',"data": "RECU_OPCIONES" },
+                    ],
+                   "columnDefs": [
+                        {"width":"20%","targets":[1]},
+                        {"width":"15%","targets":[2, 3, 4, 5, 6]},
+                        {"className": "dt-center", "targets":[0, 1, 2, 3, 4, 5, 6]}
+                    ],
+                    "footerCallback": function ( row, data, start, end, display ) {
+                        var api = this.api(), data;
+                        var intVal = function ( i ) {
+                            return typeof i === 'string' ?
+                            i.replace(/[^0-9.]/g, '')*1 :
+                            typeof i === 'number' ?
+                            i : 0;
+                        };
+                        total = api
+                        .column( 3 )
+                        .data()
+                        .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                        }, 0 );
+                        tmp = parseFloat($('#MontoMeta').text().replace(/[\ U,C$]/g, ''));
+                        cump = (tmp>0)?(( parseFloat(total) / tmp ) * 100):0;
+                        $('#cumplMeta').text(numeral(cump).format('0.00')+'%');
+                        $('#MontoReal').text('C$'+ numeral(total).format('0,0.00'));
+                    },
+                    "fnInitComplete": function () {
+                        
+                    }
                     
-                }
-                
-            });
+                });
 
-        $('#dtIntroRecup_length').hide();//Ocultar select que muestra cantidad de registros por pagina
-        $('#dtIntroRecup_filter').hide();//Esconde input de filtro de tabla por texto escrito
+                $('#dtIntroRecup_length').hide();//Ocultar select que muestra cantidad de registros por pagina
+                $('#dtIntroRecup_filter').hide();//Esconde input de filtro de tabla por texto escrito
 
-       
+                $('#txtMontoReal').text('Total real recup. crédito');
+                $('#txtMontoMeta').text('Total meta recuperacion');
+           
 
-           /* $(tableActive).dataTable({
-                responsive: true,
-                "autoWidth":false,
-                "ajax":{
-                    "url": "detalles/"+tipo+"/"+mes+"/"+anio+"/ND/ND/ND",
-                    'dataSrc': '',
-                },
-                "info":    false,
-                "destroy" : true,
-                "lengthMenu": [[5,10,20,50,-1], [20,30,50,100,"Todo"]],
-                "language": {
-                    "zeroRecords": "Cargando...",
-                    "paginate": {
-                        "first":      "Primera",
-                        "last":       "Última ",
-                        "next":       "Siguiente",
-                        "previous":   "Anterior"
+            } else if (companny_id == '2') {
+
+
+                $("#cjRecuperacion").hide();
+                $("#cjRecu_GumaPharma").show();
+
+                tableActive = `#dtRecu_GumaPharma`;
+
+                var route="getRecuRowsByRoutes/"+mes+"/"+anio+"/"+pageName;
+                var metodo = 'GET';
+                $(tableActive).dataTable({
+                    responsive: true,
+                    "autoWidth":false,
+                    'ajax':{
+                        'url':route,
+                        'method':metodo,
+                        'async' : false,
+                        'dataSrc': '',
+                    },        
+                    "destroy" : true,
+                    "info":    false,
+                    "lengthMenu": [[5,10,15,-1], [5,10,15,"Todo"]],
+                    "language": {
+                        "zeroRecords": "Cargando...",
+                        "paginate": {
+                            "first":      "Primera",
+                            "last":       "Última ",
+                            "next":       "Siguiente",
+                            "previous":   "Anterior"
+                        },
+                        "lengthMenu": "MOSTRAR _MENU_",
+                        "emptyTable": "NO HAY DATOS DISPONIBLES",
+                        "search":     "BUSCAR"
                     },
-                    "lengthMenu": "MOSTRAR _MENU_",
-                    "emptyTable": "NO HAY DATOS DISPONIBLES",
-                    "search":     "BUSCAR"
-                },
-                'columns': [
-                    { "title": "Ruta",          "data": "RUTA" },
-                    { "title": "Nombre",        "data": "NOMBRE" },
-                    { "title": "Monto",         "data": "MONTO" },
-                    { "title": "Meta",          "data": "META" },
-                    { "title": "Efectividad",   "data": "EFEC" }
-                ],
-                "columnDefs": [
-                    {"className": "dt-right", "targets": [ 2, 3 ]},
-                    {"className": "dt-center", "targets": [ 0, 4 ]}
-                ],
-                "footerCallback": function ( row, data, start, end, display ) {
-                    var api = this.api(), data;
-                    var intVal = function ( i ) {
-                        return typeof i === 'string' ?
-                        i.replace(/[\$,]/g, '')*1 :
-                        typeof i === 'number' ?
-                        i : 0;
-                    };
-                    total = api
-                    .column( 2 )
-                    .data()
-                    .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                    }, 0 );
-                    tmp = parseFloat($('#MontoMeta').text().replace(/[\ U,C$]/g, ''));
-                    cump = (tmp>0)?(( parseFloat(total) / tmp ) * 100):0;
-                    $('#cumplMeta').text(numeral(cump).format('0.00')+'%');
-                    $('#MontoReal').text('C$'+ numeral(total).format('0,0.00'));
-                }
-            })*/
+                    'columns': [
+                        { "title": "Ruta",      "data": "RECU_RUTA" },
+                        { "title": "Vendedor", "data": "RECU_VENDE" },
+                        { "title": "Meta",      "data": "RECU_META" },
+                        { "title": "Recuperación",      "data": "RECU_TOTAL" },
+                        { "title": "% Cumplimiento",      "data": "RECU_CUMPLIMIENTO" }
+                        //{ "title": 'Opciones',"data": "RECU_OPCIONES" },
+                    ],
+                   "columnDefs": [
+                        {"width":"20%","targets":[0,1]},
+                        {"width":"15%","targets":[2, 3, 4]},
+                        {"className": "dt-center", "targets":[0, 1, 2, 4]},
+                        {"className": "dt-right", "targets":[3]}
+                    ],
+                    "footerCallback": function ( row, data, start, end, display ) {
+                        var api = this.api(), data;
+                        var intVal = function ( i ) {
+                            return typeof i === 'string' ?
+                            i.replace(/[ \C$,]/g, '')*1 :
+                            typeof i === 'number' ?
+                            i : 0;
 
-            $('#txtMontoReal').text('Total real recup. crédito');
-            $('#txtMontoMeta').text('Total meta recuperacion');
+                        };
+                        total =api
+                        .column( 3 )
+                        .data()
+                        .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                        }, 0 );
+                       
+                
+                        tmp = parseFloat($('#MontoMeta').text().replace(/[\ U,C$]/g, ''));
+                        cump = (tmp>0)?(( parseFloat(total) / tmp ) * 100):0;
+                        $('#cumplMeta').text(numeral(cump).format('0.00')+'%');
+                        $('#MontoReal').text('C$'+ numeral(total).format('0,0.00'));
+                    },
+                    "fnInitComplete": function () {
+                        
+                    }
+                    
+                });
+
+                $('#dtRecu_GumaPharma_length').hide();//Ocultar select que muestra cantidad de registros por pagina
+                $('#dtRecu_GumaPharma_filter').hide();//Esconde input de filtro de tabla por texto escrito
+
+                $('#txtMontoReal').text('Total real recuperación');
+                $('#txtMontoMeta').text('Total meta recuperacion');
+           
+            }
+
 
 
         break;

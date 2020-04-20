@@ -81,4 +81,15 @@ class dashboard_controller extends Controller {
     $obj = dashboard_model::getVentasMensuales();
     return response()->json($obj);
   }
+
+  public function getRecuRowsByRoutes($mes, $anio, $pageName){
+
+     $obj = dashboard_model::getRecuRowsByRoutes($mes, $anio, $pageName);
+  return response()->json($obj);
+      
+  }
+
 }
+
+
+

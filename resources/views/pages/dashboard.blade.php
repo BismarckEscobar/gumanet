@@ -158,6 +158,15 @@
                     </div>
                 </div>                    
             </div>
+
+            <div class="col-sm-12 mt-2">
+                <div class="table-responsive">
+                   <div id="cjRecu_GumaPharma">
+                        <table class="table table-bordered table-sm" width="100%" id="dtRecu_GumaPharma"></table>
+                    </div>
+                </div>                    
+            </div>
+
             <div class="col-sm-12 mt-2">
                 <div class="table-responsive">
                     <div id="cjCliente">

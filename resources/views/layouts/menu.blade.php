@@ -9,6 +9,7 @@
     <div class="row mt-3">
       <div class="col-sm-12">
         <p class="font-weight-normal mt-0 mb-0 text-left ml-3"><strong class="text-muted">Usuario: </strong>{{ Auth::User()->email }}</p>
+        <p id="companny_id" class="font-weight-normal mt-0 mb-0 text-left ml-3" hidden="true">{{ Session::get('company_id') }}</p>
         <p class="font-weight-normal text-left ml-3"><strong class="text-muted">Unidad: </strong>{{ Session::get('companyName')}}</p>
       </div>
     </div>
@@ -47,7 +48,7 @@
                   Usuarios
               </a>
            </li>
-            @if(Session::get('companyName')=='UNIMARK')
+            @if(Session::get('companyName')=='UNIMARK' || Session::get('companyName')=='INNOVA')
              <li>
               <a class="nav-link text-secondary" href="Recuperacion">
                 <span data-feather="corner-down-left"></span>
@@ -80,14 +81,14 @@
                   Inventario
               </a>
           </li>
-          @if(Session::get('companyName')=='UNIMARK')
-          <li>
-            <a class="nav-link text-secondary" href="Saldos">
-              <span data-feather="dollar-sign"></span>
-              Saldos
-            </a>
-          </li>
-          @endif
+            @if(Session::get('companyName')=='UNIMARK')
+            <li>
+              <a class="nav-link text-secondary" href="Saldos">
+                <span data-feather="dollar-sign"></span>
+                Saldos
+              </a>
+            </li>
+            @endif
           @elseif(Auth::User()->activeRole()==3)
           <li class="nav-item">
               <a class="nav-link text-secondary" href="Metas">

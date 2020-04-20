@@ -12,13 +12,16 @@
         fillDtIntroRecup(route, metodo);
        // validacion = validarSiDtMuestraRegistros();
         var ValidarTablaRecu = existenDatosEnTablaRecu(mes, anio);
+
+        $('#btnSaveIntroRecup').text('Guardar');
+
          if (ValidarTablaRecu.length > 0) {
             
-            $('#btnSaveIntroRecup').text('Actualizar Registros');//si hay registro label del boton es igual a "Guardar"
+            //$('#btnSaveIntroRecup').text('Actualizar Registros');//si hay registro label del boton es igual a "Guardar"
             $('#btnSaveIntroRecup').val(1);
             
         }else{
-        $('#btnSaveIntroRecup').text('Crear Registros');//si NO hay registro label del boton es igual a "Agregar Rutas"
+        //$('#btnSaveIntroRecup').text('Crear Registros');//si NO hay registro label del boton es igual a "Agregar Rutas"
             $('#btnSaveIntroRecup').val(0);
             obtenerRutasRecu();
         }
@@ -26,24 +29,6 @@
 
 	});
 
-//VALIDA SI LA TABLA TIENE REGISTROS EN PANTALLA, NO INVLUYE TOTAL FILTRADOS
-   /* function validarSiDtMuestraRegistros(){
-        dt = $('#dtIntroRecup').DataTable();
-        var retornos = new Array();
-        var info = dt.page.info();
-        var cantRegShowOnDt = info.recordsDisplay;// muestra solo los registros mostrados en dataTable.
-        if (cantRegShowOnDt != 0){
-            
-
-             retornos['verdadero'] = 1;
-             retornos['rows'] = cantRegShowOnDt;
-            
-        }else{
-            retornos['verdadero'] = 0;
-            retornos['rows'] = 0;
-        }
-        return retornos;
-    }*/
 
     function fillDtIntroRecup(route, metodo){
         //Mostrar datos de recuperación en data table
@@ -78,14 +63,13 @@
                     { "title": "Recup. Crédito",      "data": "RECU_CREDITO" },
                     { "title": "Recup. Contado","data": "RECU_CONTADO" },
                     { "title": "Recup. Total",      "data": "RECU_TOTAL" },
-                    { "title": "% Cumplimiento Crédito",      "data": "RECU_CUMPLIMIENTO" },
+                    { "title": "% Cump. Crédito",      "data": "RECU_CUMPLIMIENTO" },
                     //{ "title": 'Opciones',"data": "RECU_OPCIONES" },
                 ],
                 "columnDefs": [
-                    {"className": "dt-center", "targets": [ 0 , 2, 3, 4, 5, 6]},
-                    {"width":"8%","targets":[0,6]},
                     {"width":"20%","targets":[1]},
-                    {"width":"10%","targets":[2,3,4,5,6]}
+                    {"width":"15%","targets":[2, 3, 4, 5, 6]},
+                    {"className": "dt-center", "targets":[0, 1, 2, 3, 4, 5, 6]}
                 ],
                 "fnInitComplete": function () {
                     //validarSiDtMuestraRegistros();
@@ -109,29 +93,64 @@
     });
 
     function getAttr(inputAtt){
+        var valMeta = 0.00;
         var valCredito = 0.00;
         var valContado = 0.00;
+
         var valRutaCredito = "";
         var valRutaContado = "";
         var id = "";
         var totalRecu = 0.00;
         var meta;
+
+
+
         var table = $('#dtIntroRecup').DataTable();
         id = "#"+inputAtt.id;
         ruta = id.substr(-3,3);
 
+       
+
+        $("#recu_meta_"+ruta).keyup(function (){
+            $("#recu_meta_"+ruta).maskMoney({prefix:'C$', thousands:',', decimal:'.', affixesStay: true});
+            //this.value = 'C$'+numeral((this.value).replace(/[^0-9.,C$]/g, '')).format('0,0.00');
+        });
+
         $("#recu_credito_"+ruta).keyup(function (){
-            this.value = (this.value + '').replace(/[^0-9.]/g, '');
+            $("#recu_credito_"+ruta).maskMoney({prefix:'C$', thousands:',', decimal:'.', affixesStay: true});
+            //this.value = 'C$'+numeral((this.value).replace(/[^0-9.,C$]/g, '')).format('0,0.00');
         });
+
         $("#recu_contado_"+ruta).keyup(function (){
-            this.value = (this.value + '').replace(/[^0-9.]/g, '');
+            $("#recu_contado_"+ruta).maskMoney({prefix:'C$', thousands:',', decimal:'.', affixesStay: true});
+            //this.value = 'C$'+numeral((this.value).replace(/[^0-9.,C$]/g, '')).format('0,0.00');
+        });
+
+        $("#recu_meta_"+ruta).keydown(function (){
+            $("#recu_meta_"+ruta).maskMoney({prefix:'C$', thousands:',', decimal:'.', affixesStay: true});
+            this.value = 'C$'+numeral((this.value).replace(/[^0-9.,C$]/g, '')).format('0,0.00');;
+        });
+
+        $("#recu_credito_"+ruta).keydown(function (){
+             $("#recu_credito_"+ruta).maskMoney({prefix:'C$', thousands:',', decimal:'.', affixesStay: true});
+            this.value = 'C$'+numeral((this.value).replace(/[^0-9.,C$]/g, '')).format('0,0.00');;
+        });
+
+        $("#recu_contado_"+ruta).keydown(function (){
+            $("#recu_contado_"+ruta).maskMoney({prefix:'C$', thousands:',', decimal:'.', affixesStay: true});
+            this.value = 'C$'+numeral((this.value).replace(/[^0-9.,C$]/g, '')).format('0,0.00');;
         });
 
 
+        valMeta = $("#recu_meta_"+ruta).val();
         valCredito = $("#recu_credito_"+ruta).val();
         valContado = $("#recu_contado_"+ruta).val();
+
+        valMeta =valMeta.replace(/[^0-9.]/g, '');
+        valCredito = valCredito.replace(/[^0-9.]/g, '');
+        valContado = valContado.replace(/[^0-9.]/g, '');
         
-        meta = $("#recu_meta_"+ruta).text().replace(/[C$,]/gi,"");
+        meta = Number(valMeta);
         cumplimiento = Number($('#recu_cumplimiento_'+ruta).val().replace('%',""));
         
         totalRecu = Number(valCredito) + Number(valContado);
@@ -178,14 +197,16 @@
         fillDtIntroRecup(route, metodo);
 
         var ValidarTablaRecu = existenDatosEnTablaRecu(mes, anio, pageName);
-         if (ValidarTablaRecu.length > 0) {
-            
-            $('#btnSaveIntroRecup').text('Actualizar Registros');//si hay registro label del boton es igual a "Guardar"
+
+        $('#btnSaveIntroRecup').text('Guardar');
+        if (ValidarTablaRecu.length > 0) {
+
+            //$('#btnSaveIntroRecup').text('Actualizar Registros');//si hay registro label del boton es igual a "Actualizar Registros"
             $('#btnSaveIntroRecup').val(1);
 
         }else{
 
-            $('#btnSaveIntroRecup').text('Crear Registros');//si NO hay registro label del boton es igual a "Agregar Rutas"
+            //$('#btnSaveIntroRecup').text('Crear Registros');//si NO hay registro label del boton es igual a "Crear Registros"
             $('#btnSaveIntroRecup').val(0);
             obtenerRutasRecu();
 
@@ -201,40 +222,59 @@
         var mes = $('#selectMesIntroRecup option:selected').val();
         var anio = $('#selectAnnoIntroRecup option:selected').val();
 
-        
-        var  idCredito;
+        var idMeta;
+        var idCredito;
         var idContado;
         var table = $('#dtIntroRecup').DataTable();
         var ValidarTablaRecu = existenDatosEnTablaRecu(mes, anio);
         
         var j=0;
-        var k=0;
+        //var k=0;
           
         pageName    = 'Recuperacion';
         var route="getMoneyRecuRowsByRoutes/"+mes+"/"+anio+"/"+pageName;
         var metodo = 'GET';
             
-        // Obtengo datos de tabla
+        // Obtengo datos de data table
         for (var i = 0; i < table.data().count(); i++) {
-            idCredito = '#recu_credito_'+table.cell( i, 0 ).data();
-            idContado = '#recu_contado_'+table.cell( i, 0 ).data();
+            idMeta    = $('#recu_meta_'+table.cell( i, 0 ).data()).val();
+            idCredito = $('#recu_credito_'+table.cell( i, 0 ).data()).val();
+            idContado = $('#recu_contado_'+table.cell( i, 0 ).data()).val();
             //lleno un arreglo con los datos de la tabla de cada ruta
-            
-            if ($(idCredito).val() != null) {
 
-                data[j] = {ruta: table.cell( i, 0 ).data(), vendedor :table.cell( i, 1 ).data(), Recu_credito: $(idCredito).val(), Recu_contado: $(idContado).val(), fecha: anio +'-'+ mes +'-01'};
+            idMeta = idMeta.replace(/[^0-9.]/g, '');
+            idCredito = idCredito.replace(/[^0-9.]/g, '');
+            idContado = idContado.replace(/[^0-9.]/g, '');
+
+            vendedores = table.cell( i, 1 ).data();
+            vendedores = (vendedores.replace(`<span style="text-align: left; float: left" ><span style="text-align: left; float: left" >`, '')).replace(`</span></span>`,'');
+
+            console.log(vendedores);
+            
+
+
+       
+
+                data[j] = {
+                    ruta: table.cell( i, 0 ).data(),
+                    vendedor: vendedores,
+                    Meta_recu: idMeta,
+                    Recu_credito: idCredito,
+                    Recu_contado: idContado,
+                    fecha: anio +'-'+ mes +'-01'};
                 j++;
                
-            }else{
-                data2[k] = {ruta: table.cell( i, 0 ).data(), vendedor :table.cell( i, 1 ).data(), Recu_credito: $(idCredito).val(), Recu_contado: $(idContado).val(), fecha: anio +'-'+ mes +'-01'};
-                k++;
-            }
+          
             
         }
+
+        console.log(data);
         
+         
 
         if (ValidarTablaRecu.length > 0) {
-            console.log('Actualizar');
+           
+        console.log("Actualizando");
             // Actualizo datos en campos credito y contado
             $.ajax({
                 url:"actualizarMetaRecup",
@@ -257,7 +297,9 @@
                 }
             });
         }else{
-            console.log('Crear');
+
+        console.log("Creando");
+           
             //Crear nuevos registros de recuperacion
              $.ajax({
                 url:"agregarMetaRecup",
