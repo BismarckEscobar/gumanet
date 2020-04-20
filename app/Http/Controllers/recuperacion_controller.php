@@ -142,7 +142,8 @@ class recuperacion_controller extends Controller
         
 
         if (isset($data['data'])) {
-        
+            
+       
             $company_id = Company::where('id',$request->session()->get('company_id'))->first()->id;
             foreach($data['data'] as $key) {
 
@@ -160,7 +161,7 @@ class recuperacion_controller extends Controller
 
                 }
 
-                Umk_recuperacion::where(['idCompanny' => $company_id, 'ruta'=> $key['ruta'], 'fecha_recup' => $key['fecha']])->update(array('recuperado_credito' => $recuCredito,'recuperado_contado' => $recuContado));
+                Umk_recuperacion::where(['idCompanny' => $company_id, 'ruta'=> $key['ruta'], 'fecha_recup' => $key['fecha']])->update(array('recuperado_credito' => $recuCredito,'recuperado_contado' => $recuContado, 'vendedor' => $key['vendedor']));
 
 
                 if(is_null($key['Meta_recu'])){
@@ -170,7 +171,7 @@ class recuperacion_controller extends Controller
                 }
 
                 if(recuperacion_controller::existeMetaRecu($key['fecha'], $key['ruta'], $company_id)){
-                    meta_recuperacion_exl::where(['idCompanny' => $company_id, 'ruta'=> $key['ruta'], 'fechaMeta' => $key['fecha']])->update(array('meta' => $meta));
+                    meta_recuperacion_exl::where(['idCompanny' => $company_id, 'ruta'=> $key['ruta'], 'fechaMeta' => $key['fecha']])->update(array('meta' => $meta, 'vendedor' => $key['vendedor']));
                 }else{
                     
 
@@ -273,6 +274,12 @@ class recuperacion_controller extends Controller
             break;
             case '2':
                 $sql_view = 'SELECT * FROM GP_VENDEDORES_ACTIVOS WHERE VENDEDOR NOT IN ('.$otroTipoVende.')';
+            break;
+             case '3':
+                $sql_view = '';
+            break;
+             case '4':
+                $sql_view = 'SELECT * FROM INV_VENDEDORES_ACTIVOS';
             break;
         }
 
