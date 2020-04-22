@@ -21,8 +21,11 @@ class saldos_model extends Model {
                 $sql_exec = " SELECT * FROM GP_VENDEDORES_ACTIVOS ";
                 break;
             case '3':
-                $sql_exec = "";
-                break;            
+                return false;
+                break;
+            case '4':
+                $sql_exec = " SELECT * FROM INV_VENDEDORES_ACTIVOS ";
+                break;
             default:                
                 dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
                 break;
@@ -73,13 +76,25 @@ class saldos_model extends Model {
 			    break;
 			case '3':
 			    return false;
-			    break;            
+			    break;
+			case '4':
+			    $sql_exec = 
+			    "SELECT
+					m.VENDEDOR AS RUTA,
+					ISNULL(( SELECT T.NOMBRE FROM INV_VENDEDORES_ACTIVOS T WHERE T.VENDEDOR=m.VENDEDOR ), '-') AS NOMBRE,
+					SUM (m.NoVencidos) AS N_VENCIDOS,
+					(SUM(m.Dias30) + SUM(m.Dias60) + SUM(m.Dias90) + SUM(m.Dias120) + SUM(m.Mas120)) AS VENCIDO
+				FROM
+					INN_ClientesPerMora m
+				GROUP BY
+					VENDEDOR";
+			    break;
 			default:                
 			    dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
 			    break;
 		}
 
-		$query = $sql_server->fetchArray($sql_exec, SQLSRV_FETCH_ASSOC);
+		$query = $sql_server->fetchArray($sql_exec, SQLSRV_FETCH_ASSOC); 
 
 		if( count($query)>0 ) {
 			foreach ($query as $key) {
@@ -144,7 +159,25 @@ class saldos_model extends Model {
 			    break;
 			case '3':
 			    return false;
-			    break;            
+			    break;
+			case '4':
+			    $sql_exec = 
+			    "SELECT
+					SUM (m.NoVencidos) AS N_VENCIDOS,
+					SUM (m.Dias30) AS Dias30,
+					SUM (m.Dias60) AS Dias60,
+					SUM (m.Dias90) AS Dias90,
+					SUM (m.Dias120) AS Dias120,
+					SUM (m.Mas120) AS Mas120,
+					m.VENDEDOR
+				FROM
+					INN_ClientesPerMora m
+				WHERE
+					VENDEDOR = '".$ruta."'
+				GROUP BY
+					VENDEDOR";
+				
+			    break;  
 			default:                
 			    dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
 			    break;
@@ -154,7 +187,7 @@ class saldos_model extends Model {
 
 		if( count($query)>0 ) {
 
-			if ($company_user==1) {
+			if ($company_user==1 || $company_user==4) {
 				$tmp[0]['desc'] 	= 'N_VENCIDOS';
  				$tmp[0]['value'] 	= $query[0]['N_VENCIDOS'];
 

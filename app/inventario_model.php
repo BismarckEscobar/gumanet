@@ -24,8 +24,11 @@ class inventario_model extends Model {
                 $sql_exec = "SELECT * FROM gp_iweb_articulos";
                 break;
             case '3':
-                $sql_exec = "";
-                break;            
+                return false;
+                break;
+            case '4':
+                $sql_exec = "SELECT * FROM inn_iweb_articulos";
+                break; 
             default:                
                 dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
                 break;
@@ -71,8 +74,11 @@ class inventario_model extends Model {
                 $sql_exec = 'SELECT * FROM gp_iweb_bodegas WHERE ARTICULO = '."'".$articulo."'".'';
                 break;
             case '3':
-                $sql_exec = "";
-                break;            
+                return false;
+                break;
+            case '4':
+                $sql_exec = 'SELECT * FROM INN_iweb_bodegas WHERE ARTICULO = '."'".$articulo."'".'';
+                break;
             default:                
                 dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
                 break;
@@ -107,8 +113,11 @@ class inventario_model extends Model {
                 $sql_exec = 'EXEC sp_gp_iweb_precios '."'".$articulo."'".' ';
                 break;
             case '3':
-                $sql_exec = "";
-                break;            
+                return false;
+                break;
+            case '4':
+                $sql_exec = 'EXEC sp_inn_iweb_precios '."'".$articulo."'".' ';
+                break;   
             default:                
                 dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
                 break;
@@ -144,8 +153,11 @@ class inventario_model extends Model {
                 $sql_exec = 'SELECT REGLAS FROM GP_GMV_mstr_articulos WHERE ARTICULO = '."'".$articulo."'".' ';
                 break;
             case '3':
-                $sql_exec = "";
-                break;            
+                return false;
+                break;
+            case '4':
+                $sql_exec = 'SELECT REGLAS FROM INN_GMV_mstr_articulos WHERE ARTICULO = '."'".$articulo."'".' ';
+                break;
             default:                
                 dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
                 break;
@@ -185,8 +197,11 @@ class inventario_model extends Model {
                 $sql_exec = 'SELECT * FROM GP_iweb_transacciones WHERE ARTICULO = '."'".$art."'".' AND DESCRTIPO = '."'".$tp."'".' AND FECHA  BETWEEN '."'".$f1."'".' AND '."'".$f2."'".'  ORDER BY ARTICULO ASC';
                 break;
             case '3':
-                $sql_exec = "";
-                break;            
+                return false;
+                break;
+            case '4':
+                $sql_exec = 'SELECT * FROM inn_iweb_transacciones WHERE ARTICULO = '."'".$art."'".' AND DESCRTIPO = '."'".$tp."'".' AND FECHA  BETWEEN '."'".$f1."'".' AND '."'".$f2."'".'  ORDER BY ARTICULO ASC';
+                break;
             default:                
                 dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
                 break;
@@ -224,8 +239,11 @@ class inventario_model extends Model {
                 $sql_exec = 'SELECT * FROM gp_iweb_lotes WHERE BODEGA = '."'".$bodega."'".' AND ARTICULO = '."'".$articulo."'".' ';
                 break;
             case '3':
-                $sql_exec = "";
-                break;            
+                return false;
+                break;
+            case '4':
+                $sql_exec = 'SELECT * FROM inn_iweb_lotes WHERE BODEGA = '."'".$bodega."'".' AND ARTICULO = '."'".$articulo."'".' ';
+                break;
             default:                
                 dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
                 break;
