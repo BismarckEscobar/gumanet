@@ -81,7 +81,7 @@ class recuperacion_controller extends Controller
                 } 
 
             $json[$i]['RECU_RUTA'] =  $key['ruta'];
-            $json[$i]['RECU_VENDE'] =   '<span style="text-align: left; float: left" >'.$key['vendedor'].'</span>';
+            $json[$i]['RECU_VENDE'] =   '<span style="text-align: left; float: left">'.$key['vendedor'].'</span>';
 
             if($pageName == 'Recuperacion'){
             $json[$i]['RECU_META'] =  '<input type="text" onkeyup="getAttr(this)" style="text-align: right" class="form-control" value="'.number_format($meta,2).'" id ="recu_meta_'.$key['ruta'].'">';
@@ -263,6 +263,8 @@ class recuperacion_controller extends Controller
         $otroTipoVende = "'F01','F02','F04','F12','F16','F18','F19'";
         $fecha =  date('Y-m-d', strtotime($anio.'-'.$mes.'-01'));
         $sql_server = new \sql_server();
+
+
         
         $company_id = Company::where('id',$request->session()->get('company_id'))->first()->id;
 
@@ -271,6 +273,7 @@ class recuperacion_controller extends Controller
         switch($company_id){
             case '1':
                 $sql_view = 'SELECT VENDEDOR, NOMBRE FROM UMK_VENDEDORES_ACTIVO WHERE VENDEDOR NOT IN ('.$otroTipoVende.')';
+
             break;
             case '2':
                 $sql_view = 'SELECT * FROM GP_VENDEDORES_ACTIVOS WHERE VENDEDOR NOT IN ('.$otroTipoVende.')';

@@ -217,7 +217,6 @@
     //Accion al hacer clic sobre el boton de "guardar"
     $('#btnSaveIntroRecup').on('click', function(){
         var data = new Array();
-        var data2 = new Array();
 
         var mes = $('#selectMesIntroRecup option:selected').val();
         var anio = $('#selectAnnoIntroRecup option:selected').val();
@@ -235,7 +234,7 @@
         var route="getMoneyRecuRowsByRoutes/"+mes+"/"+anio+"/"+pageName;
         var metodo = 'GET';
             
-        // Obtengo datos de data table
+        // Obtengo datos de data table (datos de los input)
         for (var i = 0; i < table.data().count(); i++) {
             idMeta    = $('#recu_meta_'+table.cell( i, 0 ).data()).val();
             idCredito = $('#recu_credito_'+table.cell( i, 0 ).data()).val();
@@ -247,7 +246,7 @@
             idContado = idContado.replace(/[^0-9.]/g, '');
 
             vendedores = table.cell( i, 1 ).data();
-            vendedores = (vendedores.replace(`<span style="text-align: left; float: left" ><span style="text-align: left; float: left" >`, '')).replace(`</span></span>`,'');
+            vendedores = (vendedores.replace('<span style="text-align: left; float: left">', '')).replace('</span>','');
 
             console.log(vendedores);
             
@@ -304,8 +303,7 @@
              $.ajax({
                 url:"agregarMetaRecup",
                 method:"POST",
-                data: {'filtered': data,
-                       'no_filtered':data2},
+                data: {'filtered': data},
                 success: function(res){
            
                     if (res == 1) {
