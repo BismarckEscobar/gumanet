@@ -962,11 +962,13 @@ function detalleVentasMes(tipo, title, cliente, articulo) {
             $("#cantRowsDtTemp selected").val("5");
             
 
+
             companny_id = $("#companny_id").text();
 
             if (companny_id == '1' || companny_id == '4') {
+               
 
-                $("#cj  Recuperacion").show();
+                $("#cjRecuperacion").show();
                 $("#cjRecu_GumaPharma").hide();
 
                 tableActive = `#dtRecuperacion`;
