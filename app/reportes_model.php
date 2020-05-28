@@ -14,7 +14,7 @@ class reportes_model extends Model
         $request = Request();
         $company_user = Company::where('id',$request->session()->get('company_id'))->first()->id;
 
-        switch ($company_user) {
+        switch ($company_user) { 
             case '1':
                 $sql_exec = " SELECT * FROM UMK_CLASIFICACION_ARTICULO ";
                 break;
@@ -22,8 +22,11 @@ class reportes_model extends Model
                 $sql_exec = " SELECT * FROM GP_CLASIFICACION_ARTICULO ";
                 break;
             case '3':
-                $sql_exec = "";
-                break;            
+                return false;
+                break;
+            case '4':
+                $sql_exec = " SELECT * FROM INN_CLASIFICACION_ARTICULO ";
+                break;   
             default:                
                 dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
                 break;
@@ -55,8 +58,11 @@ class reportes_model extends Model
                 $sql_exec = " SELECT * FROM GP_VENDEDORES_ACTIVOS ";
                 break;
             case '3':
-                $sql_exec = "";
-                break;            
+                return false;
+                break;
+            case '4':
+                $sql_exec = " SELECT * FROM INV_VENDEDORES_ACTIVOS ";
+                break;
             default:                
                 dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
                 break;
@@ -87,8 +93,11 @@ class reportes_model extends Model
                 $sql_exec = " SELECT * FROM GP_ARTICULOS_ACTIVOS ";
                 break;
             case '3':
-                $sql_exec = "";
-                break;            
+                return false;
+                break;
+            case '4':
+                $sql_exec = " SELECT * FROM INN_ARTICULOS_ACTIVOS ";
+                break;
             default:                
                 dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
                 break;
@@ -119,8 +128,11 @@ class reportes_model extends Model
                 $sql_exec = " SELECT * FROM GP_CLIENTES_ACTIVOS ";
                 break;
             case '3':
-                $sql_exec = "";
-                break;            
+                return false;
+                break;
+            case '4':
+                $sql_exec = " SELECT * FROM INN_CLIENTES_ACTIVOS ";
+                break;
             default:                
                 dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
                 break;
@@ -154,8 +166,13 @@ class reportes_model extends Model
                  $sql_meta = "EXEC Gp_meta_articulos ".$mes.", ".$anio.", '".$clase."', '".$cliente."', '".$articulo."'";
                 break;
             case '3':
-                $sql_exec = "";
-                break;            
+                return false;
+                break;
+            case '4':
+                $sql_exec = "EXEC Inv_VentaLinea_Articulo ".$mes.", ".$anio.", '".$clase."', '".$cliente."', '".$articulo."','".$ruta."'";
+                 $sql_meta = "EXEC Inv_meta_articulos ".$mes.", ".$anio.", '".$clase."', '".$cliente."', '".$articulo."'";
+                break;
+                break; 
             default:                
                 dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
                 break;
@@ -187,8 +204,11 @@ class reportes_model extends Model
                 $sql_exec = 'SELECT FACTURA, ARTICULO, DESCRIPCION, CANTIDAD, PRECIO_UNITARIO, PRECIO_TOTAL FROM GP_DETALLES_FACTURAS WHERE FACTURA = '.$nFactura.'';
                 break;
             case '3':
-                $sql_exec = "";
-                break;            
+                return false;
+                break;
+            case '4':
+                $sql_exec = 'SELECT FACTURA, ARTICULO, DESCRIPCION, CANTIDAD, PRECIO_UNITARIO, PRECIO_TOTAL FROM INN_DETALLES_FACTURAS WHERE FACTURA = '.$nFactura.'';
+                break;
             default:                
                 dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
                 break;
