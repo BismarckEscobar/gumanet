@@ -93,21 +93,25 @@ class dashboard_model extends Model {
         $i = 0;
         $json = array();
 
-        foreach ($query as $fila) {
-            $VENDEDOR = dashboard_model::buscarVendedorXRuta($fila["Ruta"], $company_user);
-            $json[$i]["VENDE"] = $VENDEDOR;
-            $meta =  Gn_couta_x_producto::where(['IdPeriodo'=> $idPeriodo, 'CodVendedor' => $fila["Ruta"]])->sum('Meta');
+        
 
-            $json[$i]["METAU"] = number_format($meta,2);
-            $json[$i]["REALU"] = number_format($fila["Cantidad"],2);
-            
-            $json[$i]["DIFU"] = ($meta==0) ? "100.00%" : number_format(((floatval($fila["Cantidad"])/floatval($meta))*100),2)."%";
-            $monto =  Gn_couta_x_producto::where(['IdPeriodo'=> $idPeriodo, 'CodVendedor' => $fila["Ruta"]])->sum('val');
-            $json[$i]["METAE"] = "C$ ".number_format($monto,2);
-            $json[$i]["REALE"] = "C$ ".number_format($fila["Monto"],2);
-            $json[$i]["DIFE"] = ($meta==0) ? "100.00%" : number_format(((floatval($fila["Monto"])/floatval($monto))*100),2)."%";
-            $json[$i]["RUTA"] = '<a href="#!" id="rutaDetVenta" onclick="getDetalleVenta('.$mes.','.$anio.','."'".$json[$i]["METAU"]."'".','."'".$json[$i]["REALU"]."'".','."'".$json[$i]["METAE"]."'".','."'".$json[$i]["REALE"]."'".','."'".$fila["Ruta"]."'".', '."'".$VENDEDOR."'".')" >'.$fila["Ruta"].'</a>';
-            $i++;
+         if(count($idPeriodo) != ""){
+        foreach ($query as $fila) {
+                $VENDEDOR = dashboard_model::buscarVendedorXRuta($fila["Ruta"], $company_user);
+                $json[$i]["VENDE"] = $VENDEDOR;
+                $meta =  Gn_couta_x_producto::where(['IdPeriodo'=> $idPeriodo, 'CodVendedor' => $fila["Ruta"]])->sum('Meta');
+
+                $json[$i]["METAU"] = number_format($meta,2);
+                $json[$i]["REALU"] = number_format($fila["Cantidad"],2);
+                
+                $json[$i]["DIFU"] = ($meta==0) ? "100.00%" : number_format(((floatval($fila["Cantidad"])/floatval($meta))*100),2)."%";
+                $monto =  Gn_couta_x_producto::where(['IdPeriodo'=> $idPeriodo, 'CodVendedor' => $fila["Ruta"]])->sum('val');
+                $json[$i]["METAE"] = "C$ ".number_format($monto,2);
+                $json[$i]["REALE"] = "C$ ".number_format($fila["Monto"],2);
+                $json[$i]["DIFE"] = ($meta==0) ? "100.00%" : number_format(((floatval($fila["Monto"])/floatval($monto))*100),2)."%";
+                $json[$i]["RUTA"] = '<a href="#!" id="rutaDetVenta" onclick="getDetalleVenta('.$mes.','.$anio.','."'".$json[$i]["METAU"]."'".','."'".$json[$i]["REALU"]."'".','."'".$json[$i]["METAE"]."'".','."'".$json[$i]["REALE"]."'".','."'".$fila["Ruta"]."'".', '."'".$VENDEDOR."'".')" >'.$fila["Ruta"].'</a>';
+                $i++;
+            }
         }
         return $json;
 
