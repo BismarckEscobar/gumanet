@@ -891,17 +891,18 @@ function detalleVentasMes(tipo, title, cliente, articulo) {
             tableActive = `#dtTotalXRutaVent`;
             $("#MontoMeta").text('C$ '+montoMetaVenta);
             $("#cantRowsDtTemp selected").val("5");
+            
             $.ajax({// calcula el total real neto
                     url: "detalles/"+tipo+"/"+mes+"/"+anio+"/ND/ND/ND",
                     type: "GET",
                     async: true,
                     success: function(res) {
                         tmp = parseFloat($('#MontoMeta').text().replace(/[\ U,C$]/g, ''))
-                        $('#MontoReal').empty()
-                                        .text('C$ '+ numeral(res[0]['MONTO']).format('0,0.00'));
+                        $('#MontoReal').empty().text('C$ '+ numeral(res[0]['MONTO']).format('0,0.00'));
 
                         cump = (tmp>0)?(( parseFloat(res[0]['MONTO']) / tmp ) * 100):0;
                         $('#cumplMeta').text(numeral(cump).format('0.00')+'%');
+
                     }
                 });
 
