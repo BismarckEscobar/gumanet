@@ -5,6 +5,8 @@ use App\inventario_model;
 use Illuminate\Http\Request;
 use App\Models;
 
+use App\Company;
+
 class inventario_controller extends Controller
 {
 	public function __construct() {
@@ -12,6 +14,8 @@ class inventario_controller extends Controller
   	}
 
 	public function index() {
+		$this->agregarDatosASession();
+
 		$data = array(
 			'page' 				=> 'Inventario',
 			'name' 				=> 'GUMA@NET',
@@ -19,6 +23,14 @@ class inventario_controller extends Controller
 		);
 		return view('pages.inventario', $data);
 	}
+
+    public function agregarDatosASession(){
+        $request = Request();
+        $ApplicationVersion = new \git_version();
+        $company = Company::where('id',$request->session()->get('company_id'))->first();// obtener nombre de empresa mediante el id de empresa
+        $request->session()->put('ApplicationVersion', $ApplicationVersion::get());
+        $request->session()->put('companyName', $company->nombre);// agregar nombre de compañia a session[], para obtenert el nombre al cargar otras pagina 
+    }
 
 	public function getArticulos() {
 		$obj = inventario_model::getArticulos();
