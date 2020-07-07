@@ -58,7 +58,7 @@
         <div class="col-sm-12">
             <div class="card">
                           <div class="card-header">
-                            <strong>REPORTE: 13705102</strong>
+                            <strong>REPORTE: 137051062</strong>
                           </div>
                 <div class="card-body">
                     <form>

@@ -93,7 +93,11 @@ class dashboard_model extends Model {
         $i = 0;
         $json = array();
 
+        
+
+         if(count($idPeriodo) != ""){
         foreach ($query as $fila) {
+
             $VENDEDOR = dashboard_model::buscarVendedorXRuta($fila["Ruta"], $company_user);
             $json[$i]["VENDE"] = $VENDEDOR;
 
@@ -113,6 +117,8 @@ class dashboard_model extends Model {
             $json[$i]["DIFE"] = ($meta==0) ? "100.00%" : number_format(((floatval($fila["Monto"])/floatval($monto))*100),2)."%";
             $json[$i]["RUTA"] = '<a href="#!" id="rutaDetVenta" onclick="getDetalleVenta('.$mes.','.$anio.','."'".$json[$i]["METAU"]."'".','."'".$json[$i]["REALU"]."'".','."'".$json[$i]["METAE"]."'".','."'".$json[$i]["REALE"]."'".','."'".$fila["Ruta"]."'".', '."'".$VENDEDOR."'".')" >'.$fila["Ruta"].'</a>';
             $i++;
+            }
+
         }
         return $json;
 
