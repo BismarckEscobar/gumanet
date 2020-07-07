@@ -40,7 +40,7 @@
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li><a href="#!" id="sidebarCollapse"><i class="material-icons ml-2 mr-3">menu</i></a></li>
-      @if(Auth::User()->activeRole()!=3 && Auth::User()->activeRole()!=4)
+      @if(Auth::User()->activeRole()!=3 && Auth::User()->activeRole()!=4 && Auth::User()->activeRole()!=5)
       <li class="breadcrumb-item" id="item-nav-01"><a href="Dashboard">Dashboard</a></li>
       @endif
       <li class="ml-auto"><a href="#!"><i class="active-menu material-icons text-info" style="font-size: 20px">settings</i></a></li>

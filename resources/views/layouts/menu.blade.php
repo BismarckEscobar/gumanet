@@ -48,6 +48,12 @@
                   Usuarios
               </a>
            </li>
+          <li>
+            <a class="nav-link text-secondary" href="Saldos">
+              <span data-feather="dollar-sign"></span>
+              Saldos
+            </a>
+          </li>
             @if(Session::get('companyName')=='UNIMARK' || Session::get('companyName')=='INNOVA')
              <li>
               <a class="nav-link text-secondary" href="Recuperacion">
@@ -55,13 +61,7 @@
                 Recuperación
               </a>
             </li>
-          @endif
-          <li>
-            <a class="nav-link text-secondary" href="Saldos">
-              <span data-feather="dollar-sign"></span>
-              Saldos
-            </a>
-          </li>          
+            @endif     
           @elseif(Auth::User()->activeRole()==2)
           <li class="nav-item">                
               <a class="nav-link text-secondary" href="Dashboard">
@@ -76,18 +76,19 @@
               </a>
           </li>
           <li class="nav-item">
-              <a class="nav-link" href="Inventario">
+              <a class="nav-link text-secondary" href="Inventario">
                   <span data-feather="shopping-cart"></span>
                   Inventario
               </a>
           </li>
+          <li>
+            <a class="nav-link text-secondary" href="Saldos">
+              <span data-feather="dollar-sign"></span>
+              Saldos
+            </a>
+          </li>
             @if(Session::get('companyName')=='UNIMARK')
-            <li>
-              <a class="nav-link text-secondary" href="Saldos">
-                <span data-feather="dollar-sign"></span>
-                Saldos
-              </a>
-            </li>
+
             @endif
           @elseif(Auth::User()->activeRole()==3)
           <li class="nav-item">
@@ -105,7 +106,20 @@
                 </a>
               </li>
             @endif
+          @elseif(Auth::User()->activeRole()==5)
+          <li class="nav-item">
+              <a class="nav-link text-secondary" href="Inventario">
+                  <span data-feather="shopping-cart"></span>
+                  Inventario
+              </a>
+          </li>
           @endif
+          <li class="nav-item">
+              <a class="nav-link text-secondary" href="Proyecciones">
+                  <span data-feather="trending-up"></span>
+                  Proyecciones de ventas
+              </a>
+          </li>
           <li class="nav-item">
               <a class="nav-link text-danger font-weight-bold" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><span data-feather="log-out"></span> Cerrar sesion
               </a>
