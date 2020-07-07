@@ -96,13 +96,18 @@ class dashboard_model extends Model {
         foreach ($query as $fila) {
             $VENDEDOR = dashboard_model::buscarVendedorXRuta($fila["Ruta"], $company_user);
             $json[$i]["VENDE"] = $VENDEDOR;
-            $meta =  Gn_couta_x_producto::where(['IdPeriodo'=> $idPeriodo, 'CodVendedor' => $fila["Ruta"]])->sum('Meta');
+
+            if ( count($idPeriodo)>0 ) {
+                $meta =  Gn_couta_x_producto::where(['IdPeriodo'=> $idPeriodo, 'CodVendedor' => $fila["Ruta"]])->sum('Meta');
+                $monto = Gn_couta_x_producto::where(['IdPeriodo'=> $idPeriodo, 'CodVendedor' => $fila["Ruta"]])->sum('val');
+            }else {
+                $meta = $monto = 0;
+            }            
 
             $json[$i]["METAU"] = number_format($meta,2);
             $json[$i]["REALU"] = number_format($fila["Cantidad"],2);
             
-            $json[$i]["DIFU"] = ($meta==0) ? "100.00%" : number_format(((floatval($fila["Cantidad"])/floatval($meta))*100),2)."%";
-            $monto =  Gn_couta_x_producto::where(['IdPeriodo'=> $idPeriodo, 'CodVendedor' => $fila["Ruta"]])->sum('val');
+            $json[$i]["DIFU"] = ($meta==0) ? "100.00%" : number_format(((floatval($fila["Cantidad"])/floatval($meta))*100),2)."%";            
             $json[$i]["METAE"] = "C$ ".number_format($monto,2);
             $json[$i]["REALE"] = "C$ ".number_format($fila["Monto"],2);
             $json[$i]["DIFE"] = ($meta==0) ? "100.00%" : number_format(((floatval($fila["Monto"])/floatval($monto))*100),2)."%";
@@ -197,15 +202,17 @@ class dashboard_model extends Model {
          foreach ($query as $fila) {
             $meta_u = $meta_v = 0;
 
-            if (Gn_couta_x_producto::where(['CodVendedor' => $ruta, 'IdPeriodo'=> $idPeriodo, 'CodProducto' => $fila["ARTICULO"]])->first()) {
-                $meta_u =  Gn_couta_x_producto::where(['CodVendedor' => $ruta, 'IdPeriodo'=> $idPeriodo, 'CodProducto' => $fila["ARTICULO"]])->sum('Meta');
+            if( count($idPeriodo)>0 ) {
+                if (Gn_couta_x_producto::where(['CodVendedor' => $ruta, 'IdPeriodo'=> $idPeriodo, 'CodProducto' => $fila["ARTICULO"]])->first()) {
+                    $meta_u =  Gn_couta_x_producto::where(['CodVendedor' => $ruta, 'IdPeriodo'=> $idPeriodo, 'CodProducto' => $fila["ARTICULO"]])->sum('Meta');
 
-                $meta_v = Gn_couta_x_producto::where(['CodVendedor' => $ruta, 'IdPeriodo'=> $idPeriodo, 'CodProducto' => $fila["ARTICULO"]])->sum('val');
-                $label = '';
-            }
-            else {
-                $meta = number_format(0, 2);
-                $label = "<p class='text-danger'> (No definido en meta)</p>";
+                    $meta_v = Gn_couta_x_producto::where(['CodVendedor' => $ruta, 'IdPeriodo'=> $idPeriodo, 'CodProducto' => $fila["ARTICULO"]])->sum('val');
+                    $label = '';
+                }
+                else {
+                    $meta = number_format(0, 2);
+                    $label = "<p class='text-danger'> (No definido en meta)</p>";
+                }
             }
 
             $json[$i]["ARTICULO"]       = $fila["ARTICULO"];

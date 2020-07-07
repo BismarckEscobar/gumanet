@@ -55,7 +55,7 @@ class saldos_model extends Model {
 			    $sql_exec = 
 			    "SELECT
 					m.VENDEDOR AS RUTA,
-					ISNULL(( SELECT T.NOMBRE FROM UMK_VENDEDORES_ACTIVO T WHERE T.VENDEDOR=m.VENDEDOR ), '-') AS NOMBRE,
+					ISNULL(( SELECT T.NOMBRE FROM UMK_VENDEDORES_ACTIVO T WHERE T.VENDEDOR=m.VENDEDOR ), 'ND') AS NOMBRE,
 					SUM (m.NoVencidos) AS N_VENCIDOS,
 					(SUM(m.Dias30) + SUM(m.Dias60) + SUM(m.Dias90) + SUM(m.Dias120) + SUM(m.Mas120)) AS VENCIDO
 				FROM
@@ -67,7 +67,7 @@ class saldos_model extends Model {
 			    $sql_exec = 
 			    "SELECT
 			    m.VENDEDOR AS RUTA,
-			    ISNULL(( SELECT T.NOMBRE FROM GP_VENDEDORES_ACTIVOS T WHERE T.VENDEDOR=m.VENDEDOR ), '-') AS NOMBRE, SUM (m.NoVencidos) AS N_VENCIDOS,
+			    ISNULL(( SELECT T.NOMBRE FROM GP_VENDEDORES_ACTIVOS T WHERE T.VENDEDOR=m.VENDEDOR ), 'ND') AS NOMBRE, SUM (m.NoVencidos) AS N_VENCIDOS,
 					(SUM(m.Dias30) + SUM(m.Dias45)+ SUM(m.Dias60) + SUM(m.Dias90) + SUM(m.Dias120) + SUM(m.Dias150) + SUM(m.Mas150)) AS VENCIDO
 				FROM
 					GP_View_ClientesPerMora m
@@ -81,7 +81,7 @@ class saldos_model extends Model {
 			    $sql_exec = 
 			    "SELECT
 					m.VENDEDOR AS RUTA,
-					ISNULL(( SELECT T.NOMBRE FROM INV_VENDEDORES_ACTIVOS T WHERE T.VENDEDOR=m.VENDEDOR ), '-') AS NOMBRE,
+					ISNULL(( SELECT T.NOMBRE FROM INV_VENDEDORES_ACTIVOS T WHERE T.VENDEDOR=m.VENDEDOR ), 'ND') AS NOMBRE,
 					SUM (m.NoVencidos) AS N_VENCIDOS,
 					(SUM(m.Dias30) + SUM(m.Dias60) + SUM(m.Dias90) + SUM(m.Dias120) + SUM(m.Mas120)) AS VENCIDO
 				FROM

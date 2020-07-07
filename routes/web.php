@@ -18,6 +18,7 @@ Route::get('/Usuario','usuario_controller@index');
 Route::get('/Reportes','reportes_controller@index');
 Route::get('/Recuperacion','recuperacion_controller@index');
 Route::get('/Saldos','saldos_controller@index');
+Route::get('/Proyecciones','proyecciones_controller@index');
 
 //RUTAS LOGIN
 Route::get('/','Auth\LoginController@showLoginForm');//pagina login
@@ -89,3 +90,6 @@ Route::get('/obtenerRutasRecu/{mes}/{anio}','recuperacion_controller@obtenerRuta
 //RUTAS SALDOS
 Route::get('/saldoAlls','saldos_controller@saldosAll');
 Route::post('/saldoxRuta','saldos_controller@saldosXRuta');
+
+//RUTAS PROYECCIONES
+Route::post('dataProyeccion','proyecciones_controller@dataProyeccionXTipo');

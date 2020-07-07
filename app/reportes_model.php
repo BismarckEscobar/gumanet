@@ -184,6 +184,8 @@ class reportes_model extends Model
 			return $Dta = array('objDt' => $query, 'meta' => intval($query2[0]['meta']));
         }
 
+        dd($sql_exec);
+
         $sql_server->close();
         return false;
     }
