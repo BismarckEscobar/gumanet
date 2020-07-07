@@ -54,7 +54,7 @@
             <a href="#!" class="active-page-details btn btn-outline-primary btn-sm">Regresar</a>
         </div>
     </div>
-    <div class="row mt-3">
+    <div class="row mt-3"> 
         <div class="col-sm-12">
             <div class="card">
                           <div class="card-header">

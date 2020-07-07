@@ -14,7 +14,7 @@ class reportes_model extends Model
         $request = Request();
         $company_user = Company::where('id',$request->session()->get('company_id'))->first()->id;
 
-        switch ($company_user) {
+        switch ($company_user) { 
             case '1':
                 $sql_exec = " SELECT * FROM UMK_CLASIFICACION_ARTICULO ";
                 break;
