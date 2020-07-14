@@ -84,7 +84,7 @@ class recuperacion_controller extends Controller
             $json[$i]['RECU_VENDE'] =   '<span style="text-align: left; float: left">'.$key['vendedor'].'</span>';
 
             if($pageName == 'Recuperacion'){
-            $json[$i]['RECU_META'] =  '<input type="text" onkeyup="getAttr(this)" style="text-align: right" class="form-control" value="'.number_format($meta,2).'" id ="recu_meta_'.$key['ruta'].'">';
+            $json[$i]['RECU_META'] =  '<input type="text" onkeydown="getAttr(this)" style="text-align: right" class="form-control" value="C$'.number_format($meta,2).'" id ="recu_meta_'.$key['ruta'].'">';
             }else{
                 $json[$i]['RECU_META'] =  '<span style="text-align: right; float: right" >C$'.number_format($meta,2).'</span>';
             }
@@ -92,14 +92,14 @@ class recuperacion_controller extends Controller
             if ($key['recuperado_credito']>0) {
 
                 if($pageName == 'Recuperacion'){
-                    $json[$i]['RECU_CREDITO'] =  '<input type="text" onkeyup="getAttr(this)" style="text-align: right" class="form-control" value="'.number_format($key['recuperado_credito'],2).'" id ="recu_credito_'.$key['ruta'].'">';
+                    $json[$i]['RECU_CREDITO'] =  '<input type="text" onkeydown="getAttr(this)" style="text-align: right" class="form-control" value="C$'.number_format($key['recuperado_credito'],2).'" id ="recu_credito_'.$key['ruta'].'">';
                 }else{
                     $json[$i]['RECU_CREDITO'] = '<span style="text-align: right; float: right" >C$'. number_format($key['recuperado_credito'],2).'</span>';
                 }
              
             }else{
                 if($pageName == 'Recuperacion'){
-                    $json[$i]['RECU_CREDITO'] =  '<input type="text" onkeyup="getAttr(this)" style="text-align: right" class="form-control" value="0.00" id ="recu_credito_'.$key['ruta'].'">';
+                    $json[$i]['RECU_CREDITO'] =  '<input type="text" onkeydown="getAttr(this)" style="text-align: right" class="form-control" value="C$0.00" id ="recu_credito_'.$key['ruta'].'">';
                  }else{
                     $json[$i]['RECU_CREDITO'] =  '<span style="text-align: right; float: right">C$0.00</span>' ;
                  }
@@ -107,14 +107,14 @@ class recuperacion_controller extends Controller
             }
             if ($key['recuperado_contado']>0) {
                 if($pageName == 'Recuperacion'){
-                    $json[$i]['RECU_CONTADO'] =  '<input type="text" onkeyup="getAttr(this)" style="text-align: right" class="form-control" value="'.number_format($key['recuperado_contado'],2).'" id ="recu_contado_'.$key['ruta'].'">';
+                    $json[$i]['RECU_CONTADO'] =  '<input type="text" onkeydown="getAttr(this)" style="text-align: right" class="form-control" value="C$'.number_format($key['recuperado_contado'],2).'" id ="recu_contado_'.$key['ruta'].'">';
                   }else{
                     $json[$i]['RECU_CONTADO'] =  '<span style="text-align: right; float: right" >C$'. number_format($key['recuperado_contado'],2).'</span>';
                   }
                 
             }else{
                  if($pageName == 'Recuperacion'){
-                    $json[$i]['RECU_CONTADO'] =  '<input type="text" onkeyup="getAttr(this)" style="text-align: right" class="form-control" value="0.00" id ="recu_contado_'.$key['ruta'].'">';
+                    $json[$i]['RECU_CONTADO'] =  '<input type="text" onkeydown="getAttr(this)" style="text-align: right" class="form-control" value="C$0.00" id ="recu_contado_'.$key['ruta'].'">';
                  }else{
                     $json[$i]['RECU_CONTADO'] =  '<span style="text-align: right; float: right" >C$0.00</span>';
 

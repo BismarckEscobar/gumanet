@@ -9,25 +9,52 @@
         var route="getMoneyRecuRowsByRoutes/"+mes+"/"+anio+"/"+pageName;
         var metodo = 'GET';
         
-        fillDtIntroRecup(route, metodo);
+        //fillDtIntroRecup(route, metodo);
        // validacion = validarSiDtMuestraRegistros();
         var ValidarTablaRecu = existenDatosEnTablaRecu(mes, anio);
 
-        $('#btnSaveIntroRecup').text('Guardar');
+        asignarRutaMascaras(mes, anio);
 
-         if (ValidarTablaRecu.length > 0) {
-            
-            //$('#btnSaveIntroRecup').text('Actualizar Registros');//si hay registro label del boton es igual a "Guardar"
+          if (ValidarTablaRecu.length > 0) {
+            fillDtIntroRecup(route, metodo);
+           
+            $('#btnSaveIntroRecup').text('Actualizar');//si hay registro label del boton es igual a "Actualizar Registros"
             $('#btnSaveIntroRecup').val(1);
-            
+
         }else{
-        //$('#btnSaveIntroRecup').text('Crear Registros');//si NO hay registro label del boton es igual a "Agregar Rutas"
+
+            $('#btnSaveIntroRecup').text('Guardar');//si NO hay registro label del boton es igual a "Crear Registros"
             $('#btnSaveIntroRecup').val(0);
             obtenerRutasRecu();
+
+
         }
         
 
 	});
+    function asignarRutaMascaras(mes, anio){
+       
+         $.ajax({
+           url : 'obtenerRutasRecu/'+mes+'/'+anio,
+           method:'GET',
+           async : true,
+           success: function(res){
+            rutas = Array();
+                for (var i = 0; i < res.length; i++) {
+                    rutas[i] = res[i].RECU_RUTA;
+                    $("#recu_meta_"+rutas[i]).maskMoney({prefix:'C$',  thousands:',', decimal:'.', affixesStay: true});
+                    $("#recu_credito_"+rutas[i]).maskMoney({prefix:'C$', thousands:',', decimal:'.', affixesStay: true});
+                    $("#recu_contado_"+rutas[i]).maskMoney({prefix:'C$', thousands:',', decimal:'.', affixesStay: true});
+                }
+
+             
+            }
+            
+           
+        });
+        
+       
+    }
 
 
     function fillDtIntroRecup(route, metodo){
@@ -111,35 +138,21 @@
 
        
 
-        $("#recu_meta_"+ruta).keyup(function (){
-            $("#recu_meta_"+ruta).maskMoney({prefix:'C$', thousands:',', decimal:'.', affixesStay: true});
-            //this.value = 'C$'+numeral((this.value).replace(/[^0-9.,C$]/g, '')).format('0,0.00');
-        });
 
-        $("#recu_credito_"+ruta).keyup(function (){
-            $("#recu_credito_"+ruta).maskMoney({prefix:'C$', thousands:',', decimal:'.', affixesStay: true});
-            //this.value = 'C$'+numeral((this.value).replace(/[^0-9.,C$]/g, '')).format('0,0.00');
-        });
-
-        $("#recu_contado_"+ruta).keyup(function (){
-            $("#recu_contado_"+ruta).maskMoney({prefix:'C$', thousands:',', decimal:'.', affixesStay: true});
-            //this.value = 'C$'+numeral((this.value).replace(/[^0-9.,C$]/g, '')).format('0,0.00');
-        });
-
-        $("#recu_meta_"+ruta).keydown(function (){
-            $("#recu_meta_"+ruta).maskMoney({prefix:'C$', thousands:',', decimal:'.', affixesStay: true});
-            this.value = 'C$'+numeral((this.value).replace(/[^0-9.,C$]/g, '')).format('0,0.00');;
+        /*$("#recu_meta_"+ruta).keydown(function (){
+            $("#recu_meta_"+ruta).maskMoney({prefix:'C$',  thousands:',', decimal:'.', affixesStay: true});
+           this.value = "C$"+this.value + ""+numeral((this.value).replace(/[C$]/g, '')).format('0,0.00');
         });
 
         $("#recu_credito_"+ruta).keydown(function (){
              $("#recu_credito_"+ruta).maskMoney({prefix:'C$', thousands:',', decimal:'.', affixesStay: true});
-            this.value = 'C$'+numeral((this.value).replace(/[^0-9.,C$]/g, '')).format('0,0.00');;
+            this.value = 'C$'+ numeral((this.value).replace(/[^0-9.,C$]/g, '')).format('0,0.00');
         });
 
         $("#recu_contado_"+ruta).keydown(function (){
             $("#recu_contado_"+ruta).maskMoney({prefix:'C$', thousands:',', decimal:'.', affixesStay: true});
-            this.value = 'C$'+numeral((this.value).replace(/[^0-9.,C$]/g, '')).format('0,0.00');;
-        });
+            this.value = 'C$'+numeral((this.value).replace(/[^0-9.,C$]/g, '')).format('0,0.00');
+        });*/
 
 
         valMeta = $("#recu_meta_"+ruta).val();
@@ -194,21 +207,24 @@
         pageName    = 'Recuperacion';
         var route="getMoneyRecuRowsByRoutes/"+mes+"/"+anio+"/"+pageName;
         var metodo = 'GET';
-        fillDtIntroRecup(route, metodo);
-
+        
+        asignarRutaMascaras(mes, anio);
         var ValidarTablaRecu = existenDatosEnTablaRecu(mes, anio, pageName);
 
         $('#btnSaveIntroRecup').text('Guardar');
         if (ValidarTablaRecu.length > 0) {
-
-            //$('#btnSaveIntroRecup').text('Actualizar Registros');//si hay registro label del boton es igual a "Actualizar Registros"
+            fillDtIntroRecup(route, metodo);
+            
+            $('#btnSaveIntroRecup').text('Actualizar');//si hay registro label del boton es igual a "Actualizar"
             $('#btnSaveIntroRecup').val(1);
 
         }else{
+           
 
-            //$('#btnSaveIntroRecup').text('Crear Registros');//si NO hay registro label del boton es igual a "Crear Registros"
+            $('#btnSaveIntroRecup').text('Guardar');//si NO hay registro label del boton es igual a "Guardar"
             $('#btnSaveIntroRecup').val(0);
             obtenerRutasRecu();
+
 
         }
     });
@@ -241,9 +257,27 @@
             idContado = $('#recu_contado_'+table.cell( i, 0 ).data()).val();
             //lleno un arreglo con los datos de la tabla de cada ruta
 
-            idMeta = idMeta.replace(/[^0-9.]/g, '');
-            idCredito = idCredito.replace(/[^0-9.]/g, '');
-            idContado = idContado.replace(/[^0-9.]/g, '');
+            if (idMeta.length == 0){
+                idMeta = '0.00';
+            }else{
+                idMeta = idMeta.replace(/[^0-9.]/g, '');
+            }
+
+            if (idCredito.length == 0){
+                idCredito = '0.00';
+            }else{
+                idCredito = idCredito.replace(/[^0-9.]/g, '');
+            }
+
+            if (idContado.length == 0) {
+                idContado = '0.00';
+             }else{
+                idContado = idContado.replace(/[^0-9.]/g, '');
+            }
+
+            
+            
+            
 
             vendedores = table.cell( i, 1 ).data();
             vendedores = (vendedores.replace('<span style="text-align: left; float: left">', '')).replace('</span>','');
@@ -286,7 +320,7 @@
                         fillDtIntroRecup(route, metodo);//Dibuja nuevamente los registros de la tabla con los cambios realizados
                         //location.reload();//ercarga pagina
                          var ValidarTablaRecu = existenDatosEnTablaRecu(mes, anio);
-      
+                        asignarRutaMascaras(mes, anio);
                         $('#btnSaveIntroRecup').text('Actualizar Registros');//si hay registro label del boton es igual a "Guardar"
                         $('#btnSaveIntroRecup').val(1);
             
@@ -310,6 +344,7 @@
                          $('#dtIntroRecup').DataTable().clear().draw();//elimina los registros de la tabla
                         fillDtIntroRecup(route, metodo);//Dibuja nuevamente los registros de la tabla con los cambios realizados
                         //location.reload();//ercarga pagina
+                        asignarRutaMascaras(mes, anio);
 
                         $('#btnSaveIntroRecup').text('Actualizar Registros');//si hay registro label del boton es igual a "Guardar"
                         $('#btnSaveIntroRecup').val(1);
