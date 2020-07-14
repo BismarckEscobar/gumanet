@@ -37,6 +37,16 @@ class inventario_controller extends Controller
 		return response()->json($obj);
 	}
 
+	public function liquidacion6Meses() {
+		$obj = inventario_model::dataLiquidacion6Meses();
+		return response()->json($obj);
+	}
+
+	public function liquidacion12Meses() {
+		$obj = inventario_model::dataLiquidacion12Meses();
+		return response()->json($obj);
+	}
+
 	public function getArticuloDetalle($articulo) {
 		$obj = inventario_model::getArticuloDetalle($articulo);
 		return response()->json($obj);

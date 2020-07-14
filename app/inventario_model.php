@@ -58,6 +58,92 @@ class inventario_model extends Model {
         return $query;
     }
 
+    public static function dataLiquidacion6Meses() {
+        $sql_server = new \sql_server();
+        
+        $request = Request();
+        $sql_exec = '';
+        $company_user = Company::where('id',$request->session()->get('company_id'))->first()->id;
+        
+        switch ($company_user) {
+            case '1':
+                $sql_exec = "SELECT * FROM Vencimientos_6meses";
+                break;
+            case '2':
+                return false;
+                break;
+            case '3':
+                return false;
+                break;
+            case '4':
+                return false;
+                break; 
+            default:                
+                dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
+                break;
+        }
+
+        $query = array();
+        $i=0;
+
+        $query1 = $sql_server->fetchArray( $sql_exec ,SQLSRV_FETCH_ASSOC);
+        foreach ($query1 as $key) {
+            $query[$i]['ARTICULO']          = $key['ARTICULO'];
+            $query[$i]['DESCRIPCION']       = $key['DESCRIPCION'];
+            $query[$i]['DIAS_VENCIMIENTO']  = $key['DIAS_VENCIMIENTO'];
+            $query[$i]['CANT_DISPONIBLE']   = number_format($key['CANT_DISPONIBLE'],2).' - [ '.$key['UNIDAD_VENTA'].' ]';
+            $query[$i]['F_VENCIMIENTO']     = date('d/m/Y',strtotime($key['fecha_vencimientoR']));
+            $query[$i]['LOTE']              = $key['LOTE'];
+            $i++;
+        }
+        $sql_server->close();
+
+        return $query;
+    }
+
+    public static function dataLiquidacion12Meses() {
+        $sql_server = new \sql_server();
+        
+        $request = Request();
+        $sql_exec = '';
+        $company_user = Company::where('id',$request->session()->get('company_id'))->first()->id;
+        
+        switch ($company_user) {
+            case '1':
+                $sql_exec = "SELECT * FROM Vencimientos_12meses";
+                break;
+            case '2':
+                return false;
+                break;
+            case '3':
+                return false;
+                break;
+            case '4':
+                return false;
+                break; 
+            default:                
+                dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
+                break;
+        }
+
+        $query = array();
+        $i=0;
+
+        $query1 = $sql_server->fetchArray( $sql_exec ,SQLSRV_FETCH_ASSOC);
+        foreach ($query1 as $key) {
+            $query[$i]['ARTICULO']          = $key['ARTICULO'];
+            $query[$i]['DESCRIPCION']       = $key['DESCRIPCION'];
+            $query[$i]['DIAS_VENCIMIENTO']  = $key['DIAS_VENCIMIENTO'];
+            $query[$i]['CANT_DISPONIBLE']   = number_format($key['CANT_DISPONIBLE'],2).' - [ '.$key['UNIDAD_VENTA'].' ]';
+            $query[$i]['F_VENCIMIENTO']     = date('d/m/Y',strtotime($key['fecha_vencimientoR']));
+            $query[$i]['LOTE']              = $key['LOTE'];
+            $i++;
+        }
+        $sql_server->close();
+
+        return $query;
+    }
+
     public static function getBodegaInventario($articulo) {
         
         $sql_server     = new \sql_server();

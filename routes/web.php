@@ -48,6 +48,8 @@ Route::get('/objPrecios/{articulo}','inventario_controller@getPreciosArticulos')
 Route::get('/objBonificado/{articulo}','inventario_controller@getArtBonificados');
 Route::post('/transacciones','inventario_controller@transaccionesDetalle');
 Route::post('/lotes','inventario_controller@getLotesArticulo');
+Route::get('/liq6Meses','inventario_controller@liquidacion6Meses');
+Route::get('/liq12Meses','inventario_controller@liquidacion12Meses');
 
 //RUTAS METAS
 Route::post('/export_meta_from_exl','metas_controller@exportMetaFromExl');
@@ -93,3 +95,4 @@ Route::post('/saldoxRuta','saldos_controller@saldosXRuta');
 
 //RUTAS PROYECCIONES
 Route::post('dataProyeccion','proyecciones_controller@dataProyeccionXTipo');
+Route::post('artProyectado', 'proyecciones_controller@dataProyeccionXArticulo');

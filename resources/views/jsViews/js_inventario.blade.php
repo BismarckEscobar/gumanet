@@ -32,19 +32,95 @@ $(document).ready(function() {
     	    { "title": "PUNTOS",        "data": "PUNTOS" }
     	],
         "columnDefs": [
-            {"className": "dt-center", "targets": [ 0 ]},
-            { "width": "5%", "targets": [ 0 ] }
+            {"className": "dt-center", "targets": [ 0, 2, 3, 4, 5 ]},
+            { "width": "50%", "targets": [ 1 ] }
         ],
     });
 
-    $("#dtInventarioArticulos_length").hide();
-    $("#dtInventarioArticulos_filter").hide();
+    $('#dtLiq6Meses').DataTable({
+        "ajax":{
+            "url": "liq6Meses",
+            'dataSrc': '',
+        },
+        "info":    false,
+        "lengthMenu": [[5,10,50,-1], [5,10,100,"Todo"]],
+        "language": {
+            "zeroRecords": "No hay coincidencias",
+            "paginate": {
+                "first":      "Primera",
+                "last":       "Última ",
+                "next":       "Siguiente",
+                "previous":   "Anterior"
+            },
+            "lengthMenu": "MOSTRAR _MENU_",
+            "emptyTable": "NO HAY DATOS DISPONIBLES",
+            "search":     "BUSCAR"
+        },
+        'columns': [
+            { "title": "ARTICULO",              "data": "ARTICULO" },
+            { "title": "DESCRIPCION",           "data": "DESCRIPCION" },
+            { "title": "DIAS",            "data": "DIAS_VENCIMIENTO" },
+            { "title": "DISPONIBLE",            "data": "CANT_DISPONIBLE" },
+            { "title": "VENCE",           "data": "F_VENCIMIENTO" },
+            { "title": "LOTE",                  "data": "LOTE" }
+        ],
+        "columnDefs": [
+            {"className": "dt-center", "targets": [ 0, 2, 3, 4, 5 ]},
+            { "width": "50%", "targets": [ 1 ] }
+        ],
+    });
+
+    $('#dtLiq12Meses').DataTable({
+        "ajax":{
+            "url": "liq12Meses",
+            'dataSrc': '',
+        },
+        "info":    false,
+        "lengthMenu": [[5,10,50,-1], [5,10,100,"Todo"]],
+        "language": {
+            "zeroRecords": "No hay coincidencias",
+            "paginate": {
+                "first":      "Primera",
+                "last":       "Última ",
+                "next":       "Siguiente",
+                "previous":   "Anterior"
+            },
+            "lengthMenu": "MOSTRAR _MENU_",
+            "emptyTable": "NO HAY DATOS DISPONIBLES",
+            "search":     "BUSCAR"
+        },
+        'columns': [
+            { "title": "ARTICULO",              "data": "ARTICULO" },
+            { "title": "DESCRIPCION",           "data": "DESCRIPCION" },
+            { "title": "DIAS",      "data": "DIAS_VENCIMIENTO" },
+            { "title": "DISPONIBLE",       "data": "CANT_DISPONIBLE" },
+            { "title": "VENCE",    "data": "F_VENCIMIENTO" },
+            { "title": "LOTE",                  "data": "LOTE" }
+        ],
+        "columnDefs": [
+            {"className": "dt-center", "targets": [ 0, 2, 3, 4 ]},
+            
+        ],
+    });
+
+    $("#dtInventarioArticulos_length, #dtLiq6Meses_length, #dtLiq12Meses_length").hide();
+    $("#dtInventarioArticulos_filter, #dtLiq6Meses_filter, #dtLiq12Meses_filter").hide();
     inicializaControlFecha();
 });
 
 $('#InputDtShowSearchFilterArt').on( 'keyup', function () {
 	var table = $('#dtInventarioArticulos').DataTable();
 	table.search(this.value).draw();
+});
+
+$('#InputDtShowSearchFilterArt6M').on( 'keyup', function () {
+    var table = $('#dtLiq6Meses').DataTable();
+    table.search(this.value).draw();
+});
+
+$('#InputDtShowSearchFilterArt12M').on( 'keyup', function () {
+    var table = $('#dtLiq12Meses').DataTable();
+    table.search(this.value).draw();
 });
 
 $( "#InputDtShowColumnsArtic").change(function() {
