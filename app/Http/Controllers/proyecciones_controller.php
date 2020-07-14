@@ -25,25 +25,21 @@ class proyecciones_controller extends Controller
         return view('pages.proyecciones', $data);
     }
 
-    function dataProyeccionXTipo() {
+    function dataProyeccionXTipo(Request $request) {
 
-    $obj = proyecciones_model::getDataProyecciones();
-    return (response()->json($obj));
-
-		/*$i=0;
-		$json[$i]['ARTICULO'] 		='10118472';
-		$json[$i]['DESCRIPCION'] 	='Temozolamida 100 mg Capsulas 5/Caja (Naprod)';
-		$json[$i]['CLASE_ABC'] 	='AAA';
-		$json[$i]['ORDEN_MINIMA'] 	='4.9518';
-		$json[$i]['FACTOR_EMPAQUE'] 	='5.0000';
-
-		$json[$i]['OPC'] = '<center><a href="#!" id="donwloadExcelPlantilla"><i class="material-icons">content_paste</i></a></center>';
-
-		return response()->json($json);*/
-				
+        if($request->isMethod('post')) {
+            $obj = proyecciones_model::getDataProyecciones($request->input('ud'));
+            return (response()->json($obj));
+        }				
     }
 
-    public function vista() {
+    function dataProyeccionXArticulo(Request $request) {
+        
+        if($request->isMethod('post')) {
+            $obj = proyecciones_model::getDataProyeccionArticulo($request->input('ud'), $request->input('art'));
+            return (response()->json($obj));
+        }
+
         $i=0;
         $rtnArticulo=array();
         $query = $this->sqlsrv->fetchArray("SELECT * FROM DESARROLLO.dbo.ESTADISTICA_CA",SQLSRV_FETCH_ASSOC);
