@@ -108,6 +108,19 @@ $(document).ready(function() {
     inicializaControlFecha();
 });
 
+function descargarArchivo( tipo ) {
+    location.href = "desInventario/"+tipo;
+    /*$.ajax({
+        type: "POST",
+        url: "desInventario",
+        data:{
+            tp: tipo
+        },
+        success: function (data) {
+        }
+    });*/
+}
+
 $('#InputDtShowSearchFilterArt').on( 'keyup', function () {
 	var table = $('#dtInventarioArticulos').DataTable();
 	table.search(this.value).draw();

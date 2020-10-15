@@ -10,7 +10,7 @@
       <div class="card-body">                
         <h5 class="card-title">{{ $page }}</h5>
         <div class="row">
-            <div class="col-sm-11">
+            <div class="col-sm-10">
                <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="basic-addon1"><i data-feather="search"></i></span>
@@ -29,6 +29,9 @@
                     </select>
                 </div>
             </div>
+            <div class="col-sm-1">
+            <a href="#!" target="_blank" onclick="descargarArchivo('inventario')" ><img src="./images/excel.png" style="width: 31px; height: 31px" class="mt-1"></a>
+            </div>
         </div>
       </div>
     </div>
@@ -42,24 +45,38 @@
 </div><hr>
 <div class="row mt-4">
   <div class="col-sm-6 border-right">
-    <h1 class="h4 pb-0 text-info mb-4">Liquidacion a 6 meses</h1>
-   <div class="input-group">
+    <h1 class="h4 pb-0 text-info mb-4">Vencimiento a 6 meses</h1>
+    <div class="row">
+      <div class="col-10">
+       <div class="input-group">
         <div class="input-group-prepend">
             <span class="input-group-text" id="basic-addon1"><i data-feather="search"></i></span>
         </div>
         <input type="text" id="InputDtShowSearchFilterArt6M" class="form-control" placeholder="Buscar en Liquidacion a 6 meses" aria-label="Username" aria-describedby="basic-addon1">
-    </div>            
+        </div>
+      </div>
+      <div class="col-2">
+        <a href="#!" onclick="descargarArchivo('vence6M')" target="_blank" ><img src="./images/excel.png" style="width: 31px; height: 31px"></a>
+      </div>
+    </div>
     <div class="table-responsive mt-2 mb-5">
       <table class="table table-bordered table-sm" width="100%" id="dtLiq6Meses"></table>
     </div>
   </div>
   <div class="col-sm-6 border-right">
-  <h1 class="h4 pb-0 text-info mb-4">Liquidacion a 12 meses</h1>
-   <div class="input-group">
-        <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon1"><i data-feather="search"></i></span>
+   <h1 class="h4 pb-0 text-info mb-4">Vencimiento a 12 meses</h1>
+   <div class="row">
+     <div class="col-10">
+       <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1"><i data-feather="search"></i></span>
+            </div>
+            <input type="text" id="InputDtShowSearchFilterArt12M" class="form-control" placeholder="Buscar en Liquidacion a 12 meses" aria-label="Username" aria-describedby="basic-addon1">
         </div>
-        <input type="text" id="InputDtShowSearchFilterArt12M" class="form-control" placeholder="Buscar en Liquidacion a 12 meses" aria-label="Username" aria-describedby="basic-addon1">
+     </div> 
+     <div class="col-2">
+      <a href="#!" onclick="descargarArchivo('vence12M')" target="_blank"><img src="./images/excel.png" style="width: 31px; height: 31px"></a>
+     </div>
     </div>
     <div class="table-responsive mt-2 mb-5">
       <table class="table table-bordered table-sm" width="100%" id="dtLiq12Meses"></table>

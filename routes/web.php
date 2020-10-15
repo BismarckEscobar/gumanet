@@ -50,6 +50,7 @@ Route::post('/transacciones','inventario_controller@transaccionesDetalle');
 Route::post('/lotes','inventario_controller@getLotesArticulo');
 Route::get('/liq6Meses','inventario_controller@liquidacion6Meses');
 Route::get('/liq12Meses','inventario_controller@liquidacion12Meses');
+Route::get('/desInventario/{tipo}', 'inventario_controller@descargarInventario');
 
 //RUTAS METAS
 Route::post('/export_meta_from_exl','metas_controller@exportMetaFromExl');

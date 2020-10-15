@@ -3,7 +3,12 @@
 namespace App;
 use App\User;
 use App\Company;
+use PHPExcel;
+use PHPExcel_IOFactory;
 
+use PHPExcel_Style_Alignment;
+use PHPExcel_Style;
+use PHPExcel_Style_Border;
 use Illuminate\Database\Eloquent\Model;
 
 class inventario_model extends Model {
@@ -42,9 +47,11 @@ class inventario_model extends Model {
             $desc_art = str_replace("'", " ", $key['DESCRIPCION']);
 
 	    	$query[$i]['ARTICULO'] 			= '<a href="#!" onclick="getDetalleArticulo('."'".$key['ARTICULO']."'".', '."'".$desc_art."'".')" >'.$key['ARTICULO'].'</a>';
+            $query[$i]['ARTICULO_']         = $key['ARTICULO'];
 	    	$query[$i]['CLASE_TERAPEUTICA'] = $key['CLASE_TERAPEUTICA'];
 	    	$query[$i]['DESCRIPCION'] 		= $key['DESCRIPCION'];
 	    	$query[$i]['total'] 			= number_format($key['total'], 0);
+            $query[$i]['total_']            = ($key['total']=='')?0:$key['total'];
 	    	$query[$i]['LABORATORIO'] 		= $key['LABORATORIO'];
 	    	$query[$i]['UNIDAD_ALMACEN'] 	= $key['UNIDAD_ALMACEN'];
 	    	$query[$i]['006'] 				= $key['006'];
@@ -56,6 +63,226 @@ class inventario_model extends Model {
         $sql_server->close();        
 
         return $query;
+    }
+
+    public static function descargarInventario($tipo) {
+        $objPHPExcel = new PHPExcel();
+        $tituloReporte = "";
+        $titulosColumnas = array();
+
+        $estiloTituloReporte = array(
+            'font' => array(
+            'name'      => 'Tahoma',
+            'bold'      => true,
+            'italic'    => false,
+            'strike'    => false,
+            'size'      => 14,
+            'color'     => array(
+                            'rgb' => '212121')
+            ),
+            'alignment' =>  array(
+                            'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                            'vertical'   => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                            'rotation'   => 0,
+                            'wrap'       => TRUE,
+                            )
+        );
+
+        $estiloTituloColumnas = array(
+            'font' => array(
+                        'name'  => 'Arial',
+                        'bold'  => true
+            ),
+            'alignment' =>  array(
+                                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                                'vertical'   => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                                'wrap'          => TRUE
+                            ),
+            'borders' => array(
+                            'top' => array(
+                            'style' => PHPExcel_Style_Border::BORDER_THIN,
+                        ),
+            'allborders' => array(
+                                'style' => PHPExcel_Style_Border::BORDER_THIN,
+                            )
+            )
+        );
+                
+        $estiloInformacion = new PHPExcel_Style();
+        $estiloInformacion->applyFromArray(
+            array(
+                'borders' => array(
+                'top' => array(
+                            'style' => PHPExcel_Style_Border::BORDER_THIN,
+                        ),
+                'allborders' => array(
+                                'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                ),
+                )
+            )
+        );
+
+        $right = array(
+            'alignment' =>  array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                'wrap' => TRUE
+            )
+        );
+
+        $left = array(
+            'alignment' =>  array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                'wrap' => TRUE
+            )
+        );
+
+        switch ($tipo) {
+            case 'inventario':
+                $temp = inventario_model::getArticulos();
+                
+                $tituloReporte = "INVENTARIO DE ARTICULOS ACTUALIZADOS HASTA ".date('d/m/Y');
+                $titulosColumnas = array('ARTICULO', 'DESCRIPCION', 'EXISTENCIA', 'LABORATORIO', 'UNIDAD', 'PUNTOS');
+
+                $objPHPExcel->setActiveSheetIndex(0)
+                        ->mergeCells('A1:F1');
+
+                $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A1',$tituloReporte)
+                ->setCellValue('A3',  $titulosColumnas[0])
+                ->setCellValue('B3',  $titulosColumnas[1])
+                ->setCellValue('C3',  $titulosColumnas[2])
+                ->setCellValue('D3',  $titulosColumnas[3])
+                ->setCellValue('E3',  $titulosColumnas[4])
+                ->setCellValue('F3',  $titulosColumnas[5]);
+                
+                $i=4;
+
+                foreach ($temp as $key) {
+                    $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A'.$i,  $key['ARTICULO_'])
+                    ->setCellValue('B'.$i,  $key['DESCRIPCION'])
+                    ->setCellValue('C'.$i,  round($key['total_']))
+                    ->setCellValue('D'.$i,  $key['LABORATORIO'])
+                    ->setCellValue('E'.$i,  $key['UNIDAD_ALMACEN'])
+                    ->setCellValue('F'.$i,  $key['PUNTOS']);
+                    $i++;
+                }
+
+                $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(70);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(30);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(12);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(12);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(12);
+
+                
+                $objPHPExcel->getActiveSheet()->getStyle('A1:F1')->applyFromArray($estiloTituloReporte);
+                $objPHPExcel->getActiveSheet()->getStyle('A3:F3')->applyFromArray($estiloTituloColumnas);      
+                $objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A4:F".($i-1));
+                $objPHPExcel->getActiveSheet()->getStyle("C4:F".($i-1))->applyFromArray($right);
+
+
+                break;
+            case 'vence6M':
+                $temp = inventario_model::dataLiquidacion6Meses();
+
+                $tituloReporte = "VENCIMIENTO A 6 MESES HASTA ".date('d/m/Y');
+                $titulosColumnas = array('ARTICULO', 'DESCRIPCION', 'DIAS', 'DISPONIBLE', 'VENCE', 'LOTE');
+
+                $objPHPExcel->setActiveSheetIndex(0)
+                        ->mergeCells('A1:F1');
+
+                $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A1',$tituloReporte)
+                ->setCellValue('A3',  $titulosColumnas[0])
+                ->setCellValue('B3',  $titulosColumnas[1])
+                ->setCellValue('C3',  $titulosColumnas[2])
+                ->setCellValue('D3',  $titulosColumnas[3])
+                ->setCellValue('E3',  $titulosColumnas[4])
+                ->setCellValue('F3',  $titulosColumnas[5]);
+                
+                $i=4;
+
+                foreach ($temp as $key) {
+                    $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A'.$i,  $key['ARTICULO'])
+                    ->setCellValue('B'.$i,  $key['DESCRIPCION'])
+                    ->setCellValue('C'.$i,  $key['DIAS_VENCIMIENTO'])
+                    ->setCellValue('D'.$i,  $key['CANT_DISPONIBLE'])
+                    ->setCellValue('E'.$i,  $key['F_VENCIMIENTO'])
+                    ->setCellValue('F'.$i,  $key['LOTE']);
+                    $i++;
+                }
+
+                $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(70);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(12);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(12);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
+
+                $objPHPExcel->getActiveSheet()->getStyle('A1:F1')->applyFromArray($estiloTituloReporte);
+                $objPHPExcel->getActiveSheet()->getStyle('A3:F3')->applyFromArray($estiloTituloColumnas);
+                $objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A4:F".($i-1));
+                $objPHPExcel->getActiveSheet()->getStyle("C4:F".($i-1))->applyFromArray($right);
+
+                break;
+            case 'vence12M':
+                $temp = inventario_model::dataLiquidacion12Meses();
+
+                $tituloReporte = "VENCIMIENTO A 12 MESES HASTA ".date('d/m/Y');
+                $titulosColumnas = array('ARTICULO', 'DESCRIPCION', 'DIAS', 'DISPONIBLE', 'VENCE', 'LOTE');
+
+                $objPHPExcel->setActiveSheetIndex(0)
+                        ->mergeCells('A1:F1');
+
+                $objPHPExcel->setActiveSheetIndex(0)
+                ->setCellValue('A1',$tituloReporte)
+                ->setCellValue('A3',  $titulosColumnas[0])
+                ->setCellValue('B3',  $titulosColumnas[1])
+                ->setCellValue('C3',  $titulosColumnas[2])
+                ->setCellValue('D3',  $titulosColumnas[3])
+                ->setCellValue('E3',  $titulosColumnas[4])
+                ->setCellValue('F3',  $titulosColumnas[5]);
+                
+                $i=4;
+
+                foreach ($temp as $key) {
+                    $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A'.$i,  $key['ARTICULO'])
+                    ->setCellValue('B'.$i,  $key['DESCRIPCION'])
+                    ->setCellValue('C'.$i,  $key['DIAS_VENCIMIENTO'])
+                    ->setCellValue('D'.$i,  $key['CANT_DISPONIBLE'])
+                    ->setCellValue('E'.$i,  $key['F_VENCIMIENTO'])
+                    ->setCellValue('F'.$i,  $key['LOTE']);
+                    $i++;
+                }
+
+                $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(70);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(12);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(12);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
+
+                $objPHPExcel->getActiveSheet()->getStyle('A1:F1')->applyFromArray($estiloTituloReporte);
+                $objPHPExcel->getActiveSheet()->getStyle('A3:F3')->applyFromArray($estiloTituloColumnas);
+                $objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A4:F".($i-1));
+                $objPHPExcel->getActiveSheet()->getStyle("C4:F".($i-1))->applyFromArray($right);
+                break;
+            default:                
+                dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
+                break;
+        }
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="Inventario actualizado hasta '.date('d/m/Y').'.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save('php://output');
     }
 
     public static function dataLiquidacion6Meses() {
