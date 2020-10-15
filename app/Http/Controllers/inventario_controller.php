@@ -47,6 +47,10 @@ class inventario_controller extends Controller
 		return response()->json($obj);
 	}
 
+	public function descargarInventario($tipo) {
+		$obj = inventario_model::descargarInventario($tipo);
+	}
+
 	public function getArticuloDetalle($articulo) {
 		$obj = inventario_model::getArticuloDetalle($articulo);
 		return response()->json($obj);
@@ -67,7 +71,7 @@ class inventario_controller extends Controller
 		return response()->json($obj);
 	}
 
-	public function transaccionesDetalle(Request $request) {		
+	public function transaccionesDetalle(Request $request) {
 		if($request->isMethod('post')){
 			$obj = inventario_model::transaccionesDetalle($request->input('f1'),$request->input('f2'),$request->input('art'),$request->input('tp'));
 			return response()->json($obj);
