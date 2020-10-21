@@ -132,6 +132,41 @@
   transition: all 0.4s;
 }
 
+.date-picker-wrapper {
+  border-radius: 10px;
+  background-color: #f1f5f8!important;
+  padding: 15px!important;
+}
+
+.date-picker-wrapper .month-wrapper {
+  margin-top: 1%;
+}
+
+.day {
+  
+  width: 38px!important
+}
+
+.week-name {
+  width: 38px!important
+}
+
+.selected-days {
+  display: none!important;
+}
+
+.date-picker-wrapper .drp_top-bar .apply-btn {
+  cursor: pointer!important;
+  color:white!important;
+  border: solid 1px #0076a3!important;
+  background: #0095cd!important
+}
+
+.DrawBorder{
+  border: solid 2px black;
+}
+
+
 #sidebarCollapse {
   cursor: pointer;
 }
@@ -273,4 +308,10 @@
 
 #tbSaldos thead tr th {
   text-align: center!important
+}
+
+.img01 {
+  width: 18px;
+  height: 18px;
+  margin-bottom: 5px;
 }

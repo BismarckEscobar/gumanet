@@ -28,9 +28,10 @@
 <!-- Custom styles for this template -->
 <link rel="stylesheet" href="{{ url('css/dashboard.css') }}">
 <link rel="stylesheet" href="{{ url('css/fuente.css') }}">
-<link rel="stylesheet"  type="text/css" href="{{ url('css/daterangepicker.css') }}">
+
 <link rel="stylesheet" type="text/css" href="{{ url('css/jquery.dataTables.min.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ url('css/bootstrap-select.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url('css/daterangepicker.min.css') }}">
 <!--Import Google Icon Font-->
 <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
@@ -107,6 +108,7 @@
 <script src="{{ url('js/xlsx.full.min.js') }}"></script>
 <script src="{{ url('js/jszip.js') }}"></script>
 <script src="{{ url('js/no-data-to-display.js') }}"></script>
+<script src="{{ url('js/jquery.daterangepicker.min.js') }}"></script>
 @yield('metodosjs')
 </body>
 </html>
