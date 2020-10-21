@@ -48,12 +48,20 @@
                   Usuarios
               </a>
            </li>
-          <li>
-            <a class="nav-link text-secondary" href="Saldos">
-              <span data-feather="dollar-sign"></span>
-              Saldos
-            </a>
-          </li>
+            <li>
+              <a class="nav-link text-secondary" href="Saldos">
+                <span data-feather="dollar-sign"></span>
+                Saldos
+              </a>
+            </li> 
+            @if(Session::get('companyName')=='UNIMARK')
+            <li>
+              <a class="nav-link text-secondary" href="InteligenciaMercado">
+                <span data-feather="message-circle"></span>
+                I de Mercado
+              </a>
+            </li>
+            @endif
             @if(Session::get('companyName')=='UNIMARK' || Session::get('companyName')=='INNOVA')
              <li>
               <a class="nav-link text-secondary" href="Recuperacion">

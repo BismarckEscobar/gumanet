@@ -19,6 +19,7 @@ Route::get('/Reportes','reportes_controller@index');
 Route::get('/Recuperacion','recuperacion_controller@index');
 Route::get('/Saldos','saldos_controller@index');
 Route::get('/Proyecciones','proyecciones_controller@index');
+Route::get('/InteligenciaMercado','inteligenciaMercado_controller@index');
 
 //RUTAS LOGIN
 Route::get('/','Auth\LoginController@showLoginForm');//pagina login
@@ -97,3 +98,6 @@ Route::post('/saldoxRuta','saldos_controller@saldosXRuta');
 //RUTAS PROYECCIONES
 Route::post('dataProyeccion','proyecciones_controller@dataProyeccionXTipo');
 Route::post('artProyectado', 'proyecciones_controller@dataProyeccionXArticulo');
+
+//RUTAS COMENTARIOS
+Route::post('/paginateDataSearch', 'inteligenciaMercado_controller@searchComentarios');
