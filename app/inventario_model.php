@@ -1,11 +1,9 @@
 <?php
-
 namespace App;
 use App\User;
 use App\Company;
 use PHPExcel;
 use PHPExcel_IOFactory;
-
 use PHPExcel_Style_Alignment;
 use PHPExcel_Style;
 use PHPExcel_Style_Border;
@@ -13,10 +11,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class inventario_model extends Model {
     
-    public static function getArticulos() {
-        
-        $sql_server = new \sql_server();
-        
+    public static function getArticulos() {        
+        $sql_server = new \sql_server();        
         $request = Request();
         $sql_exec = '';
         $company_user = Company::where('id',$request->session()->get('company_id'))->first()->id;
@@ -65,7 +61,7 @@ class inventario_model extends Model {
         return $query;
     }
 
-    public static function descargarInventario($tipo) {
+    public static function descargarInventario($tipo, $valor) {
         $objPHPExcel = new PHPExcel();
         $tituloReporte = "";
         $titulosColumnas = array();
@@ -185,10 +181,11 @@ class inventario_model extends Model {
 
 
                 break;
-            case 'vence6M':
-                $temp = inventario_model::dataLiquidacion6Meses();
+            case 'vencimiento':
+                $temp = inventario_model::dataLiquidacionMeses($valor);
 
-                $tituloReporte = "VENCIMIENTO A 6 MESES HASTA ".date('d/m/Y');
+                $tituloReporte = ($valor==6)?("VENCIMIENTO A 6 MESES HASTA ".date('d/m/Y')):("VENCIMIENTO A 12 MESES HASTA ".date('d/m/Y'));
+
                 $titulosColumnas = array('ARTICULO', 'DESCRIPCION', 'DIAS', 'DISPONIBLE', 'VENCE', 'LOTE');
 
                 $objPHPExcel->setActiveSheetIndex(0)
@@ -228,53 +225,10 @@ class inventario_model extends Model {
                 $objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A4:F".($i-1));
                 $objPHPExcel->getActiveSheet()->getStyle("C4:F".($i-1))->applyFromArray($right);
 
-                break;
-            case 'vence12M':
-                $temp = inventario_model::dataLiquidacion12Meses();
-
-                $tituloReporte = "VENCIMIENTO A 12 MESES HASTA ".date('d/m/Y');
-                $titulosColumnas = array('ARTICULO', 'DESCRIPCION', 'DIAS', 'DISPONIBLE', 'VENCE', 'LOTE');
-
-                $objPHPExcel->setActiveSheetIndex(0)
-                        ->mergeCells('A1:F1');
-
-                $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('A1',$tituloReporte)
-                ->setCellValue('A3',  $titulosColumnas[0])
-                ->setCellValue('B3',  $titulosColumnas[1])
-                ->setCellValue('C3',  $titulosColumnas[2])
-                ->setCellValue('D3',  $titulosColumnas[3])
-                ->setCellValue('E3',  $titulosColumnas[4])
-                ->setCellValue('F3',  $titulosColumnas[5]);
-                
-                $i=4;
-
-                foreach ($temp as $key) {
-                    $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A'.$i,  $key['ARTICULO'])
-                    ->setCellValue('B'.$i,  $key['DESCRIPCION'])
-                    ->setCellValue('C'.$i,  $key['DIAS_VENCIMIENTO'])
-                    ->setCellValue('D'.$i,  $key['CANT_DISPONIBLE'])
-                    ->setCellValue('E'.$i,  $key['F_VENCIMIENTO'])
-                    ->setCellValue('F'.$i,  $key['LOTE']);
-                    $i++;
-                }
-
-                $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(70);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(12);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(12);
-                $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
-
-                $objPHPExcel->getActiveSheet()->getStyle('A1:F1')->applyFromArray($estiloTituloReporte);
-                $objPHPExcel->getActiveSheet()->getStyle('A3:F3')->applyFromArray($estiloTituloColumnas);
-                $objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A4:F".($i-1));
-                $objPHPExcel->getActiveSheet()->getStyle("C4:F".($i-1))->applyFromArray($right);
-                break;
-            default:                
+            break;
+            default:
                 dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
-                break;
+            break;
         }
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -285,7 +239,7 @@ class inventario_model extends Model {
         $objWriter->save('php://output');
     }
 
-    public static function dataLiquidacion6Meses() {
+    public static function dataLiquidacionMeses($valor) {
         $sql_server = new \sql_server();
         
         $request = Request();
@@ -294,7 +248,7 @@ class inventario_model extends Model {
         
         switch ($company_user) {
             case '1':
-                $sql_exec = "SELECT * FROM Vencimientos_6meses";
+                $sql_exec = "EXECUTE FCHA_VENCIMIENTO_LOTE ".$valor;
                 break;
             case '2':
                 return false;
@@ -319,50 +273,7 @@ class inventario_model extends Model {
             $query[$i]['DESCRIPCION']       = $key['DESCRIPCION'];
             $query[$i]['DIAS_VENCIMIENTO']  = $key['DIAS_VENCIMIENTO'];
             $query[$i]['CANT_DISPONIBLE']   = number_format($key['CANT_DISPONIBLE'],2).' - [ '.$key['UNIDAD_VENTA'].' ]';
-            $query[$i]['F_VENCIMIENTO']     = date('d/m/Y',strtotime($key['fecha_vencimientoR']));
-            $query[$i]['LOTE']              = $key['LOTE'];
-            $i++;
-        }
-        $sql_server->close();
-
-        return $query;
-    }
-
-    public static function dataLiquidacion12Meses() {
-        $sql_server = new \sql_server();
-        
-        $request = Request();
-        $sql_exec = '';
-        $company_user = Company::where('id',$request->session()->get('company_id'))->first()->id;
-        
-        switch ($company_user) {
-            case '1':
-                $sql_exec = "SELECT * FROM Vencimientos_12meses";
-                break;
-            case '2':
-                return false;
-                break;
-            case '3':
-                return false;
-                break;
-            case '4':
-                return false;
-                break; 
-            default:                
-                dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
-                break;
-        }
-
-        $query = array();
-        $i=0;
-
-        $query1 = $sql_server->fetchArray( $sql_exec ,SQLSRV_FETCH_ASSOC);
-        foreach ($query1 as $key) {
-            $query[$i]['ARTICULO']          = $key['ARTICULO'];
-            $query[$i]['DESCRIPCION']       = $key['DESCRIPCION'];
-            $query[$i]['DIAS_VENCIMIENTO']  = $key['DIAS_VENCIMIENTO'];
-            $query[$i]['CANT_DISPONIBLE']   = number_format($key['CANT_DISPONIBLE'],2).' - [ '.$key['UNIDAD_VENTA'].' ]';
-            $query[$i]['F_VENCIMIENTO']     = date('d/m/Y',strtotime($key['fecha_vencimientoR']));
+            $query[$i]['F_VENCIMIENTO']     = date('d/m/Y', strtotime($key['FECHA_VENCIMIENTO']) );
             $query[$i]['LOTE']              = $key['LOTE'];
             $i++;
         }

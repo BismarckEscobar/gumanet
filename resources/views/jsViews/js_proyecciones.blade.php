@@ -10,6 +10,8 @@ $(document).ready(function() {
 				dataProyecciones(data)
 	    }
 	});*/
+
+	$("#item-nav-01").after(`<li class="breadcrumb-item active">Proyecciones de ventas</li>`);
 });
 
 function detailsProyeccion(articulo, unidad) {

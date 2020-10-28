@@ -10,7 +10,7 @@
       <div class="card-body">                
         <h5 class="card-title">{{ $page }}</h5>
         <div class="row">
-            <div class="col-sm-10">
+            <div class="col-sm-9">
                <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="basic-addon1"><i data-feather="search"></i></span>
@@ -29,8 +29,8 @@
                     </select>
                 </div>
             </div>
-            <div class="col-sm-1">
-            <a href="#!" target="_blank" onclick="descargarArchivo('inventario')" ><img src="./images/excel.png" style="width: 31px; height: 31px" class="mt-1"></a>
+            <div class="col-sm-2 p-0 m-0">
+              <a id="exp-to-excel" href="#!" onclick="descargarArchivo('inventario')" class="btn btn-light text-success float-right"><i class="fas fa-file-excel"></i> Exportar a Excel</a>
             </div>
         </div>
       </div>
@@ -44,46 +44,43 @@
     </div>
 </div><hr>
 <div class="row mt-4">
-  <div class="col-sm-6 border-right">
-    <h1 class="h4 pb-0 text-info mb-4">Vencimiento a 6 meses</h1>
+  <div class="col-sm-12">
+    <h1 class="h4 text-info mb-4">Articulos próximos a vencer</h1>
     <div class="row">
-      <div class="col-10">
-       <div class="input-group">
-        <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon1"><i data-feather="search"></i></span>
-        </div>
-        <input type="text" id="InputDtShowSearchFilterArt6M" class="form-control" placeholder="Buscar en Liquidacion a 6 meses" aria-label="Username" aria-describedby="basic-addon1">
-        </div>
-      </div>
-      <div class="col-2">
-        <a href="#!" onclick="descargarArchivo('vence6M')" target="_blank" ><img src="./images/excel.png" style="width: 31px; height: 31px"></a>
-      </div>
-    </div>
-    <div class="table-responsive mt-2 mb-5">
-      <table class="table table-bordered table-sm" width="100%" id="dtLiq6Meses"></table>
-    </div>
-  </div>
-  <div class="col-sm-6 border-right">
-   <h1 class="h4 pb-0 text-info mb-4">Vencimiento a 12 meses</h1>
-   <div class="row">
-     <div class="col-10">
-       <div class="input-group">
+      <div class="col-md-8">
+        <div class="form-group">
+          <label for="InputDtShowSearchFilterArtVenc" class="text-muted">Realizar busqueda por Articulo</label>
+          <div class="input-group">
             <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon1"><i data-feather="search"></i></span>
+              <span class="input-group-text" id="basic-addon1"><i data-feather="search"></i></span>
             </div>
-            <input type="text" id="InputDtShowSearchFilterArt12M" class="form-control" placeholder="Buscar en Liquidacion a 12 meses" aria-label="Username" aria-describedby="basic-addon1">
+            <input type="text" id="InputDtShowSearchFilterArtVenc" class="form-control" aria-label="Username" aria-describedby="basic-addon1">
+          </div>
         </div>
-     </div> 
-     <div class="col-2">
-      <a href="#!" onclick="descargarArchivo('vence12M')" target="_blank"><img src="./images/excel.png" style="width: 31px; height: 31px"></a>
-     </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="orderByDate" class="text-muted">Ver por</label>
+          <select class="form-control" id="orderByDate">
+            <option value="6">Vencimiento a 6 meses</option>
+            <option value="12">Vencimiento a 12 meses</option>
+          </select>
+        </div>
+      </div>
     </div>
-    <div class="table-responsive mt-2 mb-5">
-      <table class="table table-bordered table-sm" width="100%" id="dtLiq12Meses"></table>
+    <div class="row">
+      <div class="col-md-10">
+        <p class="font-weight-bold text-muted mt-2" id="infoTable"></p>
+      </div>
+      <div class="col-md-2">
+        <a id="exp-to-excel" href="#!" onclick="descargarArchivo('vencimiento')" class="btn btn-light text-success float-right mb-2"><i class="fas fa-file-excel"></i> Exportar a Excel</a>
+      </div>
+    </div>
+    <div class="table-responsive mb-5">
+      <table class="table table-bordered table-sm" width="100%" id="tblArticulosVencimiento"></table>
     </div>
   </div>
 </div>
-
 <!--MODAL: DETALLE DE ARTICULO-->
 <div class="modal fade bd-example-modal-xl" data-backdrop="static" data-keyboard="false" id="mdDetalleArt" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl" role="document">

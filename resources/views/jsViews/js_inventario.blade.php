@@ -37,9 +37,15 @@ $(document).ready(function() {
         ],
     });
 
-    $('#dtLiq6Meses').DataTable({
+    liquidacionPorMeses(6)
+    inicializaControlFecha();
+});
+
+function liquidacionPorMeses(valor) {
+    $('#tblArticulosVencimiento').DataTable({
+        "destroy": true,
         "ajax":{
-            "url": "liq6Meses",
+            "url": "liqMeses/"+valor,
             'dataSrc': '',
         },
         "info":    false,
@@ -70,55 +76,19 @@ $(document).ready(function() {
         ],
     });
 
-    $('#dtLiq12Meses').DataTable({
-        "ajax":{
-            "url": "liq12Meses",
-            'dataSrc': '',
-        },
-        "info":    false,
-        "lengthMenu": [[5,10,50,-1], [5,10,100,"Todo"]],
-        "language": {
-            "zeroRecords": "No hay coincidencias",
-            "paginate": {
-                "first":      "Primera",
-                "last":       "Última ",
-                "next":       "Siguiente",
-                "previous":   "Anterior"
-            },
-            "lengthMenu": "MOSTRAR _MENU_",
-            "emptyTable": "NO HAY DATOS DISPONIBLES",
-            "search":     "BUSCAR"
-        },
-        'columns': [
-            { "title": "ARTICULO",              "data": "ARTICULO" },
-            { "title": "DESCRIPCION",           "data": "DESCRIPCION" },
-            { "title": "DIAS",      "data": "DIAS_VENCIMIENTO" },
-            { "title": "DISPONIBLE",       "data": "CANT_DISPONIBLE" },
-            { "title": "VENCE",    "data": "F_VENCIMIENTO" },
-            { "title": "LOTE",                  "data": "LOTE" }
-        ],
-        "columnDefs": [
-            {"className": "dt-center", "targets": [ 0, 2, 3, 4 ]},
-            
-        ],
-    });
+    $("#dtInventarioArticulos_length, #tblArticulosVencimiento_length").hide();
+    $("#dtInventarioArticulos_filter, #tblArticulosVencimiento_filter").hide();
 
-    $("#dtInventarioArticulos_length, #dtLiq6Meses_length, #dtLiq12Meses_length").hide();
-    $("#dtInventarioArticulos_filter, #dtLiq6Meses_filter, #dtLiq12Meses_filter").hide();
-    inicializaControlFecha();
-});
+    $("#infoTable").text(`Mostrando articulos en vencimiento a `+valor+` meses`);
+}
 
 function descargarArchivo( tipo ) {
-    location.href = "desInventario/"+tipo;
-    /*$.ajax({
-        type: "POST",
-        url: "desInventario",
-        data:{
-            tp: tipo
-        },
-        success: function (data) {
-        }
-    });*/
+    if (tipo=='vencimiento') {        
+        valor = $( "#orderByDate" ).val()
+        location.href = "desInventario/"+tipo+"/"+valor;
+    }else {
+        location.href = "desInventario/"+tipo+"/ND";
+    }    
 }
 
 $('#InputDtShowSearchFilterArt').on( 'keyup', function () {
@@ -126,14 +96,20 @@ $('#InputDtShowSearchFilterArt').on( 'keyup', function () {
 	table.search(this.value).draw();
 });
 
-$('#InputDtShowSearchFilterArt6M').on( 'keyup', function () {
-    var table = $('#dtLiq6Meses').DataTable();
+$('#InputDtShowSearchFilterArtVenc').on( 'keyup', function () {
+    var table = $('#tblArticulosVencimiento').DataTable();
     table.search(this.value).draw();
 });
 
 $('#InputDtShowSearchFilterArt12M').on( 'keyup', function () {
     var table = $('#dtLiq12Meses').DataTable();
     table.search(this.value).draw();
+});
+
+$( "#orderByDate").change(function() {
+    valor = $( this ).val()  
+    
+    liquidacionPorMeses(valor)
 });
 
 $( "#InputDtShowColumnsArtic").change(function() {

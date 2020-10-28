@@ -58,7 +58,7 @@
             <li>
               <a class="nav-link text-secondary" href="InteligenciaMercado">
                 <span data-feather="message-circle"></span>
-                I de Mercado
+                I. M.
               </a>
             </li>
             @endif
@@ -69,7 +69,13 @@
                 Recuperación
               </a>
             </li>
-            @endif     
+            @endif
+          <li class="nav-item">
+              <a class="nav-link text-secondary" href="Proyecciones">
+                  <span data-feather="trending-up"></span>
+                  Proyecciones de ventas
+              </a>
+          </li>
           @elseif(Auth::User()->activeRole()==2)
           <li class="nav-item">                
               <a class="nav-link text-secondary" href="Dashboard">
@@ -96,7 +102,12 @@
             </a>
           </li>
             @if(Session::get('companyName')=='UNIMARK')
-
+            <li class="nav-item">
+                <a class="nav-link text-secondary" href="Proyecciones">
+                    <span data-feather="trending-up"></span>
+                    Proyecciones de ventas
+                </a>
+            </li>
             @endif
           @elseif(Auth::User()->activeRole()==3)
           <li class="nav-item">
@@ -122,12 +133,6 @@
               </a>
           </li>
           @endif
-          <li class="nav-item">
-              <a class="nav-link text-secondary" href="Proyecciones">
-                  <span data-feather="trending-up"></span>
-                  Proyecciones de ventas
-              </a>
-          </li>
           <li class="nav-item">
               <a class="nav-link text-danger font-weight-bold" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><span data-feather="log-out"></span> Cerrar sesion
               </a>

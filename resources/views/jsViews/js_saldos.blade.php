@@ -2,6 +2,8 @@
 $(document).ready(function() {
 	fullScreen();
 	loadDataSaldos();
+
+	$("#item-nav-01").after(`<li class="breadcrumb-item active">Saldos</li>`);
 })
 
 function loadDataSaldos() {

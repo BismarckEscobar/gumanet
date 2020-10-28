@@ -28,10 +28,11 @@
 <!-- Custom styles for this template -->
 <link rel="stylesheet" href="{{ url('css/dashboard.css') }}">
 <link rel="stylesheet" href="{{ url('css/fuente.css') }}">
-
+<link rel="stylesheet" type="text/css" href="{{ url('css/daterangepicker.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url('css/daterangepicker.min.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ url('css/jquery.dataTables.min.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ url('css/bootstrap-select.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ url('css/daterangepicker.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url('css/font-awesome.min.css') }}">
 <!--Import Google Icon Font-->
 <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
@@ -95,6 +96,7 @@
 <script src="{{ url('js/jquery.mask.js') }}"></script>
 <script src="{{ url('js/highcharts.js') }}"></script>
 <script src="{{ url('js/highcharts-3d.js') }}"></script>
+<script src="{{ url('js/all.min.js') }}"></script>
 <script src="{{ url('js/popper.min.js') }}"></script>
 <script src="{{ url('js/bootstrap.min.js') }}"></script>
 <script src="{{ url('js/bootstrap-select.js') }}"></script>
