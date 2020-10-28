@@ -37,18 +37,13 @@ class inventario_controller extends Controller
 		return response()->json($obj);
 	}
 
-	public function liquidacion6Meses() {
-		$obj = inventario_model::dataLiquidacion6Meses();
+	public function liquidacionMeses($valor) {
+		$obj = inventario_model::dataLiquidacionMeses($valor);
 		return response()->json($obj);
 	}
 
-	public function liquidacion12Meses() {
-		$obj = inventario_model::dataLiquidacion12Meses();
-		return response()->json($obj);
-	}
-
-	public function descargarInventario($tipo) {
-		$obj = inventario_model::descargarInventario($tipo);
+	public function descargarInventario($tipo, $valor) {
+		$obj = inventario_model::descargarInventario($tipo, $valor);
 	}
 
 	public function getArticuloDetalle($articulo) {

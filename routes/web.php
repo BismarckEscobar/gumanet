@@ -49,9 +49,8 @@ Route::get('/objPrecios/{articulo}','inventario_controller@getPreciosArticulos')
 Route::get('/objBonificado/{articulo}','inventario_controller@getArtBonificados');
 Route::post('/transacciones','inventario_controller@transaccionesDetalle');
 Route::post('/lotes','inventario_controller@getLotesArticulo');
-Route::get('/liq6Meses','inventario_controller@liquidacion6Meses');
-Route::get('/liq12Meses','inventario_controller@liquidacion12Meses');
-Route::get('/desInventario/{tipo}', 'inventario_controller@descargarInventario');
+Route::get('/liqMeses/{valor}','inventario_controller@liquidacionMeses');
+Route::get('/desInventario/{tipo}/{valor}', 'inventario_controller@descargarInventario');
 
 //RUTAS METAS
 Route::post('/export_meta_from_exl','metas_controller@exportMetaFromExl');
@@ -101,3 +100,4 @@ Route::post('artProyectado', 'proyecciones_controller@dataProyeccionXArticulo');
 
 //RUTAS COMENTARIOS
 Route::post('/paginateDataSearch', 'inteligenciaMercado_controller@searchComentarios');
+Route::post('/dowloadComents', 'inteligenciaMercado_controller@descargarComentarios');

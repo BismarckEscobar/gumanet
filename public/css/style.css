@@ -19,6 +19,10 @@
     content: attr(data-label);
 }
 
+.swal2-popup {
+  width: 50%!important
+}
+
 .input-fecha {
   height: 30px;
   width: 100%;

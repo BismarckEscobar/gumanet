@@ -10,18 +10,19 @@
 	<div class="row">
 		<div class="col-md-12">
 			<h4 class="h4">Inteligencia de Mercado</h4>
+
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-8">
+		<div class="col-md-6">
 			<div class="input-group mt-3">
 				<div class="input-group-prepend">
 					<span class="input-group-text" id="basic-addon1"><i data-feather="search"></i></span>
 				</div>
-				<input type="text" id="search" class="form-control" placeholder="Buscar por titulo del comentario" aria-label="Username" aria-describedby="basic-addon1">
+				<input type="text" id="search" class="form-control" placeholder="Buscar por Titulo, Contenido, Autor o por Ruta Asignada" aria-label="Username" aria-describedby="basic-addon1">
 			</div>
 		</div>
-		<div class="col-md-2">
+		<div class="col-md-3">
 			<div class="form-group">
 				<label for="orderByDate" class="text-muted m-0">Ordenar por</label>
 				<select class="form-control form-control-sm" id="orderByDate">
@@ -30,29 +31,35 @@
 				</select>
 			</div>
 		</div>
-		<div class="col-md-2">
-			<button id="dom-id" class="btn btn-light text-primary mt-3"><span data-feather="search"></span> Por Fecha</button>
+		<div class="col-sm-3 mt-3">
+			<a id="exp-to-excel" href="#!" class="btn btn-light text-success float-right" onclick="descargarArchivo()"><i class="fas fa-file-excel"></i> Excel</a>
+			<button id="dom-id" class="btn btn-light text-primary fa-1x m-0 float-left"><i class="fas fa-calendar-day"></i> Filtro por Fechas</button>
 		</div>
 	</div>
-
+	<form id="fmrDescargarComent" method="post" action="dowloadComents"> @csrf </form>
 	<div class="comentarios">
 		@foreach( $comentarios as $key )
-		<div class="row">
-			<div class="col-md-12">
-				<div class="card border-light mb-3 shadow-sm bg-white rounded">
-				  
-				  <div class="card-body">
-				    <h5 class="card-title font-weight-bold text-primary">{{ $key->Titulo }}</h5>
-					<p class="card-text">{{ $key->Contenido }}</p>
-
-					<p class="float-left font-weight-bold mr-4"><img src="./images/user.svg" class="img01" /> {{ $key->Nombre }}</p>
-					<p class="float-left font-weight-bold mr-4">
-						<img src="./images/clock.svg" class="img01" />
-						{{ strftime('%a %d de %b %G', strtotime($key->Fecha)) }}. {{ date('h:i a', strtotime($key->Fecha)) }}
-					</p>
-					<p class="float-left font-weight-bold mr-4"><img src="./images/globe.svg" class="img01" /> {{ $key->Autor }}</p>
-				  </div>
+		<div class="card border-light mb-3 shadow-sm bg-white rounded">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-10">
+						<h5 class="card-title font-weight-bold text-primary">{{ $key->Titulo }}</h5>
+						<p class="card-text">{{ $key->Contenido }}</p>					
+					</div>
+					<div class="col-md-2 ">
+					@if ($key->Imagen!='' || $key->Imagen!=NULL)
+						<img src="{{config('global.url_server').$key->Imagen}}" width="100" class="img-fluid rounded float-right" style="cursor: pointer" />
+					@endif						
+					</div>
 				</div>
+			</div>
+			<div class="card-footer bg-white border-0">
+				<p class="float-left font-weight-bold mr-4"><img src="./images/user.svg" class="img01" /> {{ $key->Nombre }}</p>
+				<p class="float-left font-weight-bold mr-4">
+				<img src="./images/clock.svg" class="img01" />
+							{{ strftime('%a %d de %b %G', strtotime($key->Fecha)) }}. {{ date('h:i a', strtotime($key->Fecha)) }}
+				</p>
+				<p class="float-left font-weight-bold mr-4"><img src="./images/globe.svg" class="img01" /> {{ $key->Autor }}</p>
 			</div>
 		</div>
 		@endforeach
@@ -62,24 +69,6 @@
 			</div>
 		</div>
 	</div>
-
-<!--<nav aria-label="Page navigation example">
-  <ul class="pagination">
-    <li class="page-item">
-      <a class="page-link" href="#" aria-label="Previous">
-        <span aria-hidden="true">&laquo;</span>
-      </a>
-    </li>
-    <li class="page-item"><a class="page-link" href="1">1</a></li>
-    <li class="page-item"><a class="page-link" href="2">2</a></li>
-    <li class="page-item"><a class="page-link" href="3">3</a></li>
-    <li class="page-item">
-      <a class="page-link" href="#" aria-label="Next">
-        <span aria-hidden="true">&raquo;</span>
-      </a>
-    </li>
-  </ul>
-</nav>-->
 </div>
 
 @endsection
