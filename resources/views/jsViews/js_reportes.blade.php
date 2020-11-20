@@ -69,22 +69,45 @@ $( "#cmbTableCant").change(function() {
 	table.page.len(this.value).draw();
 });
 
-$("#filterData").click( function() {
+var tiempo = 0;
+var tiempo_corriendo = null;
+var temp = null;
+
+$("#filterData").click( function() {	
+	$(".progress-bar").css({
+		'display': 'block',
+		'width': '0%'
+	});
     $.ajax({
         type: "POST",
         url: "ventasDetalle",
         data:{
-            clase 		: $("#cmbClase option:selected").val(),
-            ruta 		: $("#cmbRutas option:selected").val(),
-            cliente 	: $("#cmbCliente option:selected").val(),
-            articulo 	: $("#cmbArticulo option:selected").val(),
-            mes 		: $('#cmbMes option:selected').val(),
-            anio 		: $('#cmbAnio option:selected').val()
+            clase 		: $("#cmbClase 		option:selected").val(),
+            ruta 		: $("#cmbRutas 		option:selected").val(),
+            cliente 	: $("#cmbCliente 	option:selected").val(),
+            articulo 	: $("#cmbArticulo 	option:selected").val(),
+            mes 		: $('#cmbMes 		option:selected').val(),
+            anio 		: $('#cmbAnio 		option:selected').val()
         },
+		beforeSend : function(){
+			tiempo_corriendo	= setInterval(function() {
+									tiempo = tiempo + 30;
+
+									if (tiempo<=95) {
+										$(".progress-bar").css('width', tiempo+'%');
+									}
+
+								}, 1000);
+		},
+		complete: function() {
+			clearInterval(tiempo_corriendo);			
+		},
         success: function (json) {
 			if (json['objDt']) {
 				dataVentasClientes(json['objDt']);
 				dataVentasArticulos(json['objDt'], json['meta']);
+
+				$(".progress-bar").css('width', '100%');				
 			}else {
 				mensaje("No se encontraron registros que coincidan con la busqueda", "error")
 				$("#MontoMeta").text('0.00');
@@ -98,7 +121,14 @@ $("#filterData").click( function() {
 				.draw();
 			}
         }
+    }).done( function(jqXHR, textStatus) {
+		temp = setInterval(function() {		
+			$(".progress-bar").css('display', 'none');
+		}, 1000);		
     });
+
+    tiempo = 0;
+    clearInterval(temp);
 })
 
 function dataVentasClientes(json) {
@@ -128,7 +158,7 @@ function dataVentasClientes(json) {
 			{ "data": "factura", 
 				render: function(data, type, row, meta){
         			if(type === 'display'){
-            			data = '<a href="#" id="facturaLink" value="'+ data +'">' + data + '</a>';
+            			data = '<a href="#!" id="facturaLink" value="'+ data +'">' + data + '</a>';
         			}
             		return data;
          		}
@@ -157,7 +187,7 @@ function dataVentasClientes(json) {
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0 );
-            $('#MontoMeta').text('C$'+ numeral(total).format('0,0.00'));
+            $('#MontoMeta').text('C$ '+ numeral(total).format('0,0.00'));
         },
 		"fnInitComplete": function () {
 			$("#tblClientes_length").hide();
@@ -266,15 +296,17 @@ function dataVentasArticulos(json, meta) {
 				'columns': [
 					{ "data": "articulo" },
 					{ "data": "descripcion" },
-					{ "data": "Cantidad", render: $.fn.dataTable.render.number( ',', '.', 2 ) },
-					{ "data": "precioUnitario", render: $.fn.dataTable.render.number( ',', '.', 2 ) },
-					{ "data": "total", render: $.fn.dataTable.render.number( ',', '.', 2 ) }
+					{ "data": "total", render: $.fn.dataTable.render.number( ',', '.', 2 ) },
+					{ "data": null, render: function (data, type, row ) {
+						return numeral(row.Cantidad).format('0,0.0') + ' ' + row.UM;
+					} },
+					{ "data": "Cantidad_Unidad", render: $.fn.dataTable.render.number( ',', '.', 2 ) },
 				],
 				"columnDefs": [
-					{"className": "text-right", "targets": [ 2, 3, 4 ]},
 					{"className": "text-center", "targets": [ 0 ]},
-					{ "width": "30%", "targets": [ 1 ] },
-					{ "width": "5%", "targets": [ 0, 2, 3, 4 ] }
+					{"className": "text-right", "targets": [ 2, 3, 4 ]},
+					{ "width": "60%", "targets": [ 1 ] },
+					{ "width": "20%", "targets": [ 0, 2, 3, 4 ] }
 				],
 		        "footerCallback": function ( row, data, start, end, display ) {
 		            var api = this.api(), data;
@@ -286,12 +318,12 @@ function dataVentasArticulos(json, meta) {
 		            };
 		            mta = 0;
 		            total = api
-		                .column( 4 )
+		                .column( 2 )
 		                .data()
 		                .reduce( function (a, b) {
 		                    return intVal(a) + intVal(b);
 		                }, 0 );
-		            $('#MontoMeta2').text('C$'+ numeral(total).format('0,0.00'));
+		            $('#MontoMeta2').text('C$ '+ numeral(total).format('0,0.00'));
 
 		            dta = [{name: 'Real', y: total},{name:'Meta', y:meta}]
 		            subtitle= (total==0)?'':($("#cmbClase option:selected").text());

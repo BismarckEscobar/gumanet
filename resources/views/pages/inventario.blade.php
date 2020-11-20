@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div class="col-sm-2 p-0 m-0">
-              <a id="exp-to-excel" href="#!" onclick="descargarArchivo('inventario')" class="btn btn-light text-success float-right"><i class="fas fa-file-excel"></i> Exportar a Excel</a>
+              <a id="exp-to-excel" href="#!" onclick="descargarArchivo('inventario')" class="btn btn-light btn-block text-success float-right"><i class="fas fa-file-excel"></i> Exportar a Excel</a>
             </div>
         </div>
       </div>

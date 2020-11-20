@@ -11,4 +11,12 @@
   	$('#company_values').val( $('#company').val());
 	});
 
+	$("#role").change( function() {
+		if ( $(this).val() == 4 ) {
+			console.log($(this).val())
+			$("#rutas").removeAttr('disabled');
+			
+		}
+	})
+
 </script>

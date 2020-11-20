@@ -14,7 +14,7 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-6">
+		<div class="col-md-5">
 			<div class="input-group mt-3">
 				<div class="input-group-prepend">
 					<span class="input-group-text" id="basic-addon1"><i data-feather="search"></i></span>
@@ -31,9 +31,11 @@
 				</select>
 			</div>
 		</div>
-		<div class="col-sm-3 mt-3">
-			<a id="exp-to-excel" href="#!" class="btn btn-light text-success float-right" onclick="descargarArchivo()"><i class="fas fa-file-excel"></i> Excel</a>
-			<button id="dom-id" class="btn btn-light text-primary fa-1x m-0 float-left"><i class="fas fa-calendar-day"></i> Filtro por Fechas</button>
+		<div class="col-sm-2 mt-3">
+			<button id="dom-id" class="btn btn-light btn-block text-primary fa-1x"><i class="fas fa-calendar-day"></i> Filtro por Fechas</button>
+		</div>
+		<div class="col-sm-2 mt-3">
+			<a id="exp-to-excel" href="#!" class="btn btn-light btn-block text-success" onclick="descargarArchivo()"><i class="fas fa-file-excel"></i> Exp. a Excel</a>
 		</div>
 	</div>
 	<form id="fmrDescargarComent" method="post" action="dowloadComents"> @csrf </form>
