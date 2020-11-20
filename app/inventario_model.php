@@ -46,8 +46,7 @@ class inventario_model extends Model {
             $query[$i]['ARTICULO_']         = $key['ARTICULO'];
 	    	$query[$i]['CLASE_TERAPEUTICA'] = $key['CLASE_TERAPEUTICA'];
 	    	$query[$i]['DESCRIPCION'] 		= $key['DESCRIPCION'];
-	    	$query[$i]['total'] 			= number_format($key['total'], 0);
-            $query[$i]['total_']            = ($key['total']=='')?0:$key['total'];
+	    	$query[$i]['total'] 			= number_format($key['total'], 2);            
 	    	$query[$i]['LABORATORIO'] 		= $key['LABORATORIO'];
 	    	$query[$i]['UNIDAD_ALMACEN'] 	= $key['UNIDAD_ALMACEN'];
 	    	$query[$i]['006'] 				= $key['006'];
@@ -55,6 +54,48 @@ class inventario_model extends Model {
 	    	$query[$i]['PUNTOS'] 			= $key['PUNTOS'];
 	    	$query[$i]['PRECIO_FARMACIA'] 	= $key['PRECIO_FARMACIA'];
 	    	$i++;
+        }
+        $sql_server->close();        
+
+        return $query;
+    }
+
+    public static function getInventarioTotalizado() {
+        $sql_server = new \sql_server();        
+        $request = Request();
+        $sql_exec = '';
+        $company_user = Company::where('id',$request->session()->get('company_id'))->first()->id;
+        
+        switch ($company_user) {
+            case '1':
+                $sql_exec = "SELECT * FROM TOTAL_INVENTARIO";
+                break;
+            case '2':
+                return false;
+                break;
+            case '3':
+                return false;
+                break;
+            case '4':
+                return false;
+                break; 
+            default:                
+                dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
+                break;
+        }
+
+        $query = array();
+        $i=0;
+
+        $query1 = $sql_server->fetchArray( $sql_exec ,SQLSRV_FETCH_ASSOC);
+        foreach ($query1 as $key) {
+            $query[$i]['ARTICULO']        = $key['ARTICULO'];            
+            $query[$i]['DESCRIPCION']     = $key['DESCRIPCION'];
+            $query[$i]['LABORATORIO']     = $key['LABORATORIO'];
+            $query[$i]['UNIDAD_MEDIDA']   = $key['UNIDAD_MEDIDA'];
+            $query[$i]['B_UMK']           = number_format($key['Bodega_Unimark'], 2);
+            $query[$i]['B_INV']           = number_format($key['Bodega_Innova'], 2);
+            $i++;
         }
         $sql_server->close();        
 
@@ -159,7 +200,7 @@ class inventario_model extends Model {
                     $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A'.$i,  $key['ARTICULO_'])
                     ->setCellValue('B'.$i,  $key['DESCRIPCION'])
-                    ->setCellValue('C'.$i,  round($key['total_']))
+                    ->setCellValue('C'.$i,  $key['total'])
                     ->setCellValue('D'.$i,  $key['LABORATORIO'])
                     ->setCellValue('E'.$i,  $key['UNIDAD_ALMACEN'])
                     ->setCellValue('F'.$i,  $key['PUNTOS']);

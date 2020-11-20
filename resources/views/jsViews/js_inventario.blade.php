@@ -32,7 +32,8 @@ $(document).ready(function() {
     	    { "title": "PUNTOS",        "data": "PUNTOS" }
     	],
         "columnDefs": [
-            {"className": "dt-center", "targets": [ 0, 2, 3, 4, 5 ]},
+            {"className": "dt-center", "targets": [ 0, 3, 4, 5 ]},
+            {"className": "dt-right", "targets": [ 2 ]},
             { "width": "50%", "targets": [ 1 ] }
         ],
     });
@@ -71,7 +72,8 @@ function liquidacionPorMeses(valor) {
             { "title": "LOTE",                  "data": "LOTE" }
         ],
         "columnDefs": [
-            {"className": "dt-center", "targets": [ 0, 2, 3, 4, 5 ]},
+            {"className": "dt-center", "targets": [ 0, 2, 4, 5 ]},
+            {"className": "dt-right", "targets": [ 3 ]},
             { "width": "50%", "targets": [ 1 ] }
         ],
     });

@@ -36,6 +36,14 @@
               Inventario
             </a>
           </li>
+          @if(Session::get('companyName')=='UNIMARK')
+          <li>
+            <a class="nav-link text-secondary" href="InvTotalizado">
+              <span data-feather="package"></span>
+              Inv. Totalizado
+            </a>
+          </li>
+          @endif
           <li class="nav-item">
             <a class="nav-link text-secondary" href="Metas">
               <span data-feather="file"></span>
@@ -43,57 +51,10 @@
             </a>
           </li>
           <li class="nav-item">
-              <a class="nav-link text-secondary" href="Usuario">
-                  <span data-feather="users"></span>
-                  Usuarios
-              </a>
-           </li>
-            <li>
-              <a class="nav-link text-secondary" href="Saldos">
-                <span data-feather="dollar-sign"></span>
-                Saldos
-              </a>
-            </li> 
-            @if(Session::get('companyName')=='UNIMARK')
-            <li>
-              <a class="nav-link text-secondary" href="InteligenciaMercado">
-                <span data-feather="message-circle"></span>
-                I. M.
-              </a>
-            </li>
-            @endif
-            @if(Session::get('companyName')=='UNIMARK' || Session::get('companyName')=='INNOVA')
-             <li>
-              <a class="nav-link text-secondary" href="Recuperacion">
-                <span data-feather="corner-down-left"></span>
-                Recuperación
-              </a>
-            </li>
-            @endif
-          <li class="nav-item">
-              <a class="nav-link text-secondary" href="Proyecciones">
-                  <span data-feather="trending-up"></span>
-                  Proyecciones de ventas
-              </a>
-          </li>
-          @elseif(Auth::User()->activeRole()==2)
-          <li class="nav-item">                
-              <a class="nav-link text-secondary" href="Dashboard">
-                  <span data-feather="menu"></span>
-                  Dashboard <span class="sr-only">(current)</span>
-              </a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link text-secondary" href="Reportes">
-                  <span data-feather="bar-chart-2"></span>
-                  Ventas por categorías
-              </a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link text-secondary" href="Inventario">
-                  <span data-feather="shopping-cart"></span>
-                  Inventario
-              </a>
+            <a class="nav-link text-secondary" href="Usuario">
+              <span data-feather="users"></span>
+              Usuarios
+            </a>
           </li>
           <li>
             <a class="nav-link text-secondary" href="Saldos">
@@ -101,48 +62,95 @@
               Saldos
             </a>
           </li>
-            @if(Session::get('companyName')=='UNIMARK')
-            <li class="nav-item">
-                <a class="nav-link text-secondary" href="Proyecciones">
-                    <span data-feather="trending-up"></span>
-                    Proyecciones de ventas
-                </a>
-            </li>
-            @endif
-          @elseif(Auth::User()->activeRole()==3)
-          <li class="nav-item">
-              <a class="nav-link text-secondary" href="Metas">
-                  <span data-feather="file"></span>
-                  Metas
-              </a>
+          @if(Session::get('companyName')=='UNIMARK')
+          <li>
+            <a class="nav-link text-secondary" href="InteligenciaMercado">
+              <span data-feather="message-circle"></span>
+              I. M.
+            </a>
           </li>
-          @elseif(Auth::User()->activeRole()==4 )
-            @if(Session::get('companyName')=='UNIMARK')
-               <li>
-                <a class="nav-link text-secondary" href="Recuperacion">
-                  <span data-feather="corner-down-left"></span>
-                  Recuperación
-                </a>
-              </li>
-            @endif
-          @elseif(Auth::User()->activeRole()==5)
-          <li class="nav-item">
-              <a class="nav-link text-secondary" href="Inventario">
-                  <span data-feather="shopping-cart"></span>
-                  Inventario
-              </a>
+          @endif
+          @if(Session::get('companyName')=='UNIMARK' || Session::get('companyName')=='INNOVA')
+          <li>
+            <a class="nav-link text-secondary" href="Recuperacion">
+              <span data-feather="corner-down-left"></span>
+              Recuperación
+            </a>
           </li>
           @endif
           <li class="nav-item">
-              <a class="nav-link text-danger font-weight-bold" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><span data-feather="log-out"></span> Cerrar sesion
-              </a>
-            </li>
+            <a class="nav-link text-secondary" href="Proyecciones">
+              <span data-feather="trending-up"></span>
+              Proyecciones de ventas
+            </a>
+          </li>
+          @elseif(Auth::User()->activeRole()==2)
+          <li class="nav-item">                
+            <a class="nav-link text-secondary" href="Dashboard">
+              <span data-feather="menu"></span>
+              Dashboard <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-secondary" href="Reportes">
+              <span data-feather="bar-chart-2"></span>
+              Ventas por categorías
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-secondary" href="Inventario">
+              <span data-feather="shopping-cart"></span>
+              Inventario
+            </a>
+          </li>
+          <li>
+            <a class="nav-link text-secondary" href="Saldos">
+              <span data-feather="dollar-sign"></span>
+              Saldos
+            </a>
+          </li>
+          @if(Session::get('companyName')=='UNIMARK')
+          <li class="nav-item">
+            <a class="nav-link text-secondary" href="Proyecciones">
+              <span data-feather="trending-up"></span>
+              Proyecciones de ventas
+            </a>
+          </li>
+          @endif
+          @elseif(Auth::User()->activeRole()==3)
+          <li class="nav-item">
+            <a class="nav-link text-secondary" href="Metas">
+              <span data-feather="file"></span>
+              Metas
+            </a>
+          </li>
+          @elseif(Auth::User()->activeRole()==4 )
+          @if(Session::get('companyName')=='UNIMARK')
+          <li>
+            <a class="nav-link text-secondary" href="Recuperacion">
+              <span data-feather="corner-down-left"></span>
+              Recuperación
+            </a>
+          </li>
+          @endif
+          @elseif(Auth::User()->activeRole()==5)
+          <li class="nav-item">
+            <a class="nav-link text-secondary" href="Inventario">
+              <span data-feather="shopping-cart"></span>
+              Inventario
+            </a>
+          </li>
+          @endif
+          <li class="nav-item">
+            <a class="nav-link text-danger font-weight-bold" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><span data-feather="log-out"></span> Cerrar sesion
+            </a>
+          </li>
         </ul>
       </div>
     </div>
   </div>
-  <div id="_version">
+</div>
+<div id="_version">
   @include('layouts.app_version', array( 'appVersion'=>Auth::User()->gitVersion() ))
-  </div>
 </div>
 <!-- End vertical navbar -->

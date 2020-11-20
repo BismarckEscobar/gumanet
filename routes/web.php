@@ -20,6 +20,7 @@ Route::get('/Recuperacion','recuperacion_controller@index');
 Route::get('/Saldos','saldos_controller@index');
 Route::get('/Proyecciones','proyecciones_controller@index');
 Route::get('/InteligenciaMercado','inteligenciaMercado_controller@index');
+Route::get('/InvTotalizado','inventario_controller@inventarioTotalizado');
 
 //RUTAS LOGIN
 Route::get('/','Auth\LoginController@showLoginForm');//pagina login
@@ -51,6 +52,10 @@ Route::post('/transacciones','inventario_controller@transaccionesDetalle');
 Route::post('/lotes','inventario_controller@getLotesArticulo');
 Route::get('/liqMeses/{valor}','inventario_controller@liquidacionMeses');
 Route::get('/desInventario/{tipo}/{valor}', 'inventario_controller@descargarInventario');
+
+//RUTAS INVENTARIO TOTALIZADO
+Route::get('/invTotalizado','inventario_controller@getInventarioTotalizado');
+Route::get('/desInvTotal','inventario_controller@descargarInventarioTotalizado');
 
 //RUTAS METAS
 Route::post('/export_meta_from_exl','metas_controller@exportMetaFromExl');

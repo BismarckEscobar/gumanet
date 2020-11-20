@@ -4,7 +4,12 @@ namespace App\Http\Controllers;
 use App\inventario_model;
 use Illuminate\Http\Request;
 use App\Models;
-
+use PHPExcel;
+use PHPExcel_IOFactory;
+use PHPExcel_Style_Alignment;
+use PHPExcel_Style;
+use PHPExcel_Style_Border;
+use PHPExcel_Style_Fill;
 use App\Company;
 
 class inventario_controller extends Controller
@@ -32,8 +37,150 @@ class inventario_controller extends Controller
         $request->session()->put('companyName', $company->nombre);// agregar nombre de compañia a session[], para obtenert el nombre al cargar otras pagina 
     }
 
+    public function inventarioTotalizado() {
+		$this->agregarDatosASession();
+
+		$data = array(
+			'page' 				=> 'Inventario',
+			'name' 				=> 'GUMA@NET',
+			'hideTransaccion' 	=> ''
+		);
+		return view('pages.invTotalizado', $data);
+    }
+
 	public function getArticulos() {
 		$obj = inventario_model::getArticulos();
+		return response()->json($obj);
+	}
+
+	public function descargarInventarioTotalizado() {
+
+		$obj = inventario_model::getInventarioTotalizado();
+
+		$objPHPExcel = new PHPExcel();
+        $tituloReporte = "Inventario Totalizado";
+		
+        $titulosColumnas = array('Articulo', 'Descripcion', 'Laboratorio', 'Unidad', 'Bodega UMK', 'Bodega INN');
+		$objPHPExcel->setActiveSheetIndex(0)
+                        ->mergeCells('A1:F1');
+		$objPHPExcel->setActiveSheetIndex(0)
+                        ->mergeCells('A2:F2');
+
+        $estiloTituloReporte = array(
+            'font' => array(
+            'name'      => 'Calibri',
+            'bold'      => true,
+            'italic'    => false,
+            'strike'    => false,
+            'size'      => 14,
+            'color'     => array(
+                            'rgb' => '212121')
+            ),
+            'alignment' =>  array(
+                            'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                            'vertical'   => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                            'rotation'   => 0,
+                            'wrap'       => TRUE,
+                            )
+        );
+
+        $estiloTituloColumnas = array(
+            'font' => array(
+                        'name'  => 'Calibri',
+                        'bold'  => true
+            ),
+            'alignment' =>  array(
+                                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                                'vertical'   => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                                'wrap'          => TRUE
+                            ),
+            'borders' => array(
+                            'top' => array(
+                            'style' => PHPExcel_Style_Border::BORDER_THIN,
+                        ),
+            'allborders' => array(
+                                'style' => PHPExcel_Style_Border::BORDER_THIN,
+                            )
+            )
+        );
+
+        $estiloInformacion = new PHPExcel_Style();
+        $estiloInformacion->applyFromArray(
+            array(
+                'borders' => array(
+                'top' => array(
+                            'style' => PHPExcel_Style_Border::BORDER_THIN,
+                        ),
+                'allborders' => array(
+                                'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                ),
+                )
+            )
+        );
+
+        $right = array(
+            'alignment' =>  array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                'wrap' => TRUE
+            )
+        );
+
+        $left = array(
+            'alignment' =>  array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                'wrap' => TRUE
+            )
+        );
+
+		$objPHPExcel->setActiveSheetIndex(0)
+		->setCellValue('A1',    $tituloReporte)
+		->setCellValue('A3',    $titulosColumnas[0])
+		->setCellValue('B3',    $titulosColumnas[1])
+		->setCellValue('C3',    $titulosColumnas[2])
+		->setCellValue('D3',    $titulosColumnas[3])
+		->setCellValue('E3',    $titulosColumnas[4])
+		->setCellValue('F3',    $titulosColumnas[5]);
+
+		$i=4;
+		foreach ($obj as $key) {
+			$objPHPExcel->setActiveSheetIndex(0)
+			->setCellValue('A'.$i,  $key['ARTICULO'])
+			->setCellValue('B'.$i,  $key['DESCRIPCION'])
+			->setCellValue('C'.$i,  $key['UNIDAD_MEDIDA'])
+			->setCellValue('D'.$i,  $key['LABORATORIO'])
+			->setCellValue('E'.$i,  $key['B_UMK'])
+			->setCellValue('F'.$i,  $key['B_INV']);
+			$i++;
+		}
+
+		$objPHPExcel->getActiveSheet()->setTitle('Inventario Totalizado');
+		$objPHPExcel->getActiveSheet()->getStyle('A1:F1')->applyFromArray($estiloTituloReporte);
+		$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->applyFromArray($estiloTituloColumnas);      
+		$objPHPExcel->getActiveSheet()->setSharedStyle($estiloInformacion, "A4:F".($i-1));
+
+		$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(100);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(18);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(18);
+
+		$objPHPExcel->getActiveSheet()->getStyle('E3:F'.($i-1))->getNumberFormat()->setFormatCode('#,##0.00');
+
+		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+		header('Content-Disposition: attachment;filename="Inventario totalizado hasta '.date('d/m/Y').'.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+		$objWriter->save('php://output');
+
+
+	}
+
+	public function getInventarioTotalizado() {
+		$obj = inventario_model::getInventarioTotalizado();
 		return response()->json($obj);
 	}
 

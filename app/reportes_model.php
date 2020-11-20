@@ -148,7 +148,7 @@ class reportes_model extends Model
         return false;
     }
 
-    public static function returndetalleVentas($clase, $cliente, $articulo, $mes, $anio, $ruta) {
+    public static function returndetalleVentas($clase, $cliente, $articulo, $mes_, $anio, $ruta) {
         $sql_server = new \sql_server();
         $Dta = array();
 
@@ -156,10 +156,12 @@ class reportes_model extends Model
         $request = Request();
         $company_user = Company::where('id',$request->session()->get('company_id'))->first()->id;
 
+        $mes = ( $mes_=='all' )?'':$mes_;
+
         switch ($company_user) {
             case '1':
-                $sql_exec = "EXEC Umk_VentaLinea_Articulo ".$mes.", ".$anio.", '".$clase."', '".$cliente."', '".$articulo."','".$ruta."'";
-                $sql_meta = "EXEC UMK_meta_articulos ".$mes.", ".$anio.", '".$clase."', '".$cliente."', '".$articulo."'";
+                $sql_exec = "EXEC Umk_VentaLinea_Articulo '".$mes."', ".$anio.", '".$clase."', '".$cliente."', '".$articulo."','".$ruta."'";
+                $sql_meta = "EXEC UMK_meta_articulos '".$mes."', ".$anio.", '".$clase."', '".$cliente."', '".$articulo."'";
                 break;
             case '2':
                 $sql_exec = "EXEC Gp_VentaLinea_Articulo ".$mes.", ".$anio.", '".$clase."', '".$cliente."', '".$articulo."','".$ruta."'";
@@ -177,17 +179,16 @@ class reportes_model extends Model
                 dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
                 break;
         }
+        
         $query = $sql_server->fetchArray($sql_exec, SQLSRV_FETCH_ASSOC);
-        $query2 = $sql_server->fetchArray($sql_meta, SQLSRV_FETCH_ASSOC);
+        //$query2 = $sql_server->fetchArray($sql_meta, SQLSRV_FETCH_ASSOC);
 
         if( count($query)>0 ){
-			return $Dta = array('objDt' => $query, 'meta' => intval($query2[0]['meta']));
+			return $Dta = array('objDt' => $query, 0);
         }
 
-        dd($sql_exec);
-
         $sql_server->close();
-        return false;
+        //return false;
     }
 
     public static function returnDetFactVenta($nFactura){
