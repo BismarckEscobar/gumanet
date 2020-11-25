@@ -5,7 +5,7 @@
   @include('jsViews.js_inventarioTotalizado');
 @endsection
 @section('content')  
-<div class="container-fluid">	
+<div class="container-fluid">
 	<div class="row">
 		<div class="col-md-12">
 			<h4 class="h4">Inventario Totalizado</h4>
@@ -21,7 +21,7 @@
 			</div>
 		</div>
 		<div class="col-md-3 mt-3">
-			<a id="exp-to-excel" href="#!" class="btn btn-light btn-block text-success float-left"><i class="fas fa-file-excel"></i> Exportar a Excel</a>
+			<a id="exp-to-excel" href="#!" class="btn btn-light btn-block text-success float-left"><i class="fas fa-file-excel"></i> Exportar</a>
 		</div>
 		<div class="col-md-1">
 			<div class="form-group">

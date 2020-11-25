@@ -35,7 +35,7 @@
 			<button id="dom-id" class="btn btn-light btn-block text-primary fa-1x"><i class="fas fa-calendar-day"></i> Filtro por Fechas</button>
 		</div>
 		<div class="col-sm-2 mt-3">
-			<a id="exp-to-excel" href="#!" class="btn btn-light btn-block text-success" onclick="descargarArchivo()"><i class="fas fa-file-excel"></i> Exp. a Excel</a>
+			<a id="exp-to-excel" href="#!" class="btn btn-light btn-block text-success" onclick="descargarArchivo()"><i class="fas fa-file-excel"></i> Exportar</a>
 		</div>
 	</div>
 	<form id="fmrDescargarComent" method="post" action="dowloadComents"> @csrf </form>

@@ -9,9 +9,11 @@ $(document).ready(function() {
     		"url": "articulos",
     		'dataSrc': '',
     	},
-    	"info":    false,
+    	"info":    true,
     	"lengthMenu": [[10,30,50,100,-1], [20,30,50,100,"Todo"]],
     	"language": {
+            "info": "Mostrando Articulos solo de Bodega 02",
+            "infoFiltered": "(Filtrado de _MAX_ total entradas)",
     	    "zeroRecords": "No hay coincidencias",
     	    "paginate": {
     	        "first":      "Primera",
@@ -26,14 +28,15 @@ $(document).ready(function() {
     	'columns': [
     	    { "title": "ARTICULO",      "data": "ARTICULO" },
     	    { "title": "DESCRIPCION",   "data": "DESCRIPCION" },
-    	    { "title": "EXISTENCIA",    "data": "total" },
-    	    { "title": "LABORATORIO",   "data": "LABORATORIO" },
     	    { "title": "UNIDAD",        "data": "UNIDAD_ALMACEN" },
+    	    { "title": "EXISTENCIA",    "data": "total" },
+            { "title": "UNIDADES",      "data": "und" },
+    	    { "title": "LABORATORIO",   "data": "LABORATORIO" },
     	    { "title": "PUNTOS",        "data": "PUNTOS" }
     	],
         "columnDefs": [
-            {"className": "dt-center", "targets": [ 0, 3, 4, 5 ]},
-            {"className": "dt-right", "targets": [ 2 ]},
+            {"className": "dt-right", "targets": [ 3, 4 ]},
+            {"className": "dt-center", "targets": [ 0, 2, 5, 6 ]},
             { "width": "50%", "targets": [ 1 ] }
         ],
     });

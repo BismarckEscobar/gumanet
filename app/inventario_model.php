@@ -46,7 +46,8 @@ class inventario_model extends Model {
             $query[$i]['ARTICULO_']         = $key['ARTICULO'];
 	    	$query[$i]['CLASE_TERAPEUTICA'] = $key['CLASE_TERAPEUTICA'];
 	    	$query[$i]['DESCRIPCION'] 		= $key['DESCRIPCION'];
-	    	$query[$i]['total'] 			= number_format($key['total'], 2);            
+	    	$query[$i]['total'] 			= number_format($key['total'], 2);
+            $query[$i]['und']               = number_format($key['UNIDADES'], 2);
 	    	$query[$i]['LABORATORIO'] 		= $key['LABORATORIO'];
 	    	$query[$i]['UNIDAD_ALMACEN'] 	= $key['UNIDAD_ALMACEN'];
 	    	$query[$i]['006'] 				= $key['006'];
