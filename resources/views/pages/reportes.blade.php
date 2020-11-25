@@ -101,7 +101,7 @@
 			</div>  
 		</div>
 		<div class="col-md-2">
-			<a href="#!" id="filterData" class="btn btn-primary float-right mt-4 ">Aplicar filtros</a>			
+			<a href="#!" id="filterData" class="btn btn-primary float-right mt-4 ">Aplicar</a>			
 		</div>
 	</div>
     <div class="row mt-3">
