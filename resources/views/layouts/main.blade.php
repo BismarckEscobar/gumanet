@@ -80,7 +80,7 @@
       <div class="modal-body">
             
 
-         </div>
+      </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             <button onclick="" type="submit" class="btn btn-primary" form="formCambiarPass">{{ __('Cambiar') }}</button>
@@ -111,6 +111,7 @@
 <script src="{{ url('js/jszip.js') }}"></script>
 <script src="{{ url('js/no-data-to-display.js') }}"></script>
 <script src="{{ url('js/jquery.daterangepicker.min.js') }}"></script>
+<script src="{{ url('js/dataTables.rowGroup.min.js') }}"></script>
 @yield('metodosjs')
 </body>
 </html>

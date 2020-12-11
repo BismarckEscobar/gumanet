@@ -9,7 +9,7 @@
 <div class="container-fluid">	
 	<div class="row">
 		<div class="col-md-12">
-			<h4 class="h4">Inteligencia de Mercado</h4>
+			<h4 class="h4 mb-4">Inteligencia de Mercado</h4>
 
 		</div>
 	</div>

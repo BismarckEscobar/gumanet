@@ -74,7 +74,20 @@
                             </div>
                         </div>
 
-
+                        <div class="form-group row">
+                            <label for="rutas" class="col-md-4 col-form-label text-md-right">Asignar Rutas</label>
+                            <div class="col-md-6" >
+                                <select id="rutas" disabled="true" title="Seleccione las Rutas" size="1" name="rutas" multiple="multiple"  class= "form-control selectpicker" autofocus>
+                                    @foreach ($rutas as $key)
+                                        
+                                        <option class="options" value="{{$key['VENDEDOR']}}">{{$key['NOMBRE']}} ({{$key['VENDEDOR']}})</option>
+                                    @endforeach
+                                </select>
+                                <input id="rutas_values" name="rutas_values" type="text" class="form-control" hidden="true">
+                            </div>
+                            
+                        </div>
+                        
                         <div class="form-group row">
                             <label for="company" class="col-md-4 col-form-label text-md-right">{{ __('Compañia') }}</label>
 
@@ -84,6 +97,7 @@
                                         <option class="options" value="{{  $company->id }}">{{ $company->nombre }}</option>
                                     @endforeach
                                 </select>
+                                <input id="company_values" name="company_values" type="text" class="form-control" hidden="true">
 
                                 @if ($errors->has('company'))
                                     <span class="invalid-feedback" role="alert">
@@ -91,7 +105,6 @@
                                     </span>
                                 @endif
                             </div>
-                            <input id="company_values" name="company_values" type="text" class="form-control" style="display: none" hidden="true">
                         </div>
 
                         <div class="form-group row">

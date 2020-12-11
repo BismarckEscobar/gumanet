@@ -319,3 +319,28 @@
   height: 18px;
   margin-bottom: 5px;
 }
+
+.bg-blue {
+  background-color: #0072bc!important;
+}
+
+/* main content start */
+.pcoded-content {
+  position: relative;
+  display: block;
+  padding: 30px;
+}
+
+.pcoded-main-container {
+  position: relative;
+  margin: 0 auto;
+  display: block;
+  clear: both;
+  float: unset;
+  right: 0;
+  margin-left: 264px;
+  min-height: 100vh;
+  -webkit-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+/* main content end*/

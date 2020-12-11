@@ -21,6 +21,7 @@ Route::get('/Saldos','saldos_controller@index');
 Route::get('/Proyecciones','proyecciones_controller@index');
 Route::get('/InteligenciaMercado','inteligenciaMercado_controller@index');
 Route::get('/InvTotalizado','inventario_controller@inventarioTotalizado');
+Route::get('/VtsProyectos','ventasProyectos_controller@index');
 
 //RUTAS LOGIN
 Route::get('/','Auth\LoginController@showLoginForm');//pagina login
@@ -106,3 +107,6 @@ Route::post('artProyectado', 'proyecciones_controller@dataProyeccionXArticulo');
 //RUTAS COMENTARIOS
 Route::post('/paginateDataSearch', 'inteligenciaMercado_controller@searchComentarios');
 Route::post('/dowloadComents', 'inteligenciaMercado_controller@descargarComentarios');
+
+//RUTAS VENTAS POR PROYECTOS
+Route::get('/dataVTS','ventasProyectos_controller@comparateDateVentas');
