@@ -6,7 +6,7 @@
 @endsection
 @section('content')  
 <div class="row" style="margin: 0 auto">
-    <div class="card mt-3" style="width: 100%">
+    <div class="card mt-3 border-0 shadow-sm" style="width: 100%">
       <div class="card-body">                
         {{-- <h5 class="card-title">{{ $data['name']}}</h5> --}}
        

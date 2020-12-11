@@ -8,7 +8,7 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-12">
-			<h4 class="h4">Ventas por categorias</h4>
+			<h4 class="h4 mb-4">Ventas por categorias</h4>
 		</div>
 	</div>
 	<div class="row">
@@ -101,12 +101,12 @@
 			</div>  
 		</div>
 		<div class="col-md-2">
-			<a href="#!" id="filterData" class="btn btn-primary float-right mt-4 ">Aplicar</a>			
+			<a href="#!" id="filterData" class="btn btn-primary btn-block float-right mt-4 ">Aplicar</a>			
 		</div>
 	</div>
     <div class="row mt-3">
     	<div class="col-sm-12">
-    		<div class="card">
+    		<div class="card border-0 shadow-sm">
     			<div class="card-body">
     				<h5 class="card-title">Articulos</h5>
 					<div class="input-group">
@@ -117,10 +117,10 @@
 					</div>
     				<div class="table-responsive mt-3 mb-5">
 						<div class="progress" style="height: 1px;">
-							<div class="progress-bar" style="display: none" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+							<div class="progress-bar bg-danger" style="display: none" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
 						</div>
 						<table id="tblArticulos" class="table table-bordered" width="100%">
-							<thead>
+							<thead class="bg-blue text-light">
 								<tr>
 									<th>Articulo</th>
 									<th>Descripción</th>
@@ -147,7 +147,7 @@
     	</div>
 		
 		<div class="col-sm-4" hidden="true">
-			<div class="card">
+			<div class="card border-0 shadow-sm">
 				<div class="card-body">
 					<div id="container01"></div>
 				</div>		
@@ -156,7 +156,7 @@
     </div>
     <div class="row mt-3">
     	<div class="col-sm-12">
-    		<div class="card">
+    		<div class="card border-0 shadow-sm">
     			<div class="card-body">
     				<h5 class="card-title">Clientes</h5>
 			        <div class="row">
@@ -182,10 +182,10 @@
 			        </div>
     				<div class="table-responsive mt-3 mb-5">
 						<div class="progress" style="height: 1px;">
-							<div class="progress-bar" style="display: none" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+							<div class="progress-bar bg-danger" style="display: none" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
 						</div>
 						<table id="tblClientes" class="table table-bordered" width="100%">
-							<thead>
+							<thead class="bg-blue text-light">
 								<tr>
 									<th>Codigo</th>
 									<th>Nombre</th>
@@ -279,7 +279,7 @@
 	                        <div class="col-sm-12">
 	                        	<div class="table-responsive mt-3 mb-5">
 									<table id="tblDetalleFacturaVenta" class="table table-bordered" width="100%">
-										<thead>
+										<thead class="bg-blue text-light">
 											<tr>
 												<th>Articulo</th>
 												<th>Nombre</th>

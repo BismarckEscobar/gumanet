@@ -103,7 +103,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <table id="tblBodega" class="table table-bordered mt-3">
-                        <thead>
+                        <thead class="bg-blue text-light">
                         <tr>
                             <th></th>
                             <th>Bodega</th>
@@ -119,7 +119,7 @@
             <div class="row">
               <div class="col-sm-12">
                 <table id="tblPrecios" class="table table-bordered mt-3">
-                  <thead>
+                  <thead class="bg-blue text-light">
                   <tr>
                       <th>Nivel de Precio</th>
                       <th>Precio</th>
@@ -131,7 +131,7 @@
           </div>
           <div class="tab-pane fade" id="nav-boni" role="tabpanel" aria-labelledby="navBonificados">
             <table id="tblBonificados" class="table table-bordered mt-3">
-              <thead>
+              <thead class="bg-blue text-light">
               <tr>
                   <th>Reglas</th>
               </tr>
@@ -178,7 +178,7 @@
                   </div>
                 </div>
                 <table id="tblTrans" class="table table-bordered mt-2">
-                    <thead>
+                    <thead class="bg-blue text-light">
                     <tr>
                         <th>Fecha</th>
                         <th>Lote</th>

@@ -12,7 +12,7 @@ use App\Http\Controllers\Controller;
 use App\User;
 use App\Role;
 use App\Company;
-
+use App\rutas_asignadas;
 
 class usuario_controller extends Controller
 {
@@ -27,12 +27,14 @@ class usuario_controller extends Controller
         $users = User::all();
         $roles = Role::all();
         $companies = Company::all();
+        $rutasAsig = rutas_asignadas::all();
+        $rutas = usuario_model::rutas();
         $data = [
             'page' => 'Usuarios',
             'name' =>  'GUMA@NET'
         ];
         
-        return view('pages.usuarios',compact('data','users','roles','companies'));
+        return view('pages.usuarios',compact('data','users','roles','companies','rutasAsig','rutas'));
     }
 
 

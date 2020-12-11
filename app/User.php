@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 use App\Role;
 use App\Company;
+use App\rutas_asignadas;
 
 class User extends Authenticatable
 {
@@ -44,6 +45,12 @@ class User extends Authenticatable
     public function companies()
     {
         return $this->belongsToMany('App\Company');
+    }
+
+    public function rutasAsignadas()
+    {
+        return $this->belongsToMany('App\rutas_asignadas');
+        //return $this->belongsToMany(rutas_asignadas::class);
     }
 
    public function roles()

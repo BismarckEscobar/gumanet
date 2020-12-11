@@ -6,6 +6,7 @@ use App\Models;
 use App\User;
 use App\Company;
 use App\Role;
+use App\rutas_asignadas;
 use DB;
 
 use Illuminate\Http\Request;
@@ -45,7 +46,9 @@ class RegisterController extends Controller
         ];
         $companies = $this->getCompanies();
         $roles = $this->getRoles();
-        return view('auth.register',compact('companies','roles'));
+        $rutas = usuario_model::rutas();
+
+        return view('auth.register',compact('companies','roles','rutas'));
     }
 
     public function getCompanies(){   
@@ -103,6 +106,8 @@ class RegisterController extends Controller
 
 
         $company = array_map('intval',explode(',', $data['company_values']));
+        $rutas = explode(',', $data['rutas_values']);
+
         $user = User::create([
             'name' => $data['name'],
             'surname' => $data['surname'],
@@ -113,11 +118,15 @@ class RegisterController extends Controller
             'image' => $data['image'],*/
         ]);
             
-         $user->companies()->attach($company,['created_at' => new \DateTime(),'updated_at' => new \DateTime()]);
-        return $user;
+        $user->companies()->attach($company,['created_at' => new \DateTime(),'updated_at' => new \DateTime()]);
         
-    }
+        foreach ($rutas as $key => $value) {
+                rutas_asignadas::create([
+                'user_id' => $user->id,
+                'ruta_id' => $value
+            ]);
+        }
 
-
-   
+        return $user;
+    }   
 }

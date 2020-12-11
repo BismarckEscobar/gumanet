@@ -172,6 +172,40 @@
                     @endif
                 </div>
             </div>
+
+            <div class="form-group row">
+                <label for="company" class="col-md-3 col-form-label text-md-right">{{ __('Rutas Asignadas') }}</label>
+
+                <div class="col-md-8" >
+                    <select id="company" title="Asigne Rutas" size="1" name="rutas" multiple="multiple"  class= "form-control selectpicker" name="rutas" autofocus>
+                        @foreach ($rutas as $key)
+
+                            @foreach ( $rutasAsig as $ruta )
+
+                                @if ($ruta->ruta_id==$key['VENDEDOR'] && old('id')==$ruta->user_id)
+                                    <option class="options" selected value="{{ $ruta->ruta_id }}">{{ old('name') }}</option>
+                                @else
+                                <option class="options" value="{{ $ruta->ruta_id }}">{{ old('name') }}</option>
+                                @endif
+                            @endforeach
+
+
+                        
+                        @endforeach
+
+
+
+                    </select>
+
+                    @if ($errors->has('company'))
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $errors->first('company') }}</strong>
+                        </span>
+                    @endif
+                </div>
+                <input id="edit_company_values" name="edit_company_values" type="text" class="form-control" style="display: none" hidden="true">
+            </div>
+
             <div class="form-group row">
                 <label for="company" class="col-md-3 col-form-label text-md-right">{{ __('Compañia') }}</label>
 

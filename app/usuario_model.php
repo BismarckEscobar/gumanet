@@ -41,10 +41,42 @@ class usuario_model extends Model
         return DB::table('companies')->get();
     }
 
-     public static function getRoles(){
+    public static function getRoles(){
         return DB::table('roles')->get();
     }
 
-   
-    
+    public static function rutas() {
+         $sql_server = new \sql_server();
+
+        $sql_exec = '';
+        $request = Request();
+        $company_user = Company::where('id',$request->session()->get('company_id'))->first()->id;
+
+        switch ($company_user) {
+            case '1':
+                $sql_exec = " SELECT * FROM UMK_VENDEDORES_ACTIVO ";
+                break;
+            case '2':
+                $sql_exec = " SELECT * FROM GP_VENDEDORES_ACTIVOS ";
+                break;
+            case '3':
+                return false;
+                break;
+            case '4':
+                $sql_exec = " SELECT * FROM INV_VENDEDORES_ACTIVOS ";
+                break;
+            default:                
+                dd("Ups... al parecer sucedio un error al tratar de encontrar articulos para esta empresa. ". $company->id);
+                break;
+        }
+
+         $query = $sql_server->fetchArray($sql_exec, SQLSRV_FETCH_ASSOC);
+
+        if( count($query)>0 ){
+            return $query;
+        }
+
+        $sql_server->close();
+        return false;
+    }    
 }
