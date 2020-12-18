@@ -98,34 +98,39 @@
           <thead class="bg-blue text-light">
               <tr class="text-center">
                   <th rowspan="2">groupColumn</th>
-                  <th rowspan="2">Nombre</th>
-                  <th rowspan="2">Ruta</th>
-                  <th rowspan="2">Zona</th>
-                  <th rowspan="2">Crec. Actual</th>
+                  <th rowspan="2">NOMBRE</th>
+                  <th rowspan="2">RUTA</th>
+                  <th rowspan="2">ZONA</th>
+                  <th colspan="3"><span>MES ACTUAL VS ANTERIOR</span></th>
                   <th colspan="3"><span id="lblMesActual">?</span></th>
                   <th colspan="3"><span id="lblMesAntero">?</span></th>
               </tr>
-              <tr class="text-center">
-                  <th><span class="lblAnioActual">?</span></th>
-                  <th><span class="lblAnioAnteri">?</span></th>
-                  <th>Crecimiento</th>
-                  <th><span class="lblAnioActual"></span></th>
-                  <th><span class="lblAnioAnteri"></span></th>
-                  <th>Crecimiento</th>
+              <tr>
+                  <th class="text-center"><span id="lblMesActual_">?</span></th>
+                  <th class="text-center"><span id="lblMesAnteri_">?</span></th>
+                  <th class="text-center">%</th>
+                  <th class="text-center"><span class="lblAnioActual">?</span></th>
+                  <th class="text-center"><span class="lblAnioAnteri">?</span></th>
+                  <th class="text-center">%</th>
+                  <th class="text-center"><span class="lblAnioActual"></span></th>
+                  <th class="text-center"><span class="lblAnioAnteri"></span></th>
+                  <th class="text-center">%</th>
               </tr>
           </thead>
           <tbody>
           </tbody>
            <tfoot>
                 <tr>
-                    <th colspan="5" style="text-align:right;">TOTALES: </th>
+                    <th colspan="4" style="text-align:right;">TOTALES: </th>
                     <th style="padding-right: 10px!important"></th>
                     <th style="padding-right: 10px!important"></th>
                     <th style="padding-right: 10px!important"></th>
                     <th style="padding-right: 10px!important"></th>
                     <th style="padding-right: 10px!important"></th>
                     <th style="padding-right: 10px!important"></th>
-
+                    <th style="padding-right: 10px!important"></th>
+                    <th style="padding-right: 10px!important"></th>
+                    <th style="padding-right: 10px!important"></th>
                 </tr>
             </tfoot>
         </table>
