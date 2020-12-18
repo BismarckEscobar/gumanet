@@ -13,8 +13,11 @@ $(document).ready(function() {
 	$("select#cmbMes1").prop("selectedIndex", mes1);
 	$("select#cmbMes2").prop("selectedIndex", mes2);
 
-	$("#lblMesActual").text( $("select#cmbMes1 option:selected").text() );
-	$("#lblMesAntero").text( $("select#cmbMes2 option:selected").text() );
+	$("#lblMesActual").text( $("select#cmbMes1 option:selected").text().toUpperCase() );
+	$("#lblMesAntero").text( $("select#cmbMes2 option:selected").text().toUpperCase() );
+
+	$("#lblMesActual_").text( $("select#cmbMes1 option:selected").text().toUpperCase() );
+	$("#lblMesAnteri_").text( $("select#cmbMes2 option:selected").text().toUpperCase() );
 	
 	data = {
 		'anio1' : anio1,
@@ -23,15 +26,24 @@ $(document).ready(function() {
 		'mes2'	: mes2
 	}
 
+	/*data = {
+		'anio1' : 2020,
+		'anio2' : 2019,
+		'mes1'	: 11,
+		'mes2'	: 10
+	}*/
+
 	loadDataVTS(data)
 })
 
 $("#cmbMes1").change( function( event ) {
-	$('#tblVtsProyectos thead tr:eq(0) th:eq(4)').html($("#cmbMes1 option:selected").text());
+	$('#tblVtsProyectos thead tr:eq(0) th:eq(4)').html($("#cmbMes1 option:selected").text().toUpperCase());
+	$("#lblMesActual_").text( $("select#cmbMes1 option:selected").text().toUpperCase() );
 });
 
 $("#cmbMes2").change( function( event ) {
-	$('#tblVtsProyectos thead tr:eq(0) th:eq(5)').html($("#cmbMes2 option:selected").text());
+	$('#tblVtsProyectos thead tr:eq(0) th:eq(5)').html($("#cmbMes2 option:selected").text().toUpperCase());
+	$("#lblMesAnteri_").text( $("select#cmbMes2 option:selected").text().toUpperCase() );
 });
 
 $("#compararMeses").click( function() {
@@ -54,8 +66,8 @@ $("#compararMeses").click( function() {
 })
 
 function loadDataVTS(data) {
-	$('.lblAnioActual').text( data['anio2'] );
-	$('.lblAnioAnteri').text( data['anio1'] );
+	$('.lblAnioActual').text( data['anio1'] );
+	$('.lblAnioAnteri').text( data['anio2'] );
 
 	$('#tblVtsProyectos').DataTable({
 		'ajax':{
@@ -70,6 +82,7 @@ function loadDataVTS(data) {
 		},
 		"destroy" : true,
 		"aaSorting": [],
+		"ordering": false,
 		"lengthMenu": [[30], [30]],
 		"info":    false,
 		"paging": false,
@@ -83,22 +96,24 @@ function loadDataVTS(data) {
 			{"data": "nombre" },
 			{"data": "ruta" },
 			{"data": "zona" },
+			{"data": "data.mes1.anioActual", render: $.fn.dataTable.render.number( ',', '.', 2 ) },
+			{"data": "data.mes2.anioActual", render: $.fn.dataTable.render.number( ',', '.', 2 ) },
 			{"data": null,
 				render: function(data, type, row) { 
 					var temp = (row.data.mes1.anioActual==0)?0:(( row.data.mes1.anioActual / row.data.mes2.anioActual)-1)*100;
 					return $.fn.dataTable.render.number(',', '.', 2).display( temp )+'%'
 				} 
 			},
-			{"data": "data.mes1.anioAnterior", render: $.fn.dataTable.render.number( ',', '.', 2 ) },
 			{"data": "data.mes1.anioActual", render: $.fn.dataTable.render.number( ',', '.', 2 ) },
+			{"data": "data.mes1.anioAnterior", render: $.fn.dataTable.render.number( ',', '.', 2 ) },
 			{"data": null,
 				render: function(data, type, row) { 
 					var temp = (row.data.mes1.anioAnterior==0)?0:((row.data.mes1.anioActual /  row.data.mes1.anioAnterior)-1)*100;
 					return $.fn.dataTable.render.number(',', '.', 2).display( temp )+'%'
 				} 
 			},
-			{"data": "data.mes2.anioAnterior", render: $.fn.dataTable.render.number( ',', '.', 2 ) },
 			{"data": "data.mes2.anioActual", render: $.fn.dataTable.render.number( ',', '.', 2 ) },
+			{"data": "data.mes2.anioAnterior", render: $.fn.dataTable.render.number( ',', '.', 2 ) },
 			{"data": null,
 				render: function(data, type, row) { 
 					var temp = (row.data.mes2.anioAnterior==0)?0:((row.data.mes2.anioActual /  row.data.mes2.anioAnterior)-1)*100;
@@ -108,10 +123,10 @@ function loadDataVTS(data) {
 		],
 		"columnDefs": [
 			{ "visible": false, "targets": 0 },
-			
-			{ "width":"6%","targets":[4,5,6,7,8,9,10] },
+			{ "width":"20%","targets":[1] },
+			{ "width":"5%","targets":[4,5,6,7,8,9,10,11,12] },
 			{ "className": "dt-center", "targets": [ 2 ]},
-			{ "className": "dt-right", "targets": [ 4, 5, 6, 7, 8, 9, 10 ]},
+			{ "className": "dt-right", "targets": [4,5,6,7,8,9,10,11,12]},
 		],
 		rowGroup: {
 			dataSrc: 'groupColumn',
@@ -168,12 +183,14 @@ function loadDataVTS(data) {
 
 				return $('<tr/>')
 				.append( `<td class="table-primary font-weight-bold" colspan="3">Total</td>` )
-				.append( `<td class="dt-right table-primary font-weight-bold">`+crece03+`</td>` )
-				.append( `<td class="dt-right table-primary font-weight-bold">`+mes1_02+`</td>` )
 				.append( `<td class="dt-right table-primary font-weight-bold">`+mes1_01+`</td>` )
-				.append( `<td class="dt-right table-primary font-weight-bold">`+crece02+`</td>` )
-				.append( `<td class="dt-right table-primary font-weight-bold">`+mes2_02+`</td>` )
 				.append( `<td class="dt-right table-primary font-weight-bold">`+mes2_01+`</td>` )
+				.append( `<td class="dt-right table-primary font-weight-bold">`+crece03+`</td>` )
+				.append( `<td class="dt-right table-primary font-weight-bold">`+mes1_01+`</td>` )
+				.append( `<td class="dt-right table-primary font-weight-bold">`+mes1_02+`</td>` )
+				.append( `<td class="dt-right table-primary font-weight-bold">`+crece02+`</td>` )
+				.append( `<td class="dt-right table-primary font-weight-bold">`+mes2_01+`</td>` )
+				.append( `<td class="dt-right table-primary font-weight-bold">`+mes2_02+`</td>` )
 				.append( `<td class="dt-right table-primary font-weight-bold">`+crece01+`</td>` );
 			}
 		},
@@ -187,58 +204,85 @@ function loadDataVTS(data) {
 			};
 
 			total01 = api
-			.column( 5 )
+			.column( 4 )
 			.data()
 			.reduce( function (a, b) {
 				return intVal(a) + intVal(b);
 			}, 0 );
 
 			total02 = api
-			.column( 6 )
+			.column( 5 )
 			.data()
 			.reduce( function (a, b) {
 				return intVal(a) + intVal(b);
 			}, 0 );			
 
 			total03 = api
-			.column( 8 )
+			.column( 7 )
 			.data()
 			.reduce( function (a, b) {
 				return intVal(a) + intVal(b);
 			}, 0 );
 
 			total04 = api
-			.column( 9 )
+			.column( 8 )
 			.data()
 			.reduce( function (a, b) {
 				return intVal(a) + intVal(b);
 			}, 0 );
 
-			crece01_ = ( total02==0 )?0:((total02/total01)-1)*100;
-			crece02_ = ( total04==0 )?0:((total04/total03)-1)*100;
+			total05 = api
+			.column( 10 )
+			.data()
+			.reduce( function (a, b) {
+				return intVal(a) + intVal(b);
+			}, 0 );
 
-			$( api.column( 5 ).footer() ).html(
+			total06 = api
+			.column( 11 )
+			.data()
+			.reduce( function (a, b) {
+				return intVal(a) + intVal(b);
+			}, 0 );
+
+			crece01_ = ( total02==0 )?0:((total05/total06)-1)*100;
+			crece02_ = ( total04==0 )?0:((total03/total04)-1)*100;
+			crece03_ = ( total02==0 )?0:((total01/total02)-1)*100;
+
+			$( api.column( 4 ).footer() ).html(
 				numeral(total01).format('0,0.00')
 			);
 
-			$( api.column( 6 ).footer() ).html(
+			$( api.column( 5 ).footer() ).html(
 				numeral(total02).format('0,0.00')
 			);
 
-			$( api.column( 7 ).footer() ).html(
-				numeral(crece01_).format('0,0.00')+'%'
+			$( api.column( 6 ).footer() ).html(
+				numeral(crece03_).format('0,0.00')+'%'
 			);
 
-			$( api.column( 8 ).footer() ).html(
+			$( api.column( 7 ).footer() ).html(
 				numeral(total03).format('0,0.00')
 			);
 
-			$( api.column( 9 ).footer() ).html(
+			$( api.column( 8 ).footer() ).html(
 				numeral(total04).format('0,0.00')
 			);
 
-			$( api.column( 10 ).footer() ).html(
+			$( api.column( 9 ).footer() ).html(
 				numeral(crece02_).format('0,0.00')+'%'
+			);
+
+			$( api.column( 10 ).footer() ).html(
+				numeral(total05).format('0,0.00')
+			);
+
+			$( api.column( 11 ).footer() ).html(
+				numeral(total06).format('0,0.00')
+			);
+
+			$( api.column( 12 ).footer() ).html(
+				numeral(crece01_).format('0,0.00')+'%'
 			);
 		}
 	});
