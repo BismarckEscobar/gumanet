@@ -101,6 +101,7 @@
                   <th rowspan="2">Nombre</th>
                   <th rowspan="2">Ruta</th>
                   <th rowspan="2">Zona</th>
+                  <th rowspan="2">Crec. Actual</th>
                   <th colspan="3"><span id="lblMesActual">?</span></th>
                   <th colspan="3"><span id="lblMesAntero">?</span></th>
               </tr>
@@ -117,13 +118,14 @@
           </tbody>
            <tfoot>
                 <tr>
-                    <th colspan="4" style="text-align:right;">TOTALES: </th>
+                    <th colspan="5" style="text-align:right;">TOTALES: </th>
                     <th style="padding-right: 10px!important"></th>
                     <th style="padding-right: 10px!important"></th>
                     <th style="padding-right: 10px!important"></th>
                     <th style="padding-right: 10px!important"></th>
                     <th style="padding-right: 10px!important"></th>
                     <th style="padding-right: 10px!important"></th>
+
                 </tr>
             </tfoot>
         </table>
