@@ -25,14 +25,6 @@ $(document).ready(function() {
 		'mes1'	: mes1,
 		'mes2'	: mes2
 	}
-
-	/*data = {
-		'anio1' : 2020,
-		'anio2' : 2019,
-		'mes1'	: 11,
-		'mes2'	: 10
-	}*/
-
 	loadDataVTS(data)
 })
 

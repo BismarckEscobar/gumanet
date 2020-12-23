@@ -62,8 +62,63 @@
     </div>
     <div class="content-graf mb-5">
         <div class="row" id="ct04">
-            <div class="graf col-sm-12 mt-3"><div class="container-vms" id="grafVtsMes" style="width: 100%; margin: 0 auto"></div></div>
+            <div class="graf col-sm-12 mt-3">
+                <div class="container-vms" id="grafVtsMes" style="width: 100%; margin: 0 auto"></div>
+            </div>
         </div>
+        <div class="row mt-3">
+            <div class="col-sm-6">
+                <div class="card border-0">
+                    <div class="card-body">
+                        <div class="row border-bottom">
+                            <div class="col-sm-12 mb-1">
+                                <h4 class="text-muted text-center font-weight-bold divSpinner">Acumulado Año</h4>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-sm-5 text-center">                    
+                                <p class="text-muted m-0 lblanio2">...</p>
+                                <p class="font-weight-bolder" id="lblmontoanio2" style="font-size: 1.2rem!important">...</p>
+                            </div>
+                            <div class="col-sm-5 text-center">
+                                <p class="text-muted m-0 lblanio1">...</p>
+                                <p class="font-weight-bolder" id="lblmontoanio1" style="font-size: 1.2rem!important">...</p>
+                            </div>
+                            <div class="col-sm-2 text-center">
+                                <p class="text-muted m-0">% Crec.</p>
+                                <p class="font-weight-bolder" style="font-size: 1.2rem!important" id="lblCrecimiento">...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card border-0">
+                    <div class="card-body">
+                        <div class="row border-bottom">
+                            <div class="col-sm-12 mb-1">
+                                <h4 class="text-muted text-center font-weight-bold divSpinner">Promedio Mensual</h4>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-sm-5 text-center">                    
+                                <p class="text-muted m-0 lblanio2">...</p>
+                                <p class="font-weight-bolder" id="lblporcenanio2" style="font-size: 1.2rem!important">...</p>
+                            </div>
+                            <div class="col-sm-5 text-center">
+                                <p class="text-muted m-0 lblanio1">...</p>
+                                <p class="font-weight-bolder" id="lblporcenanio1" style="font-size: 1.2rem!important">...</p>
+                            </div>
+                            <div class="col-sm-2 text-center">
+                                <p class="text-muted m-0">% Crec.</p>
+                                <p class="font-weight-bolder" style="font-size: 1.2rem!important" id="lblporcentaje">...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row" id="ct05">            
             <div class="graf col-sm-12 mt-3 text-right">
                 <figure class="highcharts-figure">

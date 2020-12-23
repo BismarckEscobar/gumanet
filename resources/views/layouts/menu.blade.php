@@ -85,6 +85,12 @@
           </li>
           @endif
           <li class="nav-item">
+            <a class="nav-link text-secondary" href="#!">
+              <span data-feather="file-text" class="mr-3"></span>
+              Minuta Corp
+            </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link text-secondary" href="Proyecciones">
               <span data-feather="crosshair" class="mr-3"></span>
               Proy de ventas
