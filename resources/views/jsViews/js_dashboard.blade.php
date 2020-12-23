@@ -847,17 +847,92 @@ function grafVentasMensuales() {
                   <div class="spinner-border ml-auto text-primary" role="status" aria-hidden="true"></div>
                 </div>
             </div>`);
+
+    $(".divSpinner")
+    .before(`<div class="spinner-border text-primary float-right" role="status"></div>`);
+
     ventasMensuales.series = [];
     $.getJSON("dataVentasMens", function(json) {
         var newseries;
+        var sumTotales = [];
+        var temp = 0;
+        var anio = 0;
+        var porcentaje01 = 0;
+        var porcentaje02 = 0;
+        var porcentajeTo = 0;
 
+        var date  = new Date();
+        var anio_ = parseInt(date.getFullYear());
+        var mes_ = parseInt(date.getMonth()+1);
+        
         $.each(json, function (i, item) {
+            if (anio != item['name']) {
+
+                $.each(item['venta'], function(i_, item_) {
+                    temp = temp + parseFloat(item_)
+                })
+
+                sumTotales.push({ 'anio':item['name'], 'suma':temp });
+                
+                anio = item['name'];
+                temp = 0;
+            }
             newseries = {};
             newseries.data = item['venta'];
             newseries.name = item['name'];
-            ventasMensuales.series.push(newseries);
+            ventasMensuales.series.push(newseries);            
         })
 
+        if (sumTotales.length > 0) {
+            anio1 = sumTotales[0].anio;
+            montoAnio1 = parseFloat(sumTotales[0].suma);
+            anio2 = sumTotales[1].anio;
+            montoAnio2 = parseFloat(sumTotales[1].suma);
+
+            crecimiento = (( montoAnio2 / montoAnio1 ) - 1 ) * 100;
+
+            if (anio1<anio_ && anio2 == anio_) {
+                porcentaje01 = ( montoAnio1 / 12 );
+            }else if (anio1==anio_ && anio2<anio_) {
+                porcentaje01 = ( montoAnio2 / 12 );
+            }
+
+            if (anio2==anio_ && anio1 < anio_) {
+                porcentaje02 = ( montoAnio2 / mes_ );
+            }else if (anio1==anio_ && anio2<anio_) {
+                porcentaje02 = ( montoAnio2 / mes_ );
+            }
+
+            porcentajeTo = ( ( porcentaje02/porcentaje01 )-1 )*100;
+
+            st_1 = (crecimiento<0)?` <i class="material-icons text-danger font-weight-bold" style="font-size:15px">arrow_downward</i>`:` <i class="material-icons text-success font-weight-bold" style="font-size:15px">arrow_upward</i>`;
+            cls_1 = (crecimiento<0)?`text-danger font-weight-bolder`:`text-success font-weight-bolder`;
+
+            st_2 = (porcentajeTo<0)?` <i class="material-icons text-danger font-weight-bold" style="font-size:15px">arrow_downward</i>`:` <i class="material-icons text-success font-weight-bold" style="font-size:15px">arrow_upward</i>`;
+            cls_2 = (porcentajeTo<0)?`text-danger font-weight-bolder`:`text-success font-weight-bolder`;
+
+            crecimiento = numeral(crecimiento).format('0,0.00')+st_1;
+            porcentajeTo = numeral(porcentajeTo).format('0,0.00')+st_2;
+
+            $(".spinner-border").remove()
+
+            $(".lblanio1").text( anio1 );
+            $("#lblmontoanio1").empty().text('C$ '+ numeral(montoAnio1).format('0,0.00'));
+            
+            $("#lblporcenanio1").empty().text(numeral(porcentaje01).format('0,0.00'));
+            $("#lblporcenanio2").empty().text(numeral(porcentaje02).format('0,0.00'));
+
+            $("#lblCrecimiento").empty()
+                                .attr('class', cls_1)
+                                .html( crecimiento );
+            $("#lblporcentaje").empty()
+                                .attr('class', cls_2)
+                                .html( porcentajeTo );
+
+            $(".lblanio2").text( anio2 );
+            $("#lblmontoanio2").empty().text('C$ '+ numeral(montoAnio2).format('0,0.00'));
+
+        }
         var chart = new Highcharts.Chart(ventasMensuales);
     })
 }
