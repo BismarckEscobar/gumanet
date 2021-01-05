@@ -85,7 +85,7 @@
           </li>
           @endif
           <li class="nav-item">
-            <a class="nav-link text-secondary" href="#!">
+            <a class="nav-link text-secondary" href="MinutasCorporativas">
               <span data-feather="file-text" class="mr-3"></span>
               Minuta Corp
             </a>

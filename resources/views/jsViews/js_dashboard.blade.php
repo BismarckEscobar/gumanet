@@ -849,7 +849,7 @@ function grafVentasMensuales() {
             </div>`);
 
     $(".divSpinner")
-    .before(`<div class="spinner-border text-primary float-right" role="status"></div>`);
+    .before(`<div class="spinner-border text-primary float-right spinner-acum" role="status"></div>`);
 
     ventasMensuales.series = [];
     $.getJSON("dataVentasMens", function(json) {
@@ -880,14 +880,14 @@ function grafVentasMensuales() {
             newseries = {};
             newseries.data = item['venta'];
             newseries.name = item['name'];
-            ventasMensuales.series.push(newseries);            
+            ventasMensuales.series.push(newseries);
         })
 
         if (sumTotales.length > 0) {
-            anio1 = sumTotales[0].anio;
-            montoAnio1 = parseFloat(sumTotales[0].suma);
-            anio2 = sumTotales[1].anio;
-            montoAnio2 = parseFloat(sumTotales[1].suma);
+            anio1 = sumTotales[1].anio;
+            montoAnio1 = parseFloat(sumTotales[1].suma);
+            anio2 = sumTotales[0].anio;
+            montoAnio2 = parseFloat(sumTotales[0].suma);
 
             crecimiento = (( montoAnio2 / montoAnio1 ) - 1 ) * 100;
 
@@ -914,7 +914,7 @@ function grafVentasMensuales() {
             crecimiento = numeral(crecimiento).format('0,0.00')+st_1;
             porcentajeTo = numeral(porcentajeTo).format('0,0.00')+st_2;
 
-            $(".spinner-border").remove()
+            $(".spinner-acum").remove()
 
             $(".lblanio1").text( anio1 );
             $("#lblmontoanio1").empty().text('C$ '+ numeral(montoAnio1).format('0,0.00'));
