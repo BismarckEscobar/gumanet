@@ -60,7 +60,7 @@ class dashboard_model extends Model {
 
     public static function getTotalUnidadesXRutaXVentas($mes, $anio){
         $sql_server = new \sql_server();
-         $fecha = new DateTime($anio.'-'.$mes.'-01');
+        $fecha = new DateTime($anio.'-'.$mes.'-01');
         $sql_exec = '';
         $request = Request();
         $idPeriodo = '';
@@ -91,11 +91,9 @@ class dashboard_model extends Model {
         $query = $sql_server->fetchArray($sql_exec,SQLSRV_FETCH_ASSOC);
 
         $i = 0;
-        $json = array();
+        $json = array();        
 
-        
-
-         if(count($idPeriodo) != ""){
+        //if(count($idPeriodo) != ""){
         foreach ($query as $fila) {
 
             $VENDEDOR = dashboard_model::buscarVendedorXRuta($fila["Ruta"], $company_user);
@@ -119,7 +117,7 @@ class dashboard_model extends Model {
             $i++;
             }
 
-        }
+        //}
         return $json;
 
             $sql_server->close();
@@ -1189,10 +1187,12 @@ class dashboard_model extends Model {
         $json = array();
         $val1__ = array();
         $val2__ = array();
+        $val3__ = array();
         $query = $sql_server->fetchArray($sql, SQLSRV_FETCH_ASSOC);
 
         $anioActual = intval(date('Y'));
         $anioPasado = $anioActual - 1;
+        $anioAntePasado = $anioPasado - 1;
 
         foreach ($meses as $key => $mes) {
             $x1 = array_column(array_filter($query, function($item) use($anioActual, $mes) { return $item['anio'] == $anioActual and $item['mes']==$mes; } ), 'montoVenta');
@@ -1200,16 +1200,25 @@ class dashboard_model extends Model {
 
             $y1 = array_column(array_filter($query, function($item) use($anioPasado, $mes) { return $item['anio'] == $anioPasado and $item['mes']==$mes; } ), 'montoVenta');
 
+            $z1 = array_column(array_filter($query, function($item) use($anioAntePasado, $mes) { return $item['anio'] == $anioAntePasado and $item['mes']==$mes; } ), 'montoVenta');
+
             (count($x1)>0)?(array_push($val1__,$x1[0])):(false);
             (count($y1)>0)?(array_push($val2__,$y1[0])):(array_push($val2__,0));
+            (count($z1)>0)?(array_push($val3__,$z1[0])):(array_push($val3__,0));
         }
 
-
-        $json[0]['name'] = $anioPasado;
-        $json[0]['venta'] = $val2__;
+        $json[0]['name'] = $anioActual;
+        $json[0]['venta'] = $val1__;
         
-        $json[1]['name'] = $anioActual;
-        $json[1]['venta'] = $val1__;
+        $json[1]['name'] = $anioPasado;
+        $json[1]['venta'] = $val2__;
+        
+        $json[2]['name'] = $anioAntePasado;
+        $json[2]['venta'] = $val3__;
+
+        
+
+
         return $json;
         $sql_server->close();
     }

@@ -89,10 +89,29 @@ function loadDataVTS(data) {
 			{"data": "ruta" },
 			{"data": "zona" },
 			{"data": "data.mes1.anioActual", render: $.fn.dataTable.render.number( ',', '.', 2 ) },
-			{"data": "data.mes2.anioActual", render: $.fn.dataTable.render.number( ',', '.', 2 ) },
-			{"data": null,
-				render: function(data, type, row) { 
-					var temp = (row.data.mes1.anioActual==0)?0:(( row.data.mes1.anioActual / row.data.mes2.anioActual)-1)*100;
+			{"data": null, render: function(data, type, row) {
+				var date = new Date();
+				var mesAct = parseInt( date.getMonth() + 1 );
+
+				if (mesAct==1) {
+					temp = row.data.mes2.anioAnterior;
+				}else {
+					temp = row.data.mes2.anioActual;
+				}
+					
+				return $.fn.dataTable.render.number(',', '.', 2).display( temp );
+			} },
+			{"data": null, render: function(data, type, row) {
+				var date = new Date();
+				var mesAct = parseInt( date.getMonth() + 1 );
+
+				if (mesAct==1) {
+					temp = row.data.mes2.anioAnterior;
+				}else {
+					temp = row.data.mes2.anioActual;
+				}
+
+					var temp = (row.data.mes1.anioActual==0)?0:(( row.data.mes1.anioActual / temp )-1)*100;
 					return $.fn.dataTable.render.number(',', '.', 2).display( temp )+'%'
 				} 
 			},
@@ -124,14 +143,32 @@ function loadDataVTS(data) {
 			dataSrc: 'groupColumn',
 			startRender: null,
 			endRender: function ( rows, group ) {
-				var mes2_01 = rows
+
+				var date = new Date();
+				var mesAct = parseInt( date.getMonth() + 1 );
+				
+
+				if ( mesAct=='1' ) {
+					mes2_01 = rows
 					.data()
 					.pluck('data')
 					.pluck('mes2')
-					.pluck('anioActual')
+					.pluck('anioAnterior')
 					.reduce( function (a, b) {
-						return a + b;
+						return a + b;                        
 					}, 0);
+
+					console.log(mes2_01)
+				} else {
+					mes2_01 = rows
+						.data()
+						.pluck('data')
+						.pluck('mes2')
+						.pluck('anioActual')
+						.reduce( function (a, b) {
+							return a + b;
+						}, 0);
+				}
 
 				var mes2_02 = rows
 					.data()

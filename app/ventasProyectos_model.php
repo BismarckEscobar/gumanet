@@ -16,7 +16,7 @@ class ventasProyectos_model extends Model {
 		$json = array();
 		$i=0;
 		$company_user = Company::where('id',$request->session()->get('company_id'))->first()->id;
-		$total1 = $total2 = 0;	
+		$total1 = $total2 = 0;
 
 		switch ($company_user) {
 			case '1':
@@ -43,7 +43,8 @@ class ventasProyectos_model extends Model {
 		foreach ( $proyectos as $proyecto ) {
 			$dtlles = proyectosDetalle_model::select('rutas.vendedor','rutas.nombre','rutas.zona')
                 ->join('rutas', 'proyectos_rutas.ruta_id', '=', 'rutas.id')
-                ->where('proyecto_id', $proyecto['id'])
+                ->where('proyectos_rutas.proyecto_id', $proyecto['id'])
+                ->where('rutas.estado', 1)
                 ->get();
 
 			foreach ( $dtlles as $fila ) {

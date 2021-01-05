@@ -22,6 +22,7 @@ Route::get('/Proyecciones','proyecciones_controller@index');
 Route::get('/InteligenciaMercado','inteligenciaMercado_controller@index');
 Route::get('/InvTotalizado','inventario_controller@inventarioTotalizado');
 Route::get('/VtsProyectos','ventasProyectos_controller@index');
+Route::get('/MinutasCorporativas','minutasCorp_controller@index');
 
 //RUTAS LOGIN
 Route::get('/','Auth\LoginController@showLoginForm');//pagina login
