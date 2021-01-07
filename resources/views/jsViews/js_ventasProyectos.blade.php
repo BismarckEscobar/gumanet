@@ -5,20 +5,21 @@ $(document).ready(function() {
 
 	var date = new Date();
 
-	var anio1 = parseInt( date.getFullYear() );
-	var anio2 = parseInt( date.getFullYear() ) - 1;
-	var mes1 = parseInt( date.getMonth() + 1 );
-	var mes2 = ( mes1==1 )?( 12 ):( mes1-1 );
+	anio1 = parseInt( date.getFullYear() );
+	anio2 = parseInt( date.getFullYear() ) - 1;
+	mes1 = parseInt( date.getMonth() + 1 );
+	mes2 = ( mes1==1 )?( 12 ):( mes1-1 );
 
 	$("select#cmbMes1").prop("selectedIndex", mes1);
 	$("select#cmbMes2").prop("selectedIndex", mes2);
 
-	$("#lblMesActual").text( $("select#cmbMes1 option:selected").text().toUpperCase() );
-	$("#lblMesAntero").text( $("select#cmbMes2 option:selected").text().toUpperCase() );
+	$("#lblMesActual").text( meses[mes1].toUpperCase() );
+	$("#lblMesAntero").text( meses[mes2].toUpperCase() );
 
-	$("#lblMesActual_").text( $("select#cmbMes1 option:selected").text().toUpperCase() );
-	$("#lblMesAnteri_").text( $("select#cmbMes2 option:selected").text().toUpperCase() );
+	$("#lblMesActual_").text( meses[mes1].toUpperCase() );
+	$("#lblMesAnteri_").text( meses[mes2].toUpperCase() );
 	
+	data = {};
 	data = {
 		'anio1' : anio1,
 		'anio2' : anio2,
@@ -28,38 +29,45 @@ $(document).ready(function() {
 	loadDataVTS(data)
 })
 
-$("#cmbMes1").change( function( event ) {
-	$('#tblVtsProyectos thead tr:eq(0) th:eq(4)').html($("#cmbMes1 option:selected").text().toUpperCase());
-	$("#lblMesActual_").text( $("select#cmbMes1 option:selected").text().toUpperCase() );
-});
+var anio1 = 0;
+var anio2 = 0;
+var mes1 = 0;
+var mes2 = 0;
+var meses = ['none','enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 
-$("#cmbMes2").change( function( event ) {
-	$('#tblVtsProyectos thead tr:eq(0) th:eq(5)').html($("#cmbMes2 option:selected").text().toUpperCase());
-	$("#lblMesAnteri_").text( $("select#cmbMes2 option:selected").text().toUpperCase() );
+$("#cmbMes1").change( function( event ) {
+	anio1 = parseInt( $("#cmbAnio option:selected").val() );
+	anio2 = parseInt( $("#cmbAnio option:selected").val() ) - 1;
+	mes1 = parseInt( $("#cmbMes1 option:selected").val() );
+	mes2 = ( mes1==1 )?( 12 ):( mes1-1 );
+
+	$('#tblVtsProyectos thead tr:eq(0) th:eq(4)').html(meses[mes1].toUpperCase());
+	$("#lblMesActual_").text( meses[mes1].toUpperCase() );
+
+	$('#tblVtsProyectos thead tr:eq(0) th:eq(5)').html(meses[mes2].toUpperCase());
+	$("#lblMesAnteri_").text( meses[mes2].toUpperCase() );
 });
 
 $("#compararMeses").click( function() {
-	var anio1 = parseInt( $("#cmbAnio option:selected").val() );
-	var anio2 = parseInt( $("#cmbAnio option:selected").val() ) - 1;
-	var mes1 = parseInt( $("#cmbMes1 option:selected").val() );
-	var mes2 = parseInt( $("#cmbMes2 option:selected").val() );
+	data = {};
+	anio1 = parseInt( $("#cmbAnio option:selected").val() );
+	anio2 = parseInt( $("#cmbAnio option:selected").val() ) - 1;
+	mes1 = parseInt( $("#cmbMes1 option:selected").val() );
+	mes2 = ( mes1==1 )?( 12 ):( mes1-1 );
 
-	if (mes1<=mes2) {
-		mensaje('No puede comparar el mes seleccionado con un mes superior o igual', 'error');
-	}else {
-		data = {
-			'anio1' : anio1,
-			'anio2' : anio2,
-			'mes1'	: mes1,
-			'mes2'	: mes2
-		}
-		loadDataVTS(data);
+	data = {
+		'anio1' : anio1,
+		'anio2' : anio2,
+		'mes1'	: mes1,
+		'mes2'	: mes2
 	}
+
+	loadDataVTS(data);
 })
 
 function loadDataVTS(data) {
-	$('.lblAnioActual').text( data['anio1'] );
-	$('.lblAnioAnteri').text( data['anio2'] );
+	$('.lblAnioActual').text( anio1 );
+	$('.lblAnioAnteri').text( anio2 );
 
 	$('#tblVtsProyectos').DataTable({
 		'ajax':{
@@ -88,12 +96,9 @@ function loadDataVTS(data) {
 			{"data": "nombre" },
 			{"data": "ruta" },
 			{"data": "zona" },
-			{"data": "data.mes1.anioActual", render: $.fn.dataTable.render.number( ',', '.', 2 ) },
+			{"data": "data.mes1.anioActual", render: $.fn.dataTable.render.number( ',', '.', 2 ) },			
 			{"data": null, render: function(data, type, row) {
-				var date = new Date();
-				var mesAct = parseInt( date.getMonth() + 1 );
-
-				if (mesAct==1) {
+				if (mes1==1) {
 					temp = row.data.mes2.anioAnterior;
 				}else {
 					temp = row.data.mes2.anioActual;
@@ -102,17 +107,14 @@ function loadDataVTS(data) {
 				return $.fn.dataTable.render.number(',', '.', 2).display( temp );
 			} },
 			{"data": null, render: function(data, type, row) {
-				var date = new Date();
-				var mesAct = parseInt( date.getMonth() + 1 );
-
-				if (mesAct==1) {
+				if (mes1==1) {
 					temp = row.data.mes2.anioAnterior;
 				}else {
 					temp = row.data.mes2.anioActual;
 				}
 
-					var temp = (row.data.mes1.anioActual==0)?0:(( row.data.mes1.anioActual / temp )-1)*100;
-					return $.fn.dataTable.render.number(',', '.', 2).display( temp )+'%'
+				var temp = (row.data.mes1.anioActual==0)?0:(( row.data.mes1.anioActual / temp )-1)*100;
+				return $.fn.dataTable.render.number(',', '.', 2).display( temp )+'%'
 				} 
 			},
 			{"data": "data.mes1.anioActual", render: $.fn.dataTable.render.number( ',', '.', 2 ) },
@@ -143,32 +145,14 @@ function loadDataVTS(data) {
 			dataSrc: 'groupColumn',
 			startRender: null,
 			endRender: function ( rows, group ) {
-
-				var date = new Date();
-				var mesAct = parseInt( date.getMonth() + 1 );
-				
-
-				if ( mesAct=='1' ) {
-					mes2_01 = rows
+				var mes2_01 = rows
 					.data()
 					.pluck('data')
 					.pluck('mes2')
-					.pluck('anioAnterior')
+					.pluck('anioActual')
 					.reduce( function (a, b) {
 						return a + b;                        
 					}, 0);
-
-					console.log(mes2_01)
-				} else {
-					mes2_01 = rows
-						.data()
-						.pluck('data')
-						.pluck('mes2')
-						.pluck('anioActual')
-						.reduce( function (a, b) {
-							return a + b;
-						}, 0);
-				}
 
 				var mes2_02 = rows
 					.data()
@@ -199,12 +183,12 @@ function loadDataVTS(data) {
 
 				crece01 = ( mes2_02==0 )?0:((mes2_01/mes2_02)-1)*100;
 				crece02 = ( mes1_02==0 )?0:((mes1_01/mes1_02)-1)*100;
-				crece03 = ( mes1_01==0 )?0:((mes1_01/mes2_01)-1)*100;
+				crece03 = ( mes1_01==0 )?0:((mes1_01/mes2_02)-1)*100;
 
 				mes2_01 = $.fn.dataTable.render.number(',', '.', 2).display( mes2_01 );
 				mes2_02 = $.fn.dataTable.render.number(',', '.', 2).display( mes2_02 );
 				mes1_01 = $.fn.dataTable.render.number(',', '.', 2).display( mes1_01 );
-				mes1_02 = $.fn.dataTable.render.number(',', '.', 2).display( mes1_02 );
+				mes1_02 = $.fn.dataTable.render.number(',', '.', 2).display( mes1_02 );				
 
 				crece01 = $.fn.dataTable.render.number(',', '.', 2).display( crece01 )+'%';
 				crece02 = $.fn.dataTable.render.number(',', '.', 2).display( crece02 )+'%';
@@ -213,7 +197,7 @@ function loadDataVTS(data) {
 				return $('<tr/>')
 				.append( `<td class="table-primary font-weight-bold" colspan="3">Total</td>` )
 				.append( `<td class="dt-right table-primary font-weight-bold">`+mes1_01+`</td>` )
-				.append( `<td class="dt-right table-primary font-weight-bold">`+mes2_01+`</td>` )
+				.append( `<td class="dt-right table-primary font-weight-bold">`+mes2_02+`</td>` )
 				.append( `<td class="dt-right table-primary font-weight-bold">`+crece03+`</td>` )
 				.append( `<td class="dt-right table-primary font-weight-bold">`+mes1_01+`</td>` )
 				.append( `<td class="dt-right table-primary font-weight-bold">`+mes1_02+`</td>` )
@@ -240,11 +224,36 @@ function loadDataVTS(data) {
 			}, 0 );
 
 			total02 = api
-			.column( 5 )
-			.data()
-			.reduce( function (a, b) {
-				return intVal(a) + intVal(b);
-			}, 0 );			
+				.column( 5 )
+				.data()
+				.pluck('data')
+				.pluck('mes2')
+				.pluck('anioAnterior')
+				.reduce( function (a, b) {
+					return a + b;                        
+				}, 0);
+
+			if ( mes1==1 ) {
+				total02 = api
+					.column( 5 )
+					.data()
+					.pluck('data')
+					.pluck('mes2')
+					.pluck('anioAnterior')
+					.reduce( function (a, b) {
+						return a + b;                        
+					}, 0);
+			} else {
+				total02 = api
+					.column( 5 )
+					.data()
+					.pluck('data')
+					.pluck('mes2')
+					.pluck('anioActual')
+					.reduce( function (a, b) {
+						return a + b;                        
+					}, 0);
+			}
 
 			total03 = api
 			.column( 7 )

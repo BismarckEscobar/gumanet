@@ -11,26 +11,23 @@
             <h4 class="h4 mt-4">Dashboard</h4>
         </div>
         <div class="col-sm-6">
-            <div class="row" >
+            <div class="row">
                 <div class="col-sm-5">
                     <div class="form-group">
                         <label for="opcMes" class="text-muted m-0">Filtrar por mes</label>
                         <select class="form-control form-control-sm" id="opcMes">
-                        <?php
-                            setlocale(LC_ALL, 'es_ES');
+                          <?php                        
                             $mes = date("m");
+                            $meses = array('none','enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre');
 
                             for ($i= 1; $i <= 12 ; $i++) {
-                                $dateObj   = DateTime::createFromFormat('!m', $i);
-                                $monthName = strftime('%B', $dateObj->getTimestamp());
-                                
-                                if ($i==$mes) {
-                                    echo'<option selected value="'.$i.'">'.$monthName.'</option>';
-                                }else {
-                                    echo'<option value="'.$i.'">'.$monthName.'</option>';
-                                }
+                              if ($i==$mes) {
+                                echo'<option selected value="'.$i.'">'.$meses[$i].'</option>';
+                              }else {
+                                echo'<option value="'.$i.'">'.$meses[$i].'</option>';
+                              }
                             }
-                        ?>
+                          ?>
                         </select>
                     </div>
                 </div>
@@ -66,6 +63,7 @@
                 <div class="container-vms" id="grafVtsMes" style="width: 100%; margin: 0 auto"></div>
             </div>
         </div>
+
         <div class="row mt-3">
             <div class="col-sm-6">
                 <div class="card border-0">
@@ -85,7 +83,7 @@
                                 <p class="font-weight-bolder" id="lblmontoanio1" style="font-size: 1.2rem!important">...</p>
                             </div>
                             <div class="col-sm-2 text-center">
-                                <p class="text-muted m-0">% Crec.</p>
+                                <p class="text-muted m-0">% CREC.</p>
                                 <p class="font-weight-bolder" style="font-size: 1.2rem!important" id="lblCrecimiento">...</p>
                             </div>
                         </div>
@@ -110,8 +108,61 @@
                                 <p class="font-weight-bolder" id="lblporcenanio1" style="font-size: 1.2rem!important">...</p>
                             </div>
                             <div class="col-sm-2 text-center">
-                                <p class="text-muted m-0">% Crec.</p>
+                                <p class="text-muted m-0">% CREC.</p>
                                 <p class="font-weight-bolder" style="font-size: 1.2rem!important" id="lblporcentaje">...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-sm-6">
+                <div class="card border-0">
+                    <div class="card-body">
+                        <div class="row border-bottom">
+                            <div class="col-sm-12 mb-1">
+                                <h4 class="text-muted text-center font-weight-bold divSpinner">Acumulado Año Anterior</h4>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-sm-5 text-center">                    
+                                <p class="text-muted m-0 clsAnioPas">...</p>
+                                <p class="font-weight-bolder" id="lblmontoanio2_" style="font-size: 1.2rem!important">...</p>
+                            </div>
+                            <div class="col-sm-5 text-center">
+                                <p class="text-muted m-0 clsAnioAntePas">...</p>
+                                <p class="font-weight-bolder" id="lblMontoAnio3" style="font-size: 1.2rem!important">...</p>
+                            </div>
+                            <div class="col-sm-2 text-center">
+                                <p class="text-muted m-0">% CREC.</p>
+                                <p class="font-weight-bolder" style="font-size: 1.2rem!important" id="lblCrecimiento_">...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card border-0">
+                    <div class="card-body">
+                        <div class="row border-bottom">
+                            <div class="col-sm-12 mb-1">
+                                <h4 class="text-muted text-center font-weight-bold divSpinner">Promedio Mensual Año Anterior</h4>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-sm-5 text-center">                    
+                                <p class="text-muted m-0 clsAnioPas">...</p>
+                                <p class="font-weight-bolder" id="lblporcenanio1_" style="font-size: 1.2rem!important">...</p>
+                            </div>
+                            <div class="col-sm-5 text-center">
+                                <p class="text-muted m-0 clsAnioAntePas">...</p>
+                                <p class="font-weight-bolder" id="lblporcenanio3" style="font-size: 1.2rem!important">...</p>
+                            </div>
+                            <div class="col-sm-2 text-center">
+                                <p class="text-muted m-0">% CREC.</p>
+                                <p class="font-weight-bolder" style="font-size: 1.2rem!important" id="lblporcentaje_">...</p>
                             </div>
                         </div>
                     </div>
