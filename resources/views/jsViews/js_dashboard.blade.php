@@ -886,10 +886,15 @@ function grafVentasMensuales() {
         if (sumTotales.length > 0) {
             anio1 = sumTotales[1].anio;
             montoAnio1 = parseFloat(sumTotales[1].suma);
+            
             anio2 = sumTotales[0].anio;
             montoAnio2 = parseFloat(sumTotales[0].suma);
+            
+            anio3 = sumTotales[2].anio;
+            montoAnio3 = parseFloat(sumTotales[2].suma);
 
             crecimiento = (( montoAnio2 / montoAnio1 ) - 1 ) * 100;
+            crecimiento_ = (( montoAnio1 / montoAnio3 ) - 1 ) * 100;
 
             if (anio1<anio_ && anio2 == anio_) {
                 porcentaje01 = ( montoAnio1 / 12 );
@@ -903,7 +908,15 @@ function grafVentasMensuales() {
                 porcentaje02 = ( montoAnio2 / mes_ );
             }
 
+            if (anio3 < anio_) {
+                porcentaje03 = ( montoAnio3 / 12 );
+            }
+
+
+
             porcentajeTo = ( ( porcentaje02/porcentaje01 )-1 )*100;
+            porcentajeTo_ = ( ( porcentaje01/porcentaje03 )-1 )*100;
+
 
             st_1 = (crecimiento<0)?` <i class="material-icons text-danger font-weight-bold" style="font-size:15px">arrow_downward</i>`:` <i class="material-icons text-success font-weight-bold" style="font-size:15px">arrow_upward</i>`;
             cls_1 = (crecimiento<0)?`text-danger font-weight-bolder`:`text-success font-weight-bolder`;
@@ -911,16 +924,36 @@ function grafVentasMensuales() {
             st_2 = (porcentajeTo<0)?` <i class="material-icons text-danger font-weight-bold" style="font-size:15px">arrow_downward</i>`:` <i class="material-icons text-success font-weight-bold" style="font-size:15px">arrow_upward</i>`;
             cls_2 = (porcentajeTo<0)?`text-danger font-weight-bolder`:`text-success font-weight-bolder`;
 
+            st_3 = (crecimiento_<0)?` <i class="material-icons text-danger font-weight-bold" style="font-size:15px">arrow_downward</i>`:` <i class="material-icons text-success font-weight-bold" style="font-size:15px">arrow_upward</i>`;
+            cls_3 = (crecimiento_<0)?`text-danger font-weight-bolder`:`text-success font-weight-bolder`;
+            st_4 = (porcentajeTo_<0)?` <i class="material-icons text-danger font-weight-bold" style="font-size:15px">arrow_downward</i>`:` <i class="material-icons text-success font-weight-bold" style="font-size:15px">arrow_upward</i>`;
+            cls_4 = (porcentajeTo_<0)?`text-danger font-weight-bolder`:`text-success font-weight-bolder`;
+
             crecimiento = numeral(crecimiento).format('0,0.00')+st_1;
+            crecimiento_ = numeral(crecimiento_).format('0,0.00')+st_3;
             porcentajeTo = numeral(porcentajeTo).format('0,0.00')+st_2;
+            porcentajeTo_ = numeral(porcentajeTo_).format('0,0.00')+st_4;
 
             $(".spinner-acum").remove()
 
             $(".lblanio1").text( anio1 );
             $("#lblmontoanio1").empty().text('C$ '+ numeral(montoAnio1).format('0,0.00'));
+
+            $(".clsAnioAntePas").text( anio3 );
+            $(".clsAnioPas").text( anio1 );
+
+            $("#lblmontoanio2_").empty().text('C$ '+ numeral(montoAnio1).format('0,0.00'));
+            $("#lblMontoAnio3").empty().text('C$ '+ numeral(montoAnio3).format('0,0.00'));
+            $("#lblCrecimiento_").empty()
+                                .attr('class', cls_3)
+                                .html( crecimiento_ );
+
             
             $("#lblporcenanio1").empty().text(numeral(porcentaje01).format('0,0.00'));
             $("#lblporcenanio2").empty().text(numeral(porcentaje02).format('0,0.00'));
+            $("#lblporcenanio1_").empty().text(numeral(porcentaje01).format('0,0.00'));
+            $("#lblporcenanio3").empty().text(numeral(porcentaje03).format('0,0.00'));
+            
 
             $("#lblCrecimiento").empty()
                                 .attr('class', cls_1)
@@ -928,6 +961,9 @@ function grafVentasMensuales() {
             $("#lblporcentaje").empty()
                                 .attr('class', cls_2)
                                 .html( porcentajeTo );
+            $("#lblporcentaje_").empty()
+                                .attr('class', cls_4)
+                                .html( porcentajeTo_ );
 
             $(".lblanio2").text( anio2 );
             $("#lblmontoanio2").empty().text('C$ '+ numeral(montoAnio2).format('0,0.00'));
