@@ -125,21 +125,21 @@ function loadDataVTS(data) {
 					return $.fn.dataTable.render.number(',', '.', 2).display( temp )+'%'
 				} 
 			},
-			{"data": "data.mes2.anioActual", render: $.fn.dataTable.render.number( ',', '.', 2 ) },
+			/*{"data": "data.mes2.anioActual", render: $.fn.dataTable.render.number( ',', '.', 2 ) },
 			{"data": "data.mes2.anioAnterior", render: $.fn.dataTable.render.number( ',', '.', 2 ) },
 			{"data": null,
 				render: function(data, type, row) { 
 					var temp = (row.data.mes2.anioAnterior==0)?0:((row.data.mes2.anioActual /  row.data.mes2.anioAnterior)-1)*100;
 					return $.fn.dataTable.render.number(',', '.', 2).display( temp )+'%'
 				} 
-			},
+			},*/
 		],
 		"columnDefs": [
 			{ "visible": false, "targets": 0 },
 			{ "width":"20%","targets":[1] },
-			{ "width":"5%","targets":[4,5,6,7,8,9,10,11,12] },
+			{ "width":"5%","targets":[] },
 			{ "className": "dt-center", "targets": [ 2 ]},
-			{ "className": "dt-right", "targets": [4,5,6,7,8,9,10,11,12]},
+			{ "className": "dt-right", "targets": [ 4, 5, 6, 7, 8, 9 ]},
 		],
 		rowGroup: {
 			dataSrc: 'groupColumn',
@@ -201,10 +201,10 @@ function loadDataVTS(data) {
 				.append( `<td class="dt-right table-primary font-weight-bold">`+crece03+`</td>` )
 				.append( `<td class="dt-right table-primary font-weight-bold">`+mes1_01+`</td>` )
 				.append( `<td class="dt-right table-primary font-weight-bold">`+mes1_02+`</td>` )
-				.append( `<td class="dt-right table-primary font-weight-bold">`+crece02+`</td>` )
-				.append( `<td class="dt-right table-primary font-weight-bold">`+mes2_01+`</td>` )
+				.append( `<td class="dt-right table-primary font-weight-bold">`+crece02+`</td>` );
+				/*.append( `<td class="dt-right table-primary font-weight-bold">`+mes2_01+`</td>` )
 				.append( `<td class="dt-right table-primary font-weight-bold">`+mes2_02+`</td>` )
-				.append( `<td class="dt-right table-primary font-weight-bold">`+crece01+`</td>` );
+				.append( `<td class="dt-right table-primary font-weight-bold">`+crece01+`</td>` )*/;
 			}
 		},
 		"footerCallback": function ( row, data, start, end, display ) {
@@ -269,7 +269,7 @@ function loadDataVTS(data) {
 				return intVal(a) + intVal(b);
 			}, 0 );
 
-			total05 = api
+			/*total05 = api
 			.column( 10 )
 			.data()
 			.reduce( function (a, b) {
@@ -281,9 +281,9 @@ function loadDataVTS(data) {
 			.data()
 			.reduce( function (a, b) {
 				return intVal(a) + intVal(b);
-			}, 0 );
+			}, 0 );*/
 
-			crece01_ = ( total02==0 )?0:((total05/total06)-1)*100;
+			//crece01_ = ( total02==0 )?0:((total05/total06)-1)*100;
 			crece02_ = ( total04==0 )?0:((total03/total04)-1)*100;
 			crece03_ = ( total02==0 )?0:((total01/total02)-1)*100;
 
@@ -311,7 +311,7 @@ function loadDataVTS(data) {
 				numeral(crece02_).format('0,0.00')+'%'
 			);
 
-			$( api.column( 10 ).footer() ).html(
+			/*$( api.column( 10 ).footer() ).html(
 				numeral(total05).format('0,0.00')
 			);
 
@@ -321,7 +321,7 @@ function loadDataVTS(data) {
 
 			$( api.column( 12 ).footer() ).html(
 				numeral(crece01_).format('0,0.00')+'%'
-			);
+			);*/
 		}
 	});
 

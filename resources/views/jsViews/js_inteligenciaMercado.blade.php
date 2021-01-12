@@ -106,12 +106,17 @@ function descargarArchivo() {
 
 $(document).on('click', '.img-fluid', function (e) {
 	url_image = $(this).attr('src');
+	
+
+
 	swal({
 		showCloseButton: true,
 		showConfirmButton: false,
 		imageUrl: url_image,
 		imageAlt: 'Custom image'
 	})
+
+	$(".swal2-popup").css('width', '50%');
 })
 
 $(document).on('mouseenter','.card', function (event) {
