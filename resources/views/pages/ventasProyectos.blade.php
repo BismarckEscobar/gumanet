@@ -77,7 +77,7 @@
                   <th rowspan="2">ZONA</th>
                   <th colspan="3"><span>MES ACTUAL VS ANTERIOR</span></th>
                   <th colspan="3"><span id="lblMesActual">?</span></th>
-                  <th colspan="3"><span id="lblMesAntero">?</span></th>
+                  <!--<th colspan="3"><span id="lblMesAntero">?</span></th>-->
               </tr>
               <tr>
                   <th class="text-center"><span id="lblMesActual_">?</span></th>
@@ -86,9 +86,9 @@
                   <th class="text-center"><span class="lblAnioActual">?</span></th>
                   <th class="text-center"><span class="lblAnioAnteri">?</span></th>
                   <th class="text-center">%</th>
-                  <th class="text-center"><span class="lblAnioActual"></span></th>
+                  <!--<th class="text-center"><span class="lblAnioActual"></span></th>
                   <th class="text-center"><span class="lblAnioAnteri"></span></th>
-                  <th class="text-center">%</th>
+                  <th class="text-center">%</th>-->
               </tr>
           </thead>
           <tbody>
@@ -102,9 +102,9 @@
                     <th style="padding-right: 10px!important"></th>
                     <th style="padding-right: 10px!important"></th>
                     <th style="padding-right: 10px!important"></th>
+                    <!--<th style="padding-right: 10px!important"></th>
                     <th style="padding-right: 10px!important"></th>
-                    <th style="padding-right: 10px!important"></th>
-                    <th style="padding-right: 10px!important"></th>
+                    <th style="padding-right: 10px!important"></th>-->
                 </tr>
             </tfoot>
         </table>

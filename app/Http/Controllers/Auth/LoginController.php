@@ -107,7 +107,8 @@ class LoginController extends Controller
             if(!$this->verifEmpresa($queryResult,$idComapny)->isEmpty()) {//verifica si id usuario e id empresa existen en la tabla intermedia relacional 'company_user'
                 
                 if ($this->attemptLogin($request)) {
-                    $request->session()->put('company_id', $idComapny); 
+                    $request->session()->put('user_email', $user);
+                    $request->session()->put('company_id', $idComapny);
                     return $this->sendLoginResponse($request);
                 }
                 

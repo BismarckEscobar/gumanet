@@ -111,3 +111,11 @@ Route::post('/dowloadComents', 'inteligenciaMercado_controller@descargarComentar
 
 //RUTAS VENTAS POR PROYECTOS
 Route::get('/dataVTS','ventasProyectos_controller@comparateDateVentas');
+
+//RUTAS MINUTAS CORPORATIVAS
+Route::post('/paginateDataSearchBlogs', 'minutasCorp_controller@searchBlogs');
+Route::get('/minutaCU', 'minutasCorp_controller@createUpdateMinuta');
+Route::post('saveMinuta', 'minutasCorp_controller@guardarMinuta');
+Route::get('minuta/{idMinuta}/{action}', 'minutasCorp_controller@getDataMinuta');
+Route::get('deleteMinuta/{idMinuta}', 'minutasCorp_controller@deleteMinuta');
+Route::post('updateMinuta', 'minutasCorp_controller@actulizarMinutaCorp');

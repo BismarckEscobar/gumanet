@@ -1,6 +1,8 @@
-var pgurl = window.location.href.substr(window.location.href.lastIndexOf("/")+1).replace('#!', '');
-$("ul li a").each(function(){
-    if($(this).attr("href") == pgurl || $(this).attr("href") == '' ){
+var pgurl = window.location.href.substr(window.location.href.lastIndexOf("/")+1).replace('#!', '', );
+
+$("ul li a").each(function() {
+    const ruta = $(this).attr("href").substr(window.location.href.lastIndexOf("/")+1);
+    if( ruta == pgurl || $(this).attr("href") == '' ){
         $(this).removeClass('text-secondary').addClass("text-primary font-weight-bold");
     }
 });
